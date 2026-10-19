@@ -1,275 +1,51 @@
-# SYNC Wellness Club — first mockup
+# SYNC APP
 
-A responsive membership prototype with locally vendored QR utilities using the supplied SYNC logos and palette. Open `index.html` directly or serve this directory:
+A wellness web app for Yoga and Contrast Therapy bookings, member rewards and daily studio operations.
+
+**[Open the live demo](https://sync-wellness.vercel.app/)**
+
+## Features
+
+- **Book classes** — browse sessions, check availability and manage bookings.
+- **Wallet** — view Yoga and Contrast Therapy passes, expiry dates and redeemed rewards.
+- **Rewards** — redeem points and track visit-based Plus, Core and Luxe membership progress.
+- **Account** — edit your profile, view purchases and points activity, and show your check-in QR code.
+- **Staff tools** — manage members and sessions, book for members and scan check-in codes.
+- **Attendance reports** — weekly and monthly dashboards with filters and CSV export.
+
+Responsive layouts support English and Traditional Chinese.
+
+## Demo accounts
+
+Use **Try a demo account** on the sign-in page, or enter one of these accounts. All use the demo password: `SyncDemo2026!`
+
+| Role | Email | Workspace |
+| --- | --- | --- |
+| Member | `jamie@sync.demo` | Bookings, wallet, rewards and profile |
+| Admin | `admin@sync.demo` | Studio management, account creation, passes, points and reports |
+| Front desk | `frontdesk@sync.demo` | Member assistance, bookings, check-in and reports |
+| Instructor | `instructor@sync.demo` | Assigned classes, preparation, attendance and reports |
+
+One sign-in form opens the workspace assigned to each account. Admin can create accounts for all four roles.
+
+## Run locally
+
+No build step or package installation is required. With Python 3 installed:
 
 ```sh
+git clone https://github.com/ikigaiwif606-acc/SYNC-APP.git
+cd SYNC-APP
 python3 -m http.server 4173 --bind 127.0.0.1
 ```
 
-Preview: http://127.0.0.1:4173
+Open [localhost:4173](http://127.0.0.1:4173/).
 
-Live mockup: https://sync-wellness.vercel.app
+## Demo scope
 
-Vercel project: `ikigaiwif606s-projects/sync-wellness`. To publish later changes from this directory, run `vercel deploy --prod --yes`.
+Data is saved in the current browser using local storage. Accounts and records are not shared across devices. Sign-in and purchases are simulated; no real payments or emails are sent. Use sample details when exploring.
 
-## Explore
+Membership benefits and booking policies are prototype settings.
 
-- Login (`#login`): one **SIGN IN** form for every account. Assigned email roles open the member, admin or front desk workspace automatically. Try a demo account fills the form with a sample account; submit SIGN IN to enter. Free registration, password visibility, and simulated email verification/recovery remain available.
-- Admin and front desk: today's arrivals and sales, QR camera/image scanning and manual check-in lookup, searchable members, session creation/editing/cancellation, check-in, sample orders and member pass wallets, point adjustments, guest voucher validation, audit trail, and read-only policy settings.
-- Admin changes and member actions share local data: purchased packages appear in orders, issued passes reach the wallet, bookings consume session capacity, and cancelled sessions restore the original pass and expiry.
-- Overview: premium membership card, tier-specific finishes, cursor tilt and reflection, animated points, tier progress, remaining passes.
-- Book: sample Yoga and Contrast Therapy sessions; consume the earliest-expiring eligible pass, or the specific pass selected from Wallet; cancel to restore the original pass.
-- Rewards: point redemption plus visit milestones, Plus/Core/Luxe membership and proposed tier benefits.
-- Wallet: grouped Yoga/Contrast Therapy pass cards, remaining-session meters, package details and reservation history, plus actionable service rewards and guest vouchers.
-- Account: editable profile/photo, member check-in code, current balances, purchase and points records, attendance history, preferences, local demo sign-in settings and support references.
+## Built with
 
-The design refinement adds an overview strip for the next future booking and nearest pass expiry, makes booking the primary member action, places the pass wallet before tier progress on mobile, and gives tier cards comparable visit milestones and a membership progress bar. Core uses pale blue with dark text; Luxe keeps charcoal and lime. Rewards use aligned content and full-width redemption buttons. Sample account credentials sit inside **Try a demo account**. The admin overview prioritizes arrivals awaiting check-in and uses clearer table surfaces.
-
-Glass is reserved for navigation and overlays; informational panels use solid surfaces. Ambient motion is limited to slow welcome/hero light effects. Cards retain cursor reflections and tilt, while their continuous floating and sweeping animations are removed. Reduced-motion rules remain in place. The shared SVG emblem is unchanged across mobile and desktop.
-
-Demo transactions persist in browser local storage. Use Account → Reset demo data to restore the original sample member.
-
-Access is simulated and enforced only in the interface. Sample accounts are `jamie@sync.demo` (member), `admin@sync.demo` (owner/admin), and `frontdesk@sync.demo` (front desk), all with the published demo password `SyncDemo2026!`. The other seeded member emails and older local demo registrations also use that sample password, because the previous prototype did not retain password verifiers. Unknown emails and incorrect passwords are rejected. Staff roles come from their assigned account and cannot be chosen on the sign-in form; public registration always creates a member and reserves the staff emails. New registrations retain a salted PBKDF2-SHA-256 verifier locally and accept only their chosen demo password. Plaintext chosen passwords are not saved. Verification and recovery do not send email. Front desk can manage sessions, check in, and validate guest vouchers; owner/admin can also issue passes and adjust points. No backend, production authentication, payment integration, or shared multi-device storage is connected. Browser-local role guards and verifiers do not provide secure production authorization. Remembering a demo session stores only its role/member/email locally; signing out or switching accounts clears it.
-
-The header’s 繁體中文 / English button switches all views, dialogs, notifications, dates, and saved activity labels. The language preference persists separately from demo data. SYNC and the Plus / Core / Luxe tier names remain unchanged.
-
-## Rules
-
-Confirmed: free registration, NT$1 spent earns 1 point, tier names, and supplied package prices.
-
-Provisional: Core at 10 completed visits and Luxe at 20 completed visits; tier benefits; single/5/10-pass expiry at 30/90/180 days; 9,000-point Yoga or guest rewards; 12,000-point Contrast Therapy rewards; reward validity of 30 days; 24-hour cancellation window.
-
-Tiers use recorded staff check-ins; purchases and point redemptions never change the visit count. Purchase value is retained separately from redeemable points and visit progress. Point expiry, annual tier rollover, refunds, live availability, payments, secure identity/authentication, real vouchers, and notifications are not implemented. Date inputs and pass dates use the device's calendar; session cancellation times use Taipei time. A 30-day sample timetable and capacities are seeded locally. Policy settings remain read-only.
-
-## Verification
-
-JavaScript syntax checked. A local interaction harness verified purchases, earnings, tier upgrades, redemption, insufficient-balance handling, expired-pass exclusion, booking, duplicate prevention, pass restoration on cancellation, rendering of all five views, and reset.
-
-On 1 October 2026, a separate Happy DOM audit exercised the actual HTML elements and click handlers without a browser connection. It verified both languages, reward affordability, persistence across reload, unique element IDs, button names, dialog title association, cursor updates and reset, and reduced-motion handling. PostCSS parsed all three CSS files, and all local script/style/logo references resolved.
-
-The audit found and fixed four issues: service switching discarded the selected date; overlapping sessions were allowed; dialogs had no accessible title association; and incomplete stored demo data could crash startup. Final booking confirmation now also rechecks session/pass eligibility. Mobile layout safeguards and larger tap targets were added from code review.
-
-These are DOM, transaction, markup, and CSS checks. No pixel rendering, physical-device testing, screen-reader testing, or visual animation inspection was performed. Visual QA remains pending; the user chose to skip the connected-browser review.
-
-On 2 October 2026, an additional Happy DOM audit exercised login route guards, registration and duplicate email handling, name escaping, recovery previews, password non-storage, member search, both staff roles, all six admin pages, point adjustments and negative-balance rejection, pass issuance, member booking, session cancellation with pass/expiry restoration, schedule creation and duplicate rejection, capacity updates, purchase-to-order synchronization, check-in, guest voucher use and repeat-use rejection, and Traditional Chinese screens. PostCSS parsed the new responsive portal stylesheet. The original member interaction audit also passed after integration.
-
-A subsequent design audit checked the new primary action and overview ordering, empty-wallet and near-expiry states, exclusion of past bookings from the overview, labelled tier headings and progress bar, new Traditional Chinese labels, and parsing of all seven stylesheets. Selected text/background color pairs measured above 4.5:1, including Plus/Core/Luxe secondary text. These calculations cover selected colors, not a complete rendered accessibility audit. Both existing interaction audits passed after the design changes.
-
-The membership journey is now shared by Overview and Membership, with a frosted glass surface, annual spend, amount to the next tier, positioned Plus/Core/Luxe milestones, animated fill highlights, and restrained cursor tilt and light reflection. It replaces the overview's smaller ring progress panel. The audit additionally checked the shared component, the NT$2,500 remainder at NT$12,500 spend, the 41.67% overall progress, cursor light updates and exit reset, reduced-motion handling, and Traditional Chinese copy. All eight stylesheets parse. Visual browser review remains pending.
-
-Overview now puts **Your available passes** before the points card, with service-specific booking actions or package purchase actions when no valid passes remain. Its glass journey is compact and emphasizes the amount to the next tier; Membership retains the full journey. Redeemable points and qualifying spend have distinct labels. First-time members receive a welcome and first-pass actions; Luxe members see priority booking and birthday privileges. The next-session icon matches the service, **Manage booking** opens that specific reservation, and the expiry strip totals passes of the same service that expire on the earliest date. Service cards show single-session prices plus explicitly labelled 10-pass-package rates and open the corresponding package options.
-
-A focused Overview interaction audit verified the new ordering, both service booking routes, purchase routes without passes, new/returning/Luxe states, targeted reservation management, aggregated expiry counts, pricing explanations, Traditional Chinese copy, and retention of the full Membership journey. It also caught and resolved a translation collision between available points and points required for redemption.
-
-
-## Member profiles — 17 October 2026
-
-Members → View member now opens a full staff profile, with Overview, Purchases, Points & rewards, Passes, and Visits. Direct links use `#admin-members/<member-id>/<tab>`. Returning to Members keeps the current search during the session. Both staff roles can review profiles; point adjustments and pass issuance retain owner/admin guards and preselect the viewed member.
-
-The header separates current redeemable points, valid remaining Yoga/Contrast Therapy passes, and completed visits toward the next tier. Recorded purchase value covers the orders present in the demo and is not labelled as lifetime spend. Overview includes contact details, membership number, next visit, passes expiring within 14 days, and recent member activity.
-
-New purchases link the order, issued package, and points entry. New rewards record redemption time, point cost, voucher code, associated service pass, and point balance afterward. New manual adjustments record a reason, operator, timestamp, and balance afterward. Staff-issued passes record source, date, operator, and reason. New registrations record their join time. Existing records are preserved; fields never recorded are displayed as Unavailable rather than reconstructed.
-
-Member and staff cancellations now archive reservations before removing them from the active schedule. Check-in timestamps are saved; a linked redeemed service reward is marked used at check-in, while guest voucher validation records its use time. Past reservations without check-in are labelled Past booking, not attended. Cancelling a reservation restores its original pass and expiry. Dialog focus returns to the available trigger or member heading after a staff action.
-
-Validation: JavaScript syntax checks, parsing of all nine stylesheets, and local asset-reference checks passed. A Happy DOM harness outside the deployment ran 55 integration assertions covering all tabs, search retention, member isolation, purchase/reward/pass links, balance snapshots, staff actions, negative-balance rejection, registration, legacy migration, reloads and route guards, cancellation history, check-in, guest voucher reuse, name escaping, unique element IDs, and English/Traditional Chinese. Chrome desktop and 320px responsive-emulation reviews verified the profile layout. Browser console messages observed were from installed extensions and the pre-existing missing favicon; no application script errors appeared. Physical-device and screen-reader testing were not performed.
-
-The app remains a browser-local demo with simulated access, payments and transactions.
-
-
-## Visit milestones and reward previews — 17 October 2026
-
-The membership journey now uses recorded completed visits, with provisional Core and Luxe thresholds of 10 and 20 visits. `membership-program.js` is the single source for thresholds, benefit lists, visit counting and tier selection. Member cards, Overview, Membership, staff member lists, profiles and read-only policy settings all use this program. No annual visit reset is applied.
-
-A visit counts when staff check in a reservation. Attendance is retained by booking ID and repeated check-ins cannot add another visit. Existing check-ins are recovered from member reservations, archived reservations and member-linked sample reservations; historical spending is never converted to attendance. Purchase value, points, passes and orders are preserved. A member with no recorded check-ins starts at Plus under the new program, regardless of their former spending-based tier. Bookings, unvisited cancellations, purchases, point adjustments and reward redemptions do not increase the visit count.
-
-The redesigned journey pairs the visit count and three milestones with a prominent next-tier birthday benefit. Three interactive tier cards reveal the full included benefits, with distinct current, unlocked and next-unlock states. Core previews a birthday Yoga guest pass and early access; Luxe previews a birthday Contrast Therapy reward and priority booking. These retain the existing proposed benefit definitions. They are previews and do not issue birthday passes automatically. The layout stacks on phones and honors reduced motion. English and Traditional Chinese are supported.
-
-Validation: the original 55 member-profile integration checks still pass. A further 63 checks cover all tier boundaries, progress and remaining visits, benefit dialogs, shared member/staff status, check-in upgrades, duplicate prevention, persistence and idempotent migration, legacy attendance recovery, spending independence, cancelled/unvisited bookings, and translations. JavaScript syntax, all nine stylesheets, and local asset references were checked. Chrome reviews covered the desktop and 320px journey and reward layout; observed console errors came from installed extensions and the pre-existing missing favicon. Physical-device and screen-reader testing remain outside this review.
-
-
-## Rewards and Wallet navigation — 17 October 2026
-
-The five member destinations are Overview, Book, Rewards, Wallet and Account. Rewards contains Redeem points (`#rewards/redeem`) and Membership benefits (`#rewards/membership`); the latter includes the visit journey and complete tier benefits. Existing `#membership` bookmarks redirect to `#rewards/membership`. Overview benefit links and tier actions use the merged destination.
-
-Wallet contains Pass wallet (`#wallet/passes`) and Redeemed rewards (`#wallet/rewards`). It shows available Yoga/Contrast Therapy session balances, package quantity and expiry, pass source where recorded, booking actions, reward voucher codes, and available/reserved/expired/used statuses. Expired and depleted packages remain visible but cannot initiate booking. Empty wallets have purchase and redemption links. The redemption confirmation offers Open Wallet; My rewards and View wallet also open the relevant Wallet subsection. Existing data and transaction rules are preserved. Account focuses on profile and points activity.
-
-The mobile member nav uses five equal columns so every destination fits at 320px. Wallet and Rewards subsection links support direct navigation and reloads. All new labels support English and Traditional Chinese.
-
-Validation: the earlier 55 profile and 63 visit-program assertions pass. Another 39 integration checks cover main/subsection routing, legacy Membership redirects, unique page titles/IDs, existing balances, booking and redemption-to-wallet actions, reward/pass statuses, empty states, persistence, access guards, escaping and translations. All ten stylesheets parse and all HTML assets resolve. Chrome reviews verified desktop Wallet, merged Rewards membership, and 320px Wallet/navigation. No new application errors were observed; browser extension messages remain unrelated to the site.
-
-
-## Unified sign-in — 17 October 2026
-
-The Member sign in / Team sign in switch and staff-role dropdown are removed. All accounts use the same email/password form headed SIGN IN. Successful sign-in resolves the account role and opens Overview for members or Today at SYNC for admin/front desk. Preview account buttons only fill the form; they do not bypass login. The member Account screen now offers Use a different account instead of Team sign in. Password recovery previews return to the unified form. Existing wallets, orders, visits and balances are retained.
-
-Sample accounts use the published demo password above. New local registrations save a salted verifier, are members only, and can sign back in using their chosen demo password. Busy submissions are guarded; navigating away cancels any in-progress result. The form supports English and Traditional Chinese. This remains a local prototype; a backend identity provider and server-side role authorization are required before real accounts can be used.
-
-Validation: 52 focused sign-in assertions cover the single form, sample prefilling without access, all six sample accounts, automatic role destinations, member isolation, wrong passwords/unknown emails, role restrictions, remembered sessions, account switching, reserved staff emails, salted registration verifiers, chosen-password sign-in, recovery, translations and data preservation. The existing 55 profile, 63 visit and 39 Rewards/Wallet checks also pass (209 assertions total). All ten stylesheets and local assets parse/resolve. Chrome review verified desktop and 320px sign-in/sample account layouts plus admin and front desk destinations; observed console errors were extension scripts and the existing missing favicon.
-
-
-## Sign-in copy and layout refinement — 17 October 2026
-
-The approved sign-in heading is “Welcome back”, with “Sign in to your SYNC account.” beneath it. The form uses “Keep me signed in” and “Create an account”. The automatic-workspace explanation is removed. Password recovery sits beside the password label; the show/hide control has its own clear area within the field. The form is centered within a 400px content column, with consistent 52px fields/button, quieter secondary links and balanced spacing. Demo access is identified in the collapsed Try a demo account row below the form. Mobile inputs use 16px text to avoid focus zoom on phones. Both languages and all account routing remain supported.
-
-Validation: the 52 sign-in integration checks pass after updating the presentation expectation for the translated welcome text. JavaScript syntax and all ten stylesheets parse. Chrome desktop and 320px responsive reviews confirmed the new wording, recovery placement, field controls and compact form; no new app errors were observed.
-
-## Wallet visual and interaction redesign — 17 October 2026
-
-Wallet now uses a compact balance strip and service groups: dark green Yoga cards with contour graphics, blue Contrast Therapy cards with ripple graphics, and session meters showing availability rather than attendance. The earliest-expiring active package appears first; additional active packages expand under More packages, while depleted and expired packages remain under Past passes. Package details open in a right-side desktop drawer or a phone bottom sheet, with recorded expiry, source, issue date and reservations/visits. Missing historical fields remain Unavailable rather than being reconstructed.
-
-Redeemed service rewards book their exact linked pass, and the booking screen identifies that selection. Switching service or choosing Use another pass restores normal earliest-expiry selection. Selection expiry is checked before confirmation without silently using a different package. Reserved rewards open their booking; cancellation restores the original pass. Guest vouchers have Show voucher and Copy code actions; copying reports success only after the clipboard write succeeds, with a manual-copy fallback. Unlinked legacy rewards and incomplete usage records show Needs confirmation in both Wallet and staff profiles. Saved records are preserved.
-
-Motion is limited to card hover lift, contour/ripple movement on hover, subsection indicator transitions, expansion arrival, newly redeemed reward arrival and a brief balance/meter update after booking or cancellation. Reduced-motion preferences disable these effects. English and Traditional Chinese labels are included.
-
-Validation: all 245 Happy DOM integration assertions pass (55 member profile, 63 visit program, 39 Rewards/Wallet navigation, 52 sign-in and 36 new Wallet interactions). The new checks cover service grouping, expiry order, retained history, exact reward-pass booking, cancellation restoration, expired-selection rejection, clipboard success/failure, unknown legacy status, staff/member consistency, translations, bounded large-package meters and data preservation. Five JavaScript files pass syntax checks, all ten stylesheets parse and all sixteen local HTML asset references resolve. Chrome reviews covered the desktop drawer, 320px phone cards and bottom sheet, focus return, and Traditional Chinese phone layout. Observed console messages were installed-extension errors and the existing missing favicon; no application script errors were observed. Physical-device and screen-reader testing were not performed.
-
-## Member Account redesign — 17 October 2026
-
-Account now has a compact identity header with Edit profile and Check-in code, three linked summaries for points, active passes and completed visits, and four direct routes: `#account/profile`, `#account/purchases`, `#account/points` and `#account/visits`. Full active pass and redemption cards remain in Wallet. Profile fields include name, phone and optional birthday. Photos accept JPG/PNG/WebP up to 5 MB and are cropped/resized locally to a small 160px avatar; changing or removing a photo is only committed on Save changes. Profile names stay consistent in member and staff views. Missing join dates and legacy record fields remain Unavailable.
-
-Purchases show only the current member's recorded orders, newest first, with search, date-range filtering and pagination. Order details link the exact purchased pass when that relationship was recorded and export a plain-text demo order summary; this is explicitly not a payment receipt. Points activity supports earned/redemption/adjustment filters, recorded balances after changes and exact related order/reward links. No missing financial history is reconstructed. Visits combine bookings, retained cancellations and confirmed attendance, deduplicated by booking ID. Unconfirmed past bookings do not become fabricated visits or no-shows.
-
-The QR check-in code encodes the staff-only member attendance route; it contains no password or sign-in token. Reception can open today's bookings and explicitly confirm attendance using the existing staff action. Opening the member code never records attendance or consumes a pass. A staff sign-in after scanning returns to that member. QR codes are generated locally with the vendored MIT-licensed `qrcode-generator` v2.0.4 (`vendor/qrcode.js` and its adjacent license). The same-browser storage listener refreshes member balances/attendance after staff actions in another tab, including an open check-in sheet. This remains a browser-local demo: different devices do not share bookings or check-in data.
-
-Preferences save booking/expiry reminder choices, optional marketing consent and language, without pretending to send notifications. Security includes local salted password updates after checking the current password and a pending email-change flow that leaves the existing email active until explicit demo verification. The latter clearly says no verification email was sent; it is a simulated flow, not verified email ownership. Staff email addresses remain reserved. Help lets members copy a reference and message to show reception; it sends nothing externally. Sign out/account switching remain available, and Reset demo data sits inside Demo tools. Resetting sample wallet data retains the profile, preferences and local credential.
-
-Validation: all 322 integration assertions pass: the earlier 245 profile/program/navigation/sign-in/Wallet checks plus 77 Account checks covering profile validation/cancellation/persistence and escaping, member isolation, photo handling, real purchase-to-pass links, points-to-order/reward links, search/date filtering/pagination/export, preference and language persistence, QR generation and read-only member behavior, staff confirmation and cross-tab attendance, role guards and scanned-route return, password hashing and new credential sign-in, pending/cancelled/expired email-change flows, support clipboard success/failure, unique IDs and translations. Image processing is mocked in the DOM harness; physical-device camera scanning was not tested. Seven JavaScript files pass syntax checks, all eleven stylesheets parse, and all nineteen local HTML asset references resolve. Chrome desktop and 320px responsive reviews cover the identity/summary layout, QR drawer, profile edit sheet and Traditional Chinese purchase list. No app script errors were observed; extension messages and the existing missing favicon remain unrelated. Screen-reader and physical-device testing were not performed.
-
-
-## Staff QR check-in — 17 October 2026
-
-Admin and front desk now share **Scan check-in** (`#admin-checkin`), available from the staff navigation and Today at SYNC. The page opens the camera automatically on entry, subject to browser permission, and offers QR image upload (JPG/PNG/WebP up to 10 MB) and member number/email lookup. Rear cameras are preferred on phones; a camera selector appears when multiple cameras are available. QR images and camera frames are decoded locally by the vendored Apache-2.0-licensed `jsQR` v1.4.0 (`vendor/jsQR.js` and `vendor/jsQR-LICENSE.txt`). There is no camera or image upload to a server and no audio request.
-
-Scanning the existing Account → Check-in code identifies the member and shows only their non-cancelled bookings for today. Staff review the member and reservation, then explicitly select Confirm check-in. Opening or scanning a code does not record attendance. Confirmation rechecks the staff role, member, reservation, date, cancellation and existing attendance, records the visit and staff audit entry, updates tier progress, and marks a linked redeemed service reward used. It never deducts another pass or changes point balances. Already attended sessions remain visible without another confirmation button. No-booking and invalid-code states have manual/schedule fallbacks. The same guarded confirmation function serves the existing schedule/profile check-in actions.
-
-Only the current site and the published SYNC site’s exact member attendance QR route are accepted; arbitrary URLs are neither followed nor rendered. Member numbers and emails are also accepted. The camera stops after detection, manual lookup, upload, explicit stop, navigation, sign-out, backgrounding or page exit. Pending camera permission can be cancelled, and streams that arrive after cancellation/navigation are stopped. Permission denial, missing/in-use cameras, unreadable images and unsupported camera contexts offer upload/manual lookup. Phone results receive focus and scroll into view; reduced-motion preferences are honored. All scanner copy supports English and Traditional Chinese.
-
-Validation: all 375 integration assertions pass, comprising the existing 322 checks and 53 scanner checks. New coverage includes both staff roles, unauthorized controls, member/booking matching, URL rejection, genuine QR encoder/decoder round trips, image decoding, explicit attendance/audit updates, no financial deductions, rescanning/legacy duplicate prevention, cancelled/future booking guards, camera request constraints, permission/no-camera/context fallbacks, pending cancellation/navigation races, camera switching, background cleanup and translations. Camera streams are mocked in the harness. Chrome decoded a generated QR PNG through the real file-input/canvas pipeline and displayed the correct member’s booking; desktop and 320px responsive reviews covered scanner, booking results and translated labels. All nine scripts pass syntax checks, twelve stylesheets parse and twenty-two local HTML assets resolve. No application script errors were observed; installed browser extension errors remain unrelated. Physical camera hardware, physical devices and screen readers were not tested.
-
-This remains a browser-local demo. A member can display their code on another device, but only members/bookings already stored in the staff browser can be found. Real shared check-in across member and staff devices requires a backend and server-side authorization; QR codes are identifiers, not proof of identity or authentication tokens.
-
-## Staff navigation redesign — 17 October 2026
-
-Phone and tablet staff views (up to 1024px) now use a compact 64px sticky header and a 68px bottom navigation bar with Today, Members, Scan, Schedule and More. All five shortcuts stay visible; Scan occupies the centre with a distinct QR icon. The old horizontally scrolling dark sidebar card is removed from these widths. Safe-area spacing and bottom content padding keep the bar clear of page content and notifications. Desktop uses a lighter sidebar with matching icons and a soft green current-page indicator. The supplied SYNC logo is retained.
-
-More opens a native dialog sheet above the bottom bar with Orders & passes and Points & rewards; Settings is included only for owner/admin. More remains selected on secondary pages, and the sheet identifies the current destination. The header's staff account button opens a separate menu with the assigned role, signed-in email, Member preview and Sign out. Account actions no longer sit among page-navigation links. No new staff profile editor or permissions are introduced.
-
-Menus support native focus containment and Escape dismissal, explicit close, backdrop dismissal, trigger focus return and scroll locking. Selecting a destination closes the menu and focuses the new page heading. Menus close when the layout crosses the desktop breakpoint, and staff menu contents are cleared on member preview/sign-out. Existing role guards, scanner lifecycle, member records and transactions are preserved. Both languages and reduced-motion preferences are supported. The menu entrance uses a brief, optional 180ms transition. New small-text navigation and menu colors were adjusted to meet at least 4.5:1 against their specified solid surfaces; this is not a complete accessibility audit.
-
-Validation: all 404 integration assertions pass (the existing 375 plus 29 navigation checks). New checks cover five mobile destinations, centre Scan placement, active and nested routes, secondary navigation and dialog focus/dismissal, account identity and actions, responsive cleanup, owner/front desk menu differences, member-role rejection, sign-out/access cleanup, unique IDs, translations and unchanged stored data. Earlier staff-preview/sign-out tests now open the new account menu before invoking those actions. All nine scripts pass syntax checks, thirteen stylesheets parse and twenty-three local HTML assets resolve. Chrome review covered the desktop sidebar/account menu, 320px phone navigation and More sheet, page-heading/trigger focus, native Escape dismissal, breakpoint cleanup, and the translated Front desk menu. Observed console errors were from installed browser extensions; no application errors were observed. Physical-device and screen-reader testing were not performed.
-
-## Arrival overview refinement — 17 October 2026
-
-The staff overview header now shows today's date and weekday, with a shorter Traditional Chinese title, 今日概覽. The Demo mode badge remains visible. The arrival card pairs its waiting count with state-specific guidance for pending check-ins, no bookings, or all check-ins complete. It uses a quieter surface, a compact count separated from the copy, and matched scan/schedule controls with QR and calendar icons. Actions sit beside the summary on wide screens and fill two equal columns on phones. Internal action links no longer use external-link arrows.
-
-The card's Schedule action resets the schedule to today, including after a staff member previously viewed another date. Cancelled sessions are excluded from both the overview waiting count and today's booking/attendance statistics, matching scanner eligibility. The card does not change attendance or stored balances; scan and confirmation remain separate actions. Both staff roles and languages are supported.
-
-Validation: all 419 integration assertions pass (the earlier 404 plus 15 arrival overview checks). New checks cover the three card states, correct counts and cancelled/future reservation exclusion, today's schedule shortcut, translated copy, accessible heading/links, retained demo badge and date, and unchanged stored data. All nine scripts pass syntax checks, thirteen stylesheets parse and twenty-three HTML assets resolve. Chrome review covered desktop and 375px phone layouts in both languages. Physical-device and screen-reader testing were not performed.
-
-
-## Automatic scanner camera — 17 October 2026
-
-Opening Scan check-in as admin or front desk now requests the camera immediately. The initial Open camera button is removed. The browser still controls camera permission; first-time visitors must approve its prompt. Opening/waiting states explain this in English and Traditional Chinese. Stop/Cancel remain available. Resume scanning appears only after stopping or pausing; Retry camera appears after a camera failure. Upload and manual lookup remain available, including while permission is pending. A recognized member remains paused for booking review until Scan next member is selected.
-
-Same-page language/storage refreshes reattach the current stream rather than requesting another camera. An unresolved permission request is retained through these refreshes. Late video-play results cannot affect a replacement preview. Navigation/sign-out, detection, manual lookup, image upload, backgrounding and page exit still stop camera tracks. A hidden initial page defers its first request until visible; returning from background after a paused session requires Resume scanning. Automatic startup never confirms attendance.
-
-Validation: 441 integration assertions pass, including 75 scanner checks. Added coverage verifies automatic startup for both staff roles and route entry, no camera on other pages, one request across pending/live re-renders, retained stops and member review, queued-start cancellation by manual/image actions, deferred hidden entry, explicit resume, late permission cleanup and stale video-play rejection. Nine scripts pass syntax checks, thirteen stylesheets parse and twenty-three HTML asset references resolve. Chrome confirmed the automatic permission prompt, one-time permission leading to a live hardware camera, translated controls and Stop releasing the camera; camera imagery was not captured. QR decoding uses genuine fixtures in the harness; physical QR scanning and physical-phone testing were not performed.
-
-## Instructor workspace — 17 October 2026
-
-Instructor is a separate role in the unified sign-in flow. Public sample accounts use `SyncDemo2026!`: `instructor@sync.demo` (Alex Chen, Yoga and Contrast Therapy), `yoga@sync.demo` (Maya Wu, Yoga) and `contrast@sync.demo` (Kai Lin, Contrast Therapy). Remembered sessions retain the validated Instructor account ID and email, never a password. Self-registration cannot claim these reserved accounts. Instructor navigation has Today, My schedule and Account; access to member wallets, global member profiles and operations/financial routes is blocked in the prototype flows.
-
-Sessions are linked through `instructorId`, independently of their displayed instructor name. Fresh demo schedules have explicit sample assignments. Existing sessions retain their legacy name and remain unassigned until admin chooses an actual account using Schedule → Assign instructor / Edit session. The picker includes only instructors qualified for the service. Saving rechecks qualifications and prevents overlapping 60-minute assignments across services. Front desk can read the assignment while editing existing session details but cannot change it, including through forged fields. Started/completed sessions cannot be moved, reassigned or cancelled, and stale edits cannot revive cancelled sessions.
-
-Today shows the next assigned session, when one exists, and today's agenda. My schedule supports date navigation and service filters; the service picker is omitted for single-service instructors. Session pages show names, member numbers, safe saved photos and an indicator for no previous recorded visits in that service. Purchase history, points, tiers and member contact details are excluded. Admin assigns rooms; missing legacy room data stays Room not set. Both services use their established green/blue surfaces, with a lighter sidebar on desktop and three fixed navigation destinations on phones. Motion is limited to optional card hover movement and respects reduced motion.
-
-Yoga preparation covers mats/props and participant review; Contrast Therapy covers room readiness and participant briefing. Completing preparation enables Begin session on the session date. A second session cannot begin while another assigned session is in progress. Completion uses an explicit review and changes delivery status only; it never fabricates attendance, marks no-shows, consumes passes or awards another visit. An unfinished past session can be completed later. Preparation locks after starting. Operational handovers are stored as plain text with author and time and are readable by the assigned instructor, reception and admin. Unsaved handover drafts survive language refreshes within the current Instructor session; only Save handover commits them.
-
-Instructor QR check-in reuses the automatic camera, upload and manual lookup flow, limited to today's booked participants in the selected assigned session. Results exclude email, tier and links to full member profiles. Both roster and QR actions call the same guarded attendance function as reception, retaining duplicate prevention, linked service reward use and visit progress without another pass deduction. Ownership is rechecked from current local storage before writes. A storage refresh removes reassigned rosters, closes pending completion reviews and stops camera access when the session becomes unavailable.
-
-This is the first Instructor release. Availability/cover requests, configured session timers, feedback and editable Instructor profiles remain later work. The app is still a browser-local demo: all sample accounts and records live in the browser. UI role guards and local-storage checks are not server-side authorization or secure multi-user access. Shared member/staff operation across devices requires a backend identity provider, shared booking storage and server-enforced session ownership.
-
-Validation: all 519 integration assertions pass, comprising the earlier 441 and 78 Instructor checks. New coverage includes all three Instructor accounts, remembered identities, assignment/specialization isolation, reserved role destinations, forged operations/member actions, first-recorded-visit information, preparation and delivery states, retained draft notes, escaped handovers, shared attendance and financial preservation, admin assignment, front desk restrictions, service qualification and timetable clashes, stale assignment/cancellation checks, reassignment refresh, scoped QR/manual lookup, automatic camera request and cleanup, translations and unique IDs. All ten scripts pass syntax checks, fourteen stylesheets parse and twenty-five HTML assets resolve. Chrome review confirmed admin assignment of legacy sessions, Instructor sign-in, yoga preparation, attendance, operational handover and explicit completion, as well as wide and narrow layouts. Physical-device and screen-reader tests were not performed.
-
-## Admin account creation and staff-assisted bookings — 17 October 2026
-
-Admin → Settings now includes Accounts & access: a searchable, role-filtered list and a Create account form for Admin, Front desk, Instructor and Member. Admin can also use Add member from the member list. Creation collects name, email, optional phone and a chosen password (8–100 characters). Instructors require Yoga, Contrast Therapy or both specializations and become available in the qualified assignment picker immediately. New members start with an empty Plus wallet. Existing email addresses, including sample accounts and other roles, cannot be duplicated. Creation keeps the acting admin signed in and records the actor in the audit trail; the confirmation never displays the password and no email is sent.
-
-Created accounts persist in the same browser and use salted PBKDF2 password verifiers. They sign in through the unified form with their chosen password and open the appropriate workspace. Created staff accounts reject the shared sample password. Legacy wallets and records are retained through an additive accounts migration. Closing the creation dialog or changing the acting account during hashing cancels the pending creation.
-
-Admin and Front desk can use Book for member from Schedule & bookings, an upcoming session card or a member profile. Staff choose/search a member, choose a date/service/session and select an eligible purchased, staff-issued or redeemed service pass. The review shows the session and pass balance after booking. Confirmation re-reads current browser storage, checks the next-30-day booking window, scheduled status, capacity, 60-minute member overlaps (including sample bookings), pass service, remaining quantity and validity through the session date. One pass is deducted; points and completed visits do not change. Records include staff identity and appear in the class roster, member history and wallet. Existing check-in and cancellation flows apply; cancelling the session returns the original pass with its original expiry. Front desk, Instructor and Member cannot create accounts, and Instructor/Member cannot use assisted-booking controls.
-
-Validation: 622 integration assertions pass (519 existing plus 103 account/booking checks), covering all four created-account sign-ins and session restoration, role boundaries, Instructor assignment, duplicate email and hashing races, closed-dialog cancellation, escaping, both staff booking roles, pass deductions, reward passes, cancellation restoration, expiry boundaries and stale/full/cancelled/started/overlapping sessions. Eleven loaded scripts pass syntax checks, fifteen stylesheets parse and twenty-seven local HTML assets resolve. Chrome visual QA of the new forms is pending because another active Chrome window repeatedly interrupts control; physical-device layout is not verified for this release.
-
-This is still a browser-local demo, with no shared backend, server-side authorization, real account invitation or password-reset email. An account created here is available only in the browser that stores it.
-
-## Weekly and monthly attendance dashboards — 17 October 2026
-
-Admin and Front desk now have Reports in the desktop sidebar and mobile More menu. Instructors have Reports as the fourth item in their own navigation. All three Today dashboards include a scoped current-week attendance summary and a report shortcut. The shared report provides Monday–Sunday weekly ranges, full calendar months, previous/next/current period controls, a service filter and (for operations staff) an Instructor filter. Report dates, session-end classification and displayed check-in times use Taipei time.
-
-Summary cards show recorded check-ins, attendance rate, ended classes and bookings without a recorded check-in. Rates divide checked-in bookings by non-cancelled bookings in ended classes; future/in-progress classes and cancellations do not depress the rate, and an empty denominator displays an em dash. A missing check-in is explicitly not proof of absence. Cancelled bookings/classes and pending check-ins remain separate totals. Interactive stacked bars filter the class list by day (weekly) or seven-day blocks clipped to month end (monthly). Service breakdowns, paginated class attendance cards and participant attendance dialogs support both languages. CSV export follows the period, service, Instructor and chart selection, includes all matching class summaries beyond pagination, omits participant identities and neutralizes spreadsheet formula prefixes.
-
-Instructor projections are limited to explicit assigned session IDs and qualified services before aggregation, dialogs or export. Reassignment updates the report immediately. Unattributable legacy bookings with an ambiguous shared timeslot are excluded from Instructor reports. Sessions with legacy display names but no linked Instructor account are labeled Unassigned, consistently with the assignment filter. Staff reports can recover retained historical bookings whose class record is missing; orphan check-ins lacking a class link are flagged separately and excluded from class totals. Booking/attendance IDs are deduplicated across active, archived and sample records. Viewing or exporting reports does not alter bookings, points, passes or attendance.
-
-Validation: all 701 integration assertions pass (622 existing plus 79 reporting checks). Coverage includes role-scoped navigation and reads, assigned class details, forged unauthorized controls, CSV scope and formula escaping, duplicate/archived/orphan records, cancellation exclusion, zero denominators, current/future/past sessions, Taipei end-time boundaries, cross-year weeks, leap-year months, chart filters, pagination, reassignment, service specialization, translations and preservation of stored records. Twelve loaded scripts pass syntax checks, sixteen stylesheets parse and twenty-nine local HTML assets resolve. Chrome review covered English and Traditional Chinese weekly/monthly dashboards, desktop and tablet layouts, actual recorded participant details, the assigned-class Instructor report and 375px phone period/header controls. Physical-device testing was not performed.
-
-Reports cover the demo records stored in the current browser. No shared reporting backend or fabricated historical attendance has been added.
-
-## Foreground cancellation reason popup — 17 October 2026
-
-A member attempting to cancel inside the existing 24-hour cutoff now receives a separate native alert dialog above the open booking dialog. The opaque foreground card explains why online cancellation is unavailable, identifies the session and states that the booking remains confirmed. Got it, the close icon or native Escape dismissal returns to the original booking context and restores focus. The warning stays open until dismissed rather than disappearing as a blurred background toast. Book-page cancellation uses the same popup; a session that has already started receives an accurate past-session reason. English and Traditional Chinese are supported, including a language change while the notice is open.
-
-Both the initial Cancel action and a confirmation that crosses the cutoff use this flow. Blocked cancellation leaves bookings, pass balances, points and history unchanged. Eligible cancellation and successful pass restoration keep their existing behavior. Parent-dialog closure and navigation clear stale notices. Session titles are escaped in the new notice and existing cancellation confirmation.
-
-Validation: all 723 integration assertions pass (701 existing plus 22 cancellation-popup checks), covering the separate modal/alert semantics, focus, dismissals, preserved booking context, no hidden toast, cutoff boundaries, stale confirmation, past sessions, translations, escaping and unchanged data. Twelve loaded scripts pass syntax checks, sixteen stylesheets parse and twenty-nine HTML assets resolve. Chrome visual QA for this fix could not finish because the computer-use service timed out twice; the popup's native top-layer rendering has not been visually verified in this release.
-
-## Member Overview refresh — 17 October 2026
-
-Overview now prioritizes the member's next class, usable Yoga and Contrast Therapy passes, available points and a compact visit-based membership preview. The next-class card shows Today/Tomorrow where appropriate, recorded Instructor assignment and room when available, confirmation/check-in status, and the online cancellation deadline or a closed-window explanation. Today's unconfirmed booking promotes Show check-in code; otherwise the member code remains a small header shortcut. Showing a QR code still requires reception to confirm attendance. Ongoing classes remain available for check-in; ended and cancelled bookings are excluded.
-
-Pass balances exclude expired/depleted packages. Point copy follows the actual reward thresholds. A conditional 14-day reminder groups remaining passes by service and expiry, includes both services, and opens the existing booking flow with a real eligible pass. The large decorative member card, full tier journey, three benefit previews and package marketing cards are removed from Overview. Rewards retains all tier details. Compact progress runs from the current tier's visit threshold to the next threshold; Luxe has a completed state. The next birthday benefit is explicitly a preview.
-
-Two timetable previews show the next available Yoga/Contrast options within seven days, excluding started/full/cancelled/overlapping sessions and dates beyond an existing pass's validity. View session opens the actual day/service without making a reservation. Empty wallets and empty timetables have accurate states. The responsive layout keeps the two service balances together on phones, gives points a full-width row, and stacks progress and classes. Decorative looping motion is removed from this page, with short desktop entry/press feedback and reduced-motion support. English and Traditional Chinese are supported.
-
-Validation: 782 integration assertions pass (723 existing, with obsolete Overview selectors updated, plus 59 new Overview checks). New checks cover booking ordering, exact booking management, cutoff explanations and foreground cancellation notice, ongoing/checked-in/cancelled classes, QR without attendance mutation, pass eligibility/expiry grouping and booking links, all membership boundaries, real timetable discovery, empty states, role scope, escaping, translation and unchanged records. Twelve scripts pass syntax checks, seventeen stylesheets parse and thirty HTML assets resolve. Chrome review verified desktop and the upper 375px phone layout, a real local demo booking, its pass deduction and the class-preview destination. Lower-phone scrolling was interrupted by the native browser-control service; physical-device testing was not performed.
-
-## Complete member demo reset and recovery — 17 October 2026
-
-Account → Demo tools now resets the signed-in member's wallet and linked records together. Jamie returns to 12,500 points, four Yoga passes, three Contrast Therapy passes, two starter purchases and their matching points entries, with no bookings, redemptions or recorded visits. Reset removes that member's retained visit history, linked check-in IDs, used guest-voucher markers and member audit entries; it preserves other accounts, their purchases and records, the shared timetable, and the member's profile, preferences and sign-in. Other seeded members receive their own sample wallets; newly created members return to an empty wallet.
-
-A browser-local recovery snapshot provides Undo demo reset in the same Demo tools section. Recovery survives reload, restores linked records and retains subsequent changes to other accounts. New activity in the reset account disables stale recovery. Repeating reset without new activity preserves the original recovery snapshot. Storage errors roll back the mutation. Both direct reset/recovery APIs require a member role. No account is reset automatically by deployment, and this remains a per-browser demo operation.
-
-Validation: 814 integration assertions pass (782 existing plus 32 reset/recovery checks). New checks cover complete reset scope, original sample balances/orders/points consistency, attendance migration after reload, other-member and shared-session isolation, preserved profile/sign-in, local wallet consistency, persistent recovery, repeated reset, stale recovery rejection, other-member changes during recovery, role guards and both languages. Twelve loaded scripts pass syntax checks, seventeen stylesheets parse and thirty HTML assets resolve.
-
-## Forest glass authentication — 18 October 2026
-
-The approved Forest glass concept is now the real unified sign-in page: a full-page dark forest background, slow ambient light, subtle contour rings, a centered frosted panel and translucent lime glass buttons. Editable fields retain their labels, autofill attributes and existing validation. Password visibility has an accessible icon control; errors remain readable inside the panel. The submit button displays its actual pending state and prevents duplicate submissions. Registration and recovery share the same visual treatment. English, Traditional Chinese, keyboard focus, reduced motion and an opaque fallback for browsers without backdrop blur are supported.
-
-The stylesheet is scoped to authentication screens, and the browser theme color returns to the existing app palette after sign-in. Member, Admin, Front desk and Instructor routing, stored accounts and demo records retain their existing behavior. This remains the existing browser-local demo.
-
-Validation: all 814 integration assertions pass, including the 52 authentication checks covering sample and created accounts, role destinations, password visibility, errors, registration and recovery. Chrome review covered desktop, 375px phone emulation, English and Traditional Chinese, inline credential errors and successful member sign-in. Physical-device and screen-reader testing were not performed.
-
-## Forest glass member Overview — 18 October 2026
-
-Overview now uses a deep forest canvas with a matching glass header and floating navigation. Yoga and Contrast Therapy balances have distinct emerald and blue frosted surfaces, fine contour/ripple artwork, larger values and bordered action arrows. Points and membership use lighter translucent panels to give the key numbers stronger contrast. The next-class card, timetable previews, expiry reminders and tier preview follow the same palette. Desktop cards have short hover feedback; reduced-motion preferences disable movement, and browsers without backdrop blur receive opaque fallbacks.
-
-On phones the service cards retain aligned headings, the points description spans the panel, and the tier benefit has room for its icon, name and action. Navigation and footer spacing include the device safe area. The forest canvas and browser theme colour are applied only to member Overview; Wallet and other member/staff routes retain their existing appearance. Booking actions, actual balances, visit thresholds and stored records are unchanged. Missing Chinese labels for Confirmed, Checked in and View rewards are now translated.
-
-Validation: all 814 existing integration assertions pass; the 59 Overview and 22 cancellation checks also pass after the translation update. Twelve loaded scripts pass syntax checks, nineteen stylesheets parse and thirty-two HTML assets resolve. Chrome review covered wide desktop, a narrow window, the service/points cards and complete tier preview in 375px phone emulation, Chinese labels, and Wallet retaining its original palette. Physical-device and screen-reader testing were not performed.
-
-### Points and membership glass refinement — 18 October 2026
-
-The points and membership panels now use translucent forest glass in place of their pale fills. Soft borders, lime numerals, readable sage secondary text and faint contour reflections match the surrounding service cards. Membership has glass benefit buttons and an inset reward preview; its progress fill remains tied to the actual visit count. Focus outlines and the opaque fallback now use the dark palette. The benefit action stays on one line and moves below the preview on narrow phones.
-
-Validation: all 59 existing Overview integration checks pass, and the updated stylesheet parses. Chrome visual review covered the points and membership panels in a narrow window and 375px phone emulation, including the full reward preview. No JavaScript, account records or booking rules changed in this refinement.
-
-## Timetable session states and time-of-day badges — 19 October 2026
-
-Member Book keeps all scheduled sessions visible and distinguishes Upcoming, In progress and Ended using the selected date and Taipei time. Booking closes at the exact start; a class becomes Ended after the existing 60-minute duration. Closed sessions show a readable disabled state and their end time instead of advertising remaining spaces. Fully booked remains a separate state for future sessions. Initial and final booking validation both reject a class that has started, including a review left open across the start time; a closed class never sends an empty-wallet member into a pass purchase.
-
-Each session displays its start/end range and a labelled line-art badge: sunrise for Morning (06:00–11:59), sun for Afternoon (12:00–16:59), sunset for Evening (17:00–20:59), and moon/stars for Night (21:00–05:59). Overnight end timestamps carry the correct next-day date. Icons are decorative and accompanied by text. The responsive layout groups availability with its action and keeps ended sessions readable. English and Traditional Chinese are supported.
-
-A timer updates only the affected status text and existing booking button at the next start/end boundary. It retains the date field, focusable elements and open review dialogs, catches up on tab visibility/focus or cached-page restoration, and stops on page exit or leaving Book. Status display does not record attendance, spend points or change pass balances.
-
-Validation: all 856 integration checks pass (814 existing plus 42 new timetable checks). New coverage includes the exact start/end boundaries, automatic refresh, tab/page restoration, clock correction, overnight sessions, daypart labels, future/full classes, both services and languages, booking reviews crossing the cutoff, the empty-wallet guard and unchanged financial/attendance records. Twelve loaded scripts pass syntax checks, twenty stylesheets parse and thirty-three HTML assets resolve. Chrome visual review could not complete because the native computer-use service repeatedly timed out; physical-device and screen-reader testing were not performed.
+HTML, CSS and vanilla JavaScript, hosted on Vercel. QR tools are bundled locally: [jsQR license](vendor/jsQR-LICENSE.txt) and [QRCode.js license](vendor/qrcode-LICENSE.txt).
