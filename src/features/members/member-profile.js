@@ -52,11 +52,8 @@ window.SyncMemberProfile = (() => {
   }
   function rewardStatus(db,m,v) {
     if(v.used||db.usedVouchers.includes(v.code))return 'Used';
-    const pass=v.passId&&m.wallet.packages.find(p=>p.id===v.passId);
     const booked=v.passId&&visits(db,m).find(b=>b.passId===v.passId&&b.status!=='cancelled');
     if(booked?.visitStatus==='Checked in')return 'Used';
-    if(v.expiry&&v.expiry<addDays(0))return 'Expired';
-    if(booked)return booked.visitStatus==='Upcoming'?'Reserved':'Needs confirmation';
     return walletRewardStatus(v,m.wallet);
   }
   function related(db,m,a) {
@@ -85,9 +82,8 @@ window.SyncMemberProfile = (() => {
     return panel('Points ledger',`<div class="mp-ledger-balance"><span>${t('Current balance')}</span><strong>${money(m.wallet.points)}</strong></div><p class="mp-caption">${t('Older records may not include timestamps, links or balances after a change.')}</p>${table(['Date','Activity','Change','Balance after','Related record'],activity.map(a=>`<tr><td>${when(a.createdAt,a.date)}</td><td><strong>${e(t(a.title))}</strong>${a.reason?`<small>${e(a.reason)}</small>`:''}${a.actor?`<small>${e(t(a.actor))}</small>`:''}</td><td class="mp-numeric ${a.points>0?'mp-credit':'mp-debit'}">${signed(a.points)}</td><td class="mp-numeric">${Number.isSafeInteger(a.balanceAfter)?money(a.balanceAfter):unknown()}</td><td>${related(db,m,a)}</td></tr>`),'No points activity recorded.')}`)+panel('Reward redemptions',table(['Reward','Redeemed','Points spent','Expiry date','Status','Action'],m.wallet.vouchers.map(v=>`<tr><td><strong>${e(t(v.name))}</strong><small>${e(v.code)}</small></td><td>${when(v.redeemedAt)}</td><td class="mp-numeric">${Number.isSafeInteger(v.pointsCost)?money(v.pointsCost):unknown()}</td><td>${when(null,v.expiry)}</td><td>${badge(rewardStatus(db,m,v))}</td><td>${action('reward',v.code,'View reward')}</td></tr>`),'No reward redemptions recorded.'));
   }
   function passSource(p) {return p.source==='purchase'?'Purchase':p.source==='reward'?'Reward redemption':p.source==='staff'?'Staff-issued':'Unavailable'}
-  function passStatus(p){return p.expiry<addDays(0)?'Expired':p.remaining>0?'Available':'Used up'}
   function passes(db,m) {
-    return panel('Pass wallet',table(['Package','Remaining / original','Expiry date','Source','Status','Action'],m.wallet.packages.map(p=>`<tr><td><strong>${service(p.service)}</strong><small>${e(p.id)}</small></td><td class="mp-numeric">${p.remaining} / ${p.total}</td><td>${when(null,p.expiry)}</td><td>${t(passSource(p))}</td><td>${badge(passStatus(p))}</td><td>${action('pass',p.id,'View pass')}</td></tr>`),'No passes recorded.'));
+    return panel('Pass wallet',table(['Package','Remaining / original','Expiry date','Source','Status','Action'],m.wallet.packages.map(p=>`<tr><td><strong>${service(p.service)}</strong><small>${e(p.id)}</small></td><td class="mp-numeric">${p.remaining} / ${p.total}</td><td>${when(null,p.expiry)}</td><td>${t(passSource(p))}</td><td>${badge(walletPassStatus(p,m.wallet))}</td><td>${action('pass',p.id,'View pass')}</td></tr>`),'No passes recorded.'));
   }
   function visitPage(db,m) {
     return panel('Booking and attendance history',table(['Session','Date','Status','Booked on','Updated'],visits(db,m).map(v=>`<tr><td><strong>${e(t(v.title))}</strong><small>${service(v.service)}</small>${v.cancelReason?`<small>${e(t(v.cancelReason))}</small>`:''}</td><td>${when(null,v.date)}<small>${e(v.time)}</small></td><td>${badge(v.visitStatus)}</td><td>${when(v.createdAt)}${v.bookedBy?`<small>${t('Booked by staff')} · ${e(t(v.bookedBy))}</small>`:''}</td><td>${when(v.cancelledAt||v.checkedInAt)}${v.cancelledBy?`<small>${t(v.cancelledBy==='Member'?'Member action':v.cancelledBy)}</small>`:''}</td></tr>`),'No visits recorded.'));

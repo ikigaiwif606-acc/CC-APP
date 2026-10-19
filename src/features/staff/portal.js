@@ -137,6 +137,22 @@
   if(access?.role==='member')state=clone(currentMember().wallet);
   // Account owns only the signed-in member's profile, settings and records.
   const isMember=()=>access?.role==='member';
+  // Persist the points debit, credit and history together in the canonical demo wallet.
+  window.syncPortal.redeemReward=(rewardId,redemptionId)=>{
+    loadLatest();if(!isMember())return {ok:false,error:'Member access required.'};
+    const member=currentMember(),r=rewards.find(r=>r.id===rewardId);
+    if(!member||!r||typeof redemptionId!=='string'||!redemptionId)return {ok:false,error:'Unable to redeem your reward. Please try again.'};
+    const existing=member.wallet.vouchers.find(v=>v.redemptionId===redemptionId);
+    if(existing)return existing.rewardId===r.id?{ok:true,wallet:clone(member.wallet),voucher:clone(existing)}:{ok:false,error:'Unable to redeem your reward. Please try again.'};
+    if(member.wallet.points<r.cost)return {ok:false,error:'You need more points for this reward.'};
+    const previous=member.wallet,result=createRewardCredit(previous,r,redemptionId);
+    member.wallet=result.wallet;
+    try{persist()}catch{member.wallet=previous;return {ok:false,error:'Unable to save your reward. Please try again.'}}
+    state=clone(member.wallet);
+    // This cache is recoverable from the canonical wallet on sign-in.
+    try{localStorage.setItem('sync-demo-v1',JSON.stringify(state))}catch{}
+    return {ok:true,wallet:clone(member.wallet),voucher:clone(result.voucher)};
+  };
   const demoResetBackupKey='sync-demo-reset-backups-v1';
   function resetBackups(){try{const value=JSON.parse(localStorage.getItem(demoResetBackupKey));return value&&typeof value==='object'&&!Array.isArray(value)?value:{}}catch{return {}}}
   function resetRecords(member){
