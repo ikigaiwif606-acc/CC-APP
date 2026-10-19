@@ -10,7 +10,8 @@ A wellness web app for Yoga and Contrast Therapy bookings, member rewards and da
 - **Wallet** — view Yoga and Contrast Therapy passes, expiry dates and redeemed rewards.
 - **Rewards** — redeem points and track visit-based Plus, Core and Luxe membership progress.
 - **Account** — edit your profile, view purchases and points activity, and show your check-in QR code.
-- **People & staff tools** — browse people by role, create accounts, manage sessions, book for members and scan check-in codes.
+- **People & staff tools** — browse people by role, manage sessions, book for members and scan check-in codes.
+- **Admin controls** — create accounts, edit profiles, change roles, activate/deactivate access and review change history.
 - **Attendance reports** — weekly and monthly dashboards with filters and CSV export.
 
 Responsive layouts support English and Traditional Chinese.

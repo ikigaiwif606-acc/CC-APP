@@ -41,17 +41,17 @@ window.SyncPeople = (() => {
     return `<span class="people-avatar people-avatar--${p.role}" aria-hidden="true">${photo?`<img src="${photo}" alt="" width="42" height="42" loading="lazy">`:e(initials)}</span>`;
   };
   function create(api){
-    let identity=null,query='',role='all',pageNumber=1;
+    let identity=null,query='',role='all',status='all',pageNumber=1;
     const pageSize=12;
     function scope(){
       const next=api.scope();
-      if(next!==identity){identity=next;query='';role='all';pageNumber=1}
+      if(next!==identity){identity=next;query='';role='all';status='all';pageNumber=1}
       return !!next;
     }
     const allowedRoles=()=>api.isAdmin()?Object.keys(roles):['member','instructor'];
     function people(){return scope()?api.accounts().filter(p=>allowedRoles().includes(p.role)):[]}
-    function classes(id){return api.sessions(id).filter(s=>!s.cancelled&&s.date>=addDays(0)&&s.date<=addDays(6)&&sessionStart(s.date,s.time)+3600000>Date.now()).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))}
-    function personCell(p){return `<a class="people-person" href="${profileURL(p)}" data-staff-nav>${avatar(p)}<span><strong>${e(p.name)}</strong><small>${e(p.email)}</small></span></a>`}
+    function classes(id){return api.sessions(id).filter(s=>!s.cancelled&&!s.completed&&s.date>=addDays(0)&&s.date<=addDays(6)&&sessionStart(s.date,s.time)+3600000>Date.now()).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))}
+    function personCell(p){return `<a class="people-person" href="${profileURL(p)}" data-staff-nav>${avatar(p)}<span><strong>${e(p.name)}</strong><small>${e(p.email)}</small><span class="people-access-status ${p.status==='inactive'?'inactive':''}">${t(p.status==='inactive'?'Inactive':'Active')}</span></span></a>`}
     function row(p){
       const values=role==='member'?[`<span class="staff-tier ${String(p.tier).toLowerCase()}">${e(p.tier)}</span>`,money(p.points),money(p.passes)]
         :role==='instructor'?[(p.services||[]).map(serviceName).join(' · ')||t('No specializations recorded'),String(classes(p.id).length)]
@@ -60,7 +60,7 @@ window.SyncPeople = (() => {
       return `<tr role="row"><td role="cell">${personCell(p)}</td>${values.map((value,i)=>`<td role="cell" data-label="${t(labels[i])}">${value}</td>`).join('')}<td role="cell"><a class="people-profile-link" href="${profileURL(p)}" data-staff-nav aria-label="${t('View profile')}: ${e(p.name)}"><span>${t('View profile')}</span><span aria-hidden="true">↗</span></a></td></tr>`;
     }
     function results(){
-      const list=people().filter(p=>(role==='all'||p.role===role)&&(p.name+' '+p.email).toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())).sort((a,b)=>a.name.localeCompare(b.name,I18n.language));
+      const list=people().filter(p=>(role==='all'||p.role===role)&&(status==='all'||p.status===status)&&(p.name+' '+p.email).toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())).sort((a,b)=>a.name.localeCompare(b.name,I18n.language));
       const pages=Math.max(1,Math.ceil(list.length/pageSize));pageNumber=Math.min(pageNumber,pages);
       const start=(pageNumber-1)*pageSize,shown=list.slice(start,start+pageSize);
       const summary=interpolate('Showing {start}–{end} of {total} people',{start:list.length?start+1:0,end:start+shown.length,total:list.length});
@@ -70,7 +70,7 @@ window.SyncPeople = (() => {
     function directory(){
       const list=people();if(!allowedRoles().includes(role))role='all';
       const tabs=['all',...allowedRoles()];
-      return `<section class="people-directory" aria-label="${t('People directory')}"><div class="people-toolbar"><label class="people-search"><span class="sr-only">${t('Search people')}</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input id="people-search" type="search" autocomplete="off" placeholder="${t('Search by name or email')}" value="${e(query)}" aria-controls="people-results"></label>${api.isAdmin()?`<button class="button people-add" data-staff-tool="create-account" data-role="${role==='all'?'member':role}"><span aria-hidden="true">+</span> ${t('Add person')}</button>`:''}</div><div class="people-filters" role="group" aria-label="${t('Filter people by role')}">${tabs.map(id=>`<button data-people="filter" data-role="${id}" aria-pressed="${role===id}"><span>${t(id==='all'?'All people':filters[id])}</span><span class="people-count">${list.filter(p=>id==='all'||p.role===id).length}</span></button>`).join('')}</div><div id="people-results">${results()}</div></section>`;
+      return `<section class="people-directory" aria-label="${t('People directory')}"><div class="people-toolbar"><label class="people-search"><span class="sr-only">${t('Search people')}</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input id="people-search" type="search" autocomplete="off" placeholder="${t('Search by name or email')}" value="${e(query)}" aria-controls="people-results"></label><label class="people-status-filter"><span class="sr-only">${t('Account status')}</span><select id="people-status" aria-controls="people-results">${['all','active','inactive'].map(id=>`<option value="${id}" ${status===id?'selected':''}>${t(id==='all'?'All statuses':id==='active'?'Active':'Inactive')}</option>`).join('')}</select></label>${api.isAdmin()?`<button class="button people-add" data-staff-tool="create-account" data-role="${role==='all'?'member':role}"><span aria-hidden="true">+</span> ${t('Add person')}</button>`:''}</div><div class="people-filters" role="group" aria-label="${t('Filter people by role')}">${tabs.map(id=>`<button data-people="filter" data-role="${id}" aria-pressed="${role===id}"><span>${t(id==='all'?'All people':filters[id])}</span><span class="people-count">${list.filter(p=>id==='all'||p.role===id).length}</span></button>`).join('')}</div><div id="people-results">${results()}</div></section>`;
     }
     function profile(parts){
       let id;try{id=decodeURIComponent(parts[2]||'')}catch{}
@@ -79,7 +79,7 @@ window.SyncPeople = (() => {
       if(!p)return `${back}<section class="people-profile-panel people-empty"><h2>${t('Person not available')}</h2><p>${t('This profile is unavailable in your workspace.')}</p></section>`;
       const field=(label,value)=>`<div><dt>${t(label)}</dt><dd>${value||t('Unavailable')}</dd></div>`;
       const assigned=p.role==='instructor'?classes(p.id):[];
-      return `<article class="people-profile">${back}<section class="people-profile-identity">${avatar(p)}<div><h2>${e(p.name)}</h2><p>${e(p.email)}</p></div>${badge(p)}</section><div class="people-profile-grid"><section class="people-profile-panel"><h3>${t('Profile information')}</h3><dl>${field('Full name',e(p.name))}${field('Email address',e(p.email))}${api.isAdmin()?field('Phone number',e(p.phone||'')):''}${field('Joined',dateLabel(p.createdAt)?joined(p):'')}${api.isAdmin()?field('Created by',e(p.createdBy||'')):''}</dl></section><section class="people-profile-panel"><h3>${t(p.role==='instructor'?'Specializations':'Account access')}</h3>${badge(p)}<p class="people-access-description">${t(descriptions[p.role])}</p>${p.role==='instructor'?`<div class="people-service-tags">${(p.services||[]).map(s=>`<span>${serviceName(s)}</span>`).join('')||t('No specializations recorded')}</div>`:''}${api.isAdmin()?`<p class="people-account-source">${t(p.sample?'Sample account':'Created account')}</p>`:''}</section></div>${p.role==='instructor'?`<section class="people-profile-panel people-classes"><div class="people-classes-heading"><div><h3>${t('Assigned classes')}</h3><p>${t('Next 7 days')} · ${assigned.length}</p></div><a href="#admin-schedule" data-staff-nav data-people-schedule="${assigned[0]?.date||addDays(0)}">${t('View schedule')} ↗</a></div>${assigned.length?assigned.slice(0,8).map(s=>`<a class="people-class" href="#admin-schedule" data-staff-nav data-people-schedule="${e(s.date)}"><time>${e(dateLabel(s.date+'T00:00:00+08:00'))}<strong>${e(s.time)}</strong></time><span><strong>${e(t(s.title))}</strong><small>${serviceName(s.service)}${s.room?' · '+e(s.room):''}</small></span><span aria-hidden="true">↗</span></a>`).join(''):`<p class="people-profile-empty">${t('No assigned classes in the next 7 days.')}</p>`}${assigned.length>8?`<p class="people-profile-empty">${t('Showing the next 8 classes.')}</p>`:''}</section>`:''}</article>`;
+      return `<article class="people-profile">${back}<section class="people-profile-identity">${avatar(p)}<div><h2>${e(p.name)}</h2><p>${e(p.email)}</p><span class="people-access-status ${p.status==='inactive'?'inactive':''}">${t(p.status==='inactive'?'Inactive':'Active')}</span></div>${badge(p)}${api.isAdmin()?`<div class="people-profile-actions">${api.controls(p.id)}</div>`:''}</section><div class="people-profile-grid"><section class="people-profile-panel"><h3>${t('Profile information')}</h3><dl>${field('Full name',e(p.name))}${field('Email address',e(p.email))}${api.isAdmin()?field('Phone number',e(p.phone||'')):''}${field('Joined',dateLabel(p.createdAt)?joined(p):'')}${api.isAdmin()?field('Created by',e(p.createdBy||'')):''}</dl></section><section class="people-profile-panel"><h3>${t(p.role==='instructor'?'Specializations':'Account access')}</h3>${badge(p)}<p class="people-access-description">${t(descriptions[p.role])}</p>${p.role==='instructor'?`<div class="people-service-tags">${(p.services||[]).map(s=>`<span>${serviceName(s)}</span>`).join('')||t('No specializations recorded')}</div>`:''}${api.isAdmin()?`<p class="people-account-source">${t(p.sample?'Sample account':'Created account')}</p>`:''}</section></div>${p.role==='instructor'?`<section class="people-profile-panel people-classes"><div class="people-classes-heading"><div><h3>${t('Assigned classes')}</h3><p>${t('Next 7 days')} · ${assigned.length}</p></div><a href="#admin-schedule" data-staff-nav data-people-schedule="${assigned[0]?.date||addDays(0)}">${t('View schedule')} ↗</a></div>${assigned.length?assigned.slice(0,8).map(s=>`<a class="people-class" href="#admin-schedule" data-staff-nav data-people-schedule="${e(s.date)}"><time>${e(dateLabel(s.date+'T00:00:00+08:00'))}<strong>${e(s.time)}</strong></time><span><strong>${e(t(s.title))}</strong><small>${serviceName(s.service)}${s.room?' · '+e(s.room):''}</small></span><span aria-hidden="true">↗</span></a>`).join(''):`<p class="people-profile-empty">${t('No assigned classes in the next 7 days.')}</p>`}${assigned.length>8?`<p class="people-profile-empty">${t('Showing the next 8 classes.')}</p>`:''}</section>`:''}${api.isAdmin()&&p.hasWallet?`<section class="people-profile-panel"><h3>${t('Saved member records')}</h3><a class="people-profile-link" href="#admin-members/${encodeURIComponent(p.id)}/overview" data-staff-nav>${t('View membership history')} ↗</a></section>`:''}${api.isAdmin()?api.history(p.id):''}</article>`;
     }
     function page(hash){if(!scope())return '';return hash.split('/').length>1?profile(hash.split('/')):directory()}
     function refresh(){
@@ -90,6 +90,7 @@ window.SyncPeople = (() => {
       if(event.target.id!=='people-search'||!scope())return;
       query=event.target.value;pageNumber=1;refresh();
     });
+    document.addEventListener('change',event=>{if(event.target.id==='people-status'&&scope()){status=event.target.value;pageNumber=1;refresh()}});
     document.addEventListener('click',event=>{
       const schedule=event.target.closest('[data-people-schedule]');
       if(schedule&&scope())api.scheduleDate(schedule.dataset.peopleSchedule);
@@ -101,7 +102,7 @@ window.SyncPeople = (() => {
         document.querySelectorAll('[data-people=filter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.role===role)));
         const add=document.querySelector('.people-add');if(add)add.dataset.role=role==='all'?'member':role;
       }
-      if(action==='clear'){query='';role='all';pageNumber=1;api.render();document.querySelector('#people-search')?.focus();return}
+      if(action==='clear'){query='';role='all';status='all';pageNumber=1;api.render();document.querySelector('#people-search')?.focus();return}
       if(action==='previous')pageNumber=Math.max(1,pageNumber-1);
       if(action==='next')pageNumber++;
       refresh();
