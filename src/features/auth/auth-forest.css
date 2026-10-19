@@ -15,6 +15,19 @@ body.auth-shell{--auth-text:#f0f3e9;--auth-secondary:#b8c8b5;--auth-lime:#e2edb7
 .auth-forest-atmosphere{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
 .auth-forest-atmosphere>span{position:absolute;right:-330px;top:-330px;width:850px;height:1150px;border:1px solid #dbeaba14;border-radius:48%;box-shadow:0 0 0 36px #e2edb703,0 0 0 37px #e2edb70c,0 0 0 85px #e2edb703;transform:rotate(-23deg)}
 .auth-forest-atmosphere>span+span{top:470px;left:-620px;right:auto;opacity:.55;transform:rotate(29deg)}
+/* Four seconds in, six seconds out. Only decorative layers breathe. */
+.auth-login{--auth-breath-cycle:10s}
+.auth-login .auth-forest-atmosphere:before{content:'';position:absolute;left:50%;top:44%;width:min(100vw,850px);height:min(100svh,900px);background:radial-gradient(ellipse at 50% 38%,#b9d68a38,transparent 65%),radial-gradient(ellipse at 55% 72%,#68b5a324,transparent 68%);filter:blur(28px);transform:translate(-50%,-50%) scale(.94);opacity:.4;pointer-events:none}
+.auth-login .auth-form-panel:before{content:'';position:absolute;inset:-1px;border:1px solid #dcecb570;border-radius:inherit;box-shadow:0 0 34px #c4df9a1a,inset 0 0 18px #dcecb508;opacity:.18;pointer-events:none;z-index:-1}
+@media(prefers-reduced-motion:no-preference){
+  .auth-login .auth-forest-atmosphere:before{animation:auth-breathe-halo var(--auth-breath-cycle) cubic-bezier(.45,0,.55,1) infinite}
+  .auth-login .auth-forest-atmosphere>span{--breath-rotation:-23deg;--breath-low:.4;--breath-high:.95;animation:auth-breathe-rings var(--auth-breath-cycle) cubic-bezier(.45,0,.55,1) infinite;transform-origin:center}
+  .auth-login .auth-forest-atmosphere>span+span{--breath-rotation:29deg;--breath-low:.2;--breath-high:.55}
+  .auth-login .auth-form-panel:before{animation:auth-breathe-edge var(--auth-breath-cycle) cubic-bezier(.45,0,.55,1) infinite}
+}
+@keyframes auth-breathe-halo{0%,100%{transform:translate(-50%,-50%) scale(.94);opacity:.4}40%{transform:translate(-50%,-50%) scale(1.1);opacity:.85}}
+@keyframes auth-breathe-rings{0%,100%{transform:rotate(var(--breath-rotation)) scale(.96);opacity:var(--breath-low)}40%{transform:rotate(var(--breath-rotation)) scale(1.045);opacity:var(--breath-high)}}
+@keyframes auth-breathe-edge{0%,100%{opacity:.18}40%{opacity:.65}}
 .auth-forest .auth-arrival{padding:5px 10px 25px}
 .auth-forest .auth-kicker{display:block;font-size:11px;line-height:1.6;letter-spacing:2.4px;font-weight:500;color:#bdccb5}
 .auth-forest .auth-arrival p{font-size:14px;line-height:1.7;letter-spacing:.2px;color:#c4d0be;margin:9px 0 0}
