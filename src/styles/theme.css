@@ -76,7 +76,10 @@ body:not(.auth-shell) :is(.table,.staff-table,.people-table,.mp-table){color:var
 body:not(.auth-shell) :is(.table,.staff-table,.people-table,.mp-table) th{color:var(--sync-muted);background:#0d231b70;border-color:var(--sync-line);font-size:11px;font-weight:500}
 body:not(.auth-shell) :is(.table,.staff-table,.people-table,.mp-table) td{border-color:var(--sync-line)}
 body:not(.auth-shell) :is(.table,.staff-table,.people-table,.mp-table) tbody tr:hover{background:var(--sync-surface-soft)}
-body:not(.auth-shell) :is(input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea){background:var(--sync-input);border-color:var(--sync-line-strong);border-radius:14px;color:var(--sync-text);caret-color:var(--sync-accent);min-height:44px}
+body:not(.auth-shell) :is(input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea){background-color:var(--sync-input);border-color:var(--sync-line-strong);border-radius:14px;color:var(--sync-text);caret-color:var(--sync-accent);min-height:44px}
+/* Keep single-select chevrons centred and clear of both the text and rounded edge. */
+body:not(.auth-shell) select:not([multiple]):is(:not([size]),[size="1"]){appearance:none;-webkit-appearance:none;background-image:url("../../assets/icons/chevron-down.svg");background-repeat:no-repeat;background-position:right 16px center;background-size:16px 16px;padding-inline-end:48px;text-overflow:ellipsis;cursor:pointer}
+body:not(.auth-shell) select:disabled{cursor:not-allowed}
 body:not(.auth-shell) :is(input,textarea)::placeholder{color:var(--sync-faint);opacity:1}
 body:not(.auth-shell) :is(input,select,textarea):focus{border-color:var(--sync-accent)}
 body:not(.auth-shell) :is(input[type=checkbox],input[type=radio]){accent-color:var(--sync-accent)}
@@ -159,4 +162,5 @@ body.admin-shell{background:var(--sync-bg)}
   body:not(.auth-shell)>.ambient{opacity:.22;filter:blur(40px)}
 }
 @media(prefers-reduced-motion:reduce){body:not(.auth-shell) .button{transition:none}body:not(.auth-shell) .button:hover:not(:disabled){transform:none}}
+@media(forced-colors:active){body:not(.auth-shell) select:not([multiple]):is(:not([size]),[size="1"]){appearance:auto;-webkit-appearance:menulist;background-image:none;padding-inline-end:12px}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){:root{--sync-glass:#1b352b;--sync-glass-strong:#192f27}body:not(.auth-shell) dialog{background:#1b342c}}
