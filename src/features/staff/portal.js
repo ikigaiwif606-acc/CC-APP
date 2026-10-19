@@ -524,7 +524,7 @@
     if((admin&&!staff())||(instructor&&!isInstructor())){if(/^admin-members\/[^/]+\/visits$/.test(hash))sessionStorage.setItem('sync-demo-return-to',hash);location.hash=instructor&&staff()?'admin-overview':'login';render();return}
     if(instructor&&!/^instructor-(today|schedule|reports|account)$/.test(hash)&&!/^instructor-session\/[^/]+(?:\/scan)?$/.test(hash)){location.hash='instructor-today';render();return}
     if(auth||admin||instructor)document.body.classList.remove('overview-shell');
-    document.body.classList.toggle('auth-shell',auth);document.querySelector('meta[name=theme-color]')?.setAttribute('content',auth?'#101f1b':'#eaf0ed');document.body.classList.toggle('admin-shell',admin||instructor);document.body.classList.toggle('instructor-shell',instructor&&!auth);document.body.classList.toggle('member-shell',!auth&&!admin&&!instructor);if(auth)staffMenu.innerHTML='';
+    document.body.classList.toggle('auth-shell',auth);document.querySelector('meta[name=theme-color]')?.setAttribute('content','#101f1b');document.body.classList.toggle('admin-shell',admin||instructor);document.body.classList.toggle('instructor-shell',instructor&&!auth);document.body.classList.toggle('member-shell',!auth&&!admin&&!instructor);if(auth)staffMenu.innerHTML='';
     const brand=document.querySelector('.brand');brand.href=instructor?'#instructor-today':'#home';
     if(auth){$('#navigation').innerHTML='';$('#app').innerHTML=authPage(hash);I18n.chrome()}
     else if(instructor){$('#navigation').innerHTML='';$('#app').innerHTML=instructorWorkspace.page(hash);I18n.chrome()}

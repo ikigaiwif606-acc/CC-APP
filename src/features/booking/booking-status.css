@@ -1,28 +1,28 @@
 /* Member timetable: explicit session states and labelled time-of-day symbols. */
-.booking-timezone-note{font-size:11px;line-height:1.7;color:#536b5b;margin:-7px 0 17px}
-.booking-row[data-session-time]{display:grid;grid-template-columns:185px minmax(0,1fr) auto;align-items:center;gap:24px;border-color:#cfddd2;background:linear-gradient(120deg,#ffffffdd,#f7fbf7c9);box-shadow:inset 0 1px 0 #ffffffab,0 6px 20px #234c3604}
+.booking-timezone-note{font-size:11px;line-height:1.7;color:var(--sync-muted);margin:-7px 0 17px}
+.booking-row[data-session-time]{display:grid;grid-template-columns:185px minmax(0,1fr) auto;align-items:center;gap:24px;border-color:var(--sync-line);background:var(--sync-glass);box-shadow:inset 0 1px 0 #ffffffab,0 6px 20px #234c3604}
 .booking-session-clock{min-width:0;display:flex;flex-direction:column;gap:11px;align-items:flex-start}
-.booking-daypart{display:inline-flex;align-items:center;gap:7px;border:1px solid #d4d9bd;border-radius:10px;padding:5px 8px;color:#6b5a27;background:#f5edce80;font-size:10px;font-weight:500;line-height:1.5;white-space:nowrap}
+.booking-daypart{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--sync-line);border-radius:10px;padding:5px 8px;color:var(--sync-muted);background:var(--sync-surface);font-size:10px;font-weight:500;line-height:1.5;white-space:nowrap}
 .booking-daypart .icon{width:18px;height:18px;flex-shrink:0}
-.booking-daypart.daypart-afternoon{color:#4c6334;background:#e9f0d680;border-color:#d4dfbf}
-.booking-daypart.daypart-evening{color:#485c82;background:#e5eaf680;border-color:#ccd8e7}
-.booking-daypart.daypart-night{color:#57516f;background:#eae6f380;border-color:#d6d0e3}
+.booking-daypart.daypart-afternoon{color:var(--sync-gold);background:var(--sync-gold-soft);border-color:var(--sync-gold-line)}
+.booking-daypart.daypart-evening{color:var(--sync-blue);background:var(--sync-blue-soft);border-color:var(--sync-blue-line)}
+.booking-daypart.daypart-night{color:var(--sync-blue);background:var(--sync-blue-soft);border-color:var(--sync-blue-line)}
 .booking-row[data-session-time] .booking-time{display:flex;align-items:baseline;gap:7px;font-size:29px;line-height:1.2;letter-spacing:-.5px;min-width:0;white-space:nowrap}
-.booking-end-time{font-size:12px;font-weight:400;letter-spacing:0;color:#597060}
+.booking-end-time{font-size:12px;font-weight:400;letter-spacing:0;color:var(--sync-muted)}
 .booking-row[data-session-time] .booking-info{min-width:0}
 .booking-row[data-session-time] .booking-info h3{margin:0 0 8px;overflow-wrap:anywhere}
 .booking-row[data-session-time] .booking-info p{line-height:1.7;margin:0;overflow-wrap:anywhere}
 .booking-availability{display:flex;align-items:center;justify-content:flex-end;gap:21px;min-width:0}
-.booking-availability .spots{font-size:12px;line-height:1.6;text-align:right;color:#526a59}
+.booking-availability .spots{font-size:12px;line-height:1.6;text-align:right;color:var(--sync-muted)}
 .booking-availability .button{white-space:nowrap;min-width:142px;min-height:46px;gap:8px;margin:0}
 .booking-availability .button .icon{width:17px;height:17px;flex-shrink:0}
-.booking-availability .button:disabled{opacity:1;cursor:default;transform:none;box-shadow:none;background:#e8ede8;border:1px solid #cfdbd1;color:#53675a}
-.booking-row[data-session-state=ended]{background:linear-gradient(120deg,#edf2eece,#f4f6f2ba);border-color:#d6e0d7;box-shadow:inset 0 1px 0 #ffffff66}
-.booking-row[data-session-state=ended] .booking-time,.booking-row[data-session-state=ended] .booking-info h3{color:#596d5e}
-.booking-row[data-session-state=ended] .booking-info p,.booking-row[data-session-state=ended] .booking-end-time,.booking-row[data-session-state=ended] .spots{color:#5d7262}
-.booking-row[data-session-state=ended] .booking-daypart{background:#e7ece550;border-color:#cfd9c9}
-.booking-row[data-session-state=in-progress]{border-color:#c7cfab;background:linear-gradient(120deg,#f6f5e9de,#f8fbf2ce)}
-.booking-row[data-session-state=in-progress] .button:disabled{background:#ede9d7;border-color:#d7d0af;color:#665a30}
+.booking-availability .button:disabled{opacity:1;cursor:default;transform:none;box-shadow:none;background:var(--sync-surface);border:1px solid var(--sync-line);color:var(--sync-muted)}
+.booking-row[data-session-state=ended]{background:var(--sync-glass);border-color:var(--sync-line);box-shadow:inset 0 1px 0 #ffffff66}
+.booking-row[data-session-state=ended] .booking-time,.booking-row[data-session-state=ended] .booking-info h3{color:var(--sync-muted)}
+.booking-row[data-session-state=ended] .booking-info p,.booking-row[data-session-state=ended] .booking-end-time,.booking-row[data-session-state=ended] .spots{color:var(--sync-muted)}
+.booking-row[data-session-state=ended] .booking-daypart{background:var(--sync-glass);border-color:var(--sync-line)}
+.booking-row[data-session-state=in-progress]{border-color:var(--sync-gold-line);background:var(--sync-gold-soft)}
+.booking-row[data-session-state=in-progress] .button:disabled{background:var(--sync-glass);border-color:var(--sync-line);color:var(--sync-muted)}
 @media(min-width:701px) and (max-width:1000px){.booking-row[data-session-time]{grid-template-columns:160px minmax(0,1fr) 155px;gap:18px}.booking-availability{flex-direction:column;align-items:flex-end;gap:9px}.booking-row[data-session-time] .booking-info h3{font-size:17px}.booking-availability .button{min-width:140px}}
 @media(max-width:700px){
   .booking-timezone-note{font-size:10px;margin:-5px 0 14px}
@@ -31,7 +31,7 @@
   .booking-daypart{font-size:10px;padding:5px 8px;gap:5px}.booking-daypart .icon{width:17px;height:17px}
   .booking-row[data-session-time] .booking-time{font-size:28px;gap:6px}.booking-end-time{font-size:11px}
   .booking-row[data-session-time] .booking-info h3{font-size:17px;margin-bottom:5px}.booking-row[data-session-time] .booking-info p{font-size:11px}
-  .booking-availability{justify-content:space-between;gap:12px;padding-top:13px;border-top:1px solid #d9e3d9}
+  .booking-availability{justify-content:space-between;gap:12px;padding-top:13px;border-top:1px solid var(--sync-line)}
   .booking-availability .spots{text-align:left;font-size:11px;min-width:0}.booking-availability .button{font-size:11px;min-width:125px;min-height:44px;padding:11px 14px}
 }
 @media(max-width:360px){.booking-row[data-session-time]{padding:18px 15px}.booking-row[data-session-time] .booking-time{font-size:26px}.booking-daypart{padding:5px 6px}.booking-availability .button{min-width:117px;padding:11px 12px}}

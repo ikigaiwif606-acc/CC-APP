@@ -51,7 +51,7 @@ Membership benefits and booking policies are prototype settings.
 
 - `index.html` — app entry point.
 - `src/core/` — shared app logic, translations and membership rules.
-- `src/styles/` — global styles and shared visuals.
+- `src/styles/` — global styles, shared theme tokens (`theme.css`) and visuals.
 - `src/features/` — JavaScript and CSS grouped by feature.
 - `assets/logos/` — SYNC brand assets.
 - `vendor/` — bundled QR libraries and their licenses.
