@@ -46,6 +46,16 @@ Data is saved in the current browser using local storage. Accounts and records a
 
 Membership benefits and booking policies are prototype settings.
 
+## Project structure
+
+- `index.html` — app entry point.
+- `src/core/` — shared app logic, translations and membership rules.
+- `src/styles/` — global styles and shared visuals.
+- `src/features/` — JavaScript and CSS grouped by feature.
+- `assets/logos/` — SYNC brand assets.
+- `vendor/` — bundled QR libraries and their licenses.
+- `docs/` — workflow diagrams and review notes.
+
 ## Built with
 
 HTML, CSS and vanilla JavaScript, hosted on Vercel. QR tools are bundled locally: [jsQR license](vendor/jsQR-LICENSE.txt) and [QRCode.js license](vendor/qrcode-LICENSE.txt).
