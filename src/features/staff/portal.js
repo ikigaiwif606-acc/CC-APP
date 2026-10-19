@@ -26,6 +26,9 @@
     'Sample accounts':'示範帳戶','Shared demo password':'共用示範密碼','Use a sample account to fill the form, then sign in.':'選取示範帳戶以填入資料，再按登入。',
     'Email or password is incorrect.':'電子郵件或密碼不正確。','Unable to sign in. Please try again.':'無法登入，請再試一次。',
     'Use a different account':'切換帳戶','Demo account selected.':'已選取示範帳戶。',
+    'Open account menu':'開啟帳戶選單','Signed out in another tab.':'你已在另一個分頁登出。',
+    'This sign-in was interrupted. Please try again.':'此次登入已中斷，請重新登入。',
+    'Signed out of this tab. Close other SYNC tabs to finish signing out.':'此分頁已登出，請關閉其他 SYNC 分頁以完成登出。',
     'Today':'今天','Scan':'掃碼','Schedule':'課表','More':'更多','Workspace':'工作台',
     'Staff navigation':'工作台導覽','Staff account':'工作人員帳戶','Open staff account':'開啟工作人員帳戶',
     'More navigation':'更多工作台功能','Close menu':'關閉選單','Club management':'會館管理',
@@ -75,17 +78,35 @@
   const staffAccounts=()=>accountRecords().filter(a=>a.role!=='member');
   const instructorProfiles=(historical=false)=>accountRecords().filter(a=>historical?(a.role==='instructor'||db.sessions.some(s=>s.instructorId===a.id)):(a.role==='instructor'&&a.status==='active')).map(a=>({id:a.id,name:a.name,email:a.email,services:a.services,status:a.status}));
   function accountFor(email){return accountRecords().find(a=>a.email===String(email||'').trim().toLowerCase())||null}
+  // Keep revocation outside the wallet database, including for non-remembered sessions.
+  const logoutKey=id=>'sync-demo-logout-v1:'+encodeURIComponent(id);
+  function sessionAccount(session){return !session?null:session.accountId?accountRecords().find(a=>a.id===session.accountId):accountFor(session.email||(session.role==='member'?db.members.find(m=>m.id===session.memberId)?.email:staffAccounts().find(a=>a.role===session.role)?.email))}
+  const sessionAccountId=session=>session?.accountId||sessionAccount(session)?.id;
+  const logoutVersion=id=>localStorage.getItem(logoutKey(id));
+  function forgetRemembered(session){
+    const id=sessionAccountId(session);if(!id)return;
+    try{
+      const remembered=JSON.parse(localStorage.getItem('sync-demo-access'));
+      const sameVersion=remembered&&(remembered.logoutVersion??null)===(session.logoutVersion??null)&&(remembered.authVersion||0)===(session.authVersion||0);
+      if(sessionAccountId(remembered)===id&&(sameVersion||(remembered.logoutVersion??null)!==logoutVersion(id)))localStorage.removeItem('sync-demo-access');
+    }catch{}
+  }
   function validAccess(){
     if(!access||!db.members.some(m=>m.id===access.memberId))return false;
-    const account=access.accountId?accountRecords().find(a=>a.id===access.accountId):accountFor(access.email||(access.role==='member'?db.members.find(m=>m.id===access.memberId)?.email:staffAccounts().find(a=>a.role===access.role)?.email));
-    if(!account||account.status!=='active'||account.role!==access.role||account.memberId!==access.memberId||(access.email&&account.email!==access.email)||(access.authVersion||0)!==account.authVersion||(access.role==='instructor'&&account.instructorId!==access.instructorId))return false;
+    const account=sessionAccount(access);
+    if(!account||account.status!=='active'||account.role!==access.role||account.memberId!==access.memberId||(access.email&&account.email!==access.email)||(access.authVersion||0)!==account.authVersion||(access.logoutVersion??null)!==logoutVersion(account.id)||(access.role==='instructor'&&account.instructorId!==access.instructorId))return false;
     access.accountId=account.id;access.authVersion=account.authVersion;access.email=account.email;return true;
   }
-  function clearAccess(redirect=false){
-    access=null;sessionStorage.removeItem('sync-demo-access');localStorage.removeItem('sync-demo-access');
-    if(redirect){$('#modal').close();location.hash='login';toast('Your account access changed. Please sign in again.')}
+  function clearAccess(){
+    forgetRemembered(access);access=null;sessionStorage.removeItem('sync-demo-access');
   }
-  function refreshAccess(){if(access&&!validAccess()){clearAccess(true);return false}return !!access}
+  function refreshAccess(){
+    if(access&&!validAccess()){
+      const id=sessionAccountId(access),loggedOut=id&&(access.logoutVersion??null)!==logoutVersion(id);
+      endSession(loggedOut?'Signed out in another tab.':'Your account access changed. Please sign in again.');return false;
+    }
+    return !!access;
+  }
   // Only a salted password verifier is retained for new local demo registrations.
   async function passwordCredential(password,salt=crypto.getRandomValues(new Uint8Array(16)),iterations=100000){
     const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveBits']);
@@ -359,7 +380,7 @@
     activeAdmins:accountAdministration.activeAdmins,history:accountAdministration.history,update:accountAdministration.update,
     modal,toast,close:()=>$('#modal').close(),
     go(id,role){routeTo(role==='member'?'admin-members/'+encodeURIComponent(id)+'/overview':'admin-people/'+role+'/'+encodeURIComponent(id));requestAnimationFrame(focusStaffPage)},
-    signOut(){clearAccess();$('#modal').close();routeTo('login');toast('Your account was updated. Sign in again with your current details.')}
+    signOut(){endSession('Your account was updated. Sign in again with your current details.')}
   });
   const peopleDirectory=SyncPeople.create({
     scope:()=>staff()?access.role+':'+access.email:null,isAdmin:manager,accounts:directoryAccounts,
@@ -384,9 +405,9 @@
     close:'<path d="m6 6 12 12M6 18 18 6"/>'
   };
   const staffIcon=id=>`<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${staffNavIcons[id==='people'?'members':id]||staffNavIcons.more}</svg>`;
-  const staffRole=()=>t(isInstructor()?'Instructor':manager()?'Owner / Admin':'Front desk');
-  const staffInitials=()=>isInstructor()?instructorProfile().name.trim().split(/\s+/).map(n=>n[0]).slice(0,2).join('').toUpperCase():manager()?'A':'FD';
-  let staffSection='overview',staffMenuTrigger=null,staffMenuReturnFocus=true,staffRouteFocus=false;
+  const staffRole=()=>t(isMember()?'Member':isInstructor()?'Instructor':manager()?'Owner / Admin':'Front desk');
+  const staffInitials=()=>(sessionAccount(access)?.name||'SYNC').trim().split(/\s+/).map(n=>n[0]).slice(0,2).join('').toUpperCase();
+  let staffSection='overview',staffMenuTrigger=null,staffMenuReturnFocus=true,staffRouteFocus=false,signInFocusPending=false;
   const staffMenu=document.createElement('dialog');staffMenu.id='staff-menu';staffMenu.className='staff-menu-dialog';staffMenu.setAttribute('aria-labelledby','staff-menu-title');staffMenu.setAttribute('aria-describedby','staff-menu-description');document.body.append(staffMenu);
   const staffHeader=document.createElement('div');staffHeader.id='staff-header-account';document.querySelector('.header-right').append(staffHeader);
   const compactStaff=window.matchMedia('(max-width: 1024px)');
@@ -399,25 +420,42 @@
   function staffLink(id,label,section,classes=''){return `<a class="${classes} ${section===id?'selected':''}" href="#admin-${id}" data-staff-nav ${section===id?'aria-current="page"':''}><span class="staff-nav-icon">${staffIcon(id)}</span><span>${t(label)}</span></a>`}
   function staffSidebar(section){return `<aside class="staff-sidebar"><div class="staff-sidebar-heading"><span>${t('Workspace')}</span><strong>${t(manager()?'Admin workspace':'Front desk workspace')}</strong></div><nav aria-label="${t('Staff navigation')}">${staffNav.filter(([id])=>manager()||id!=='settings').map(([id,label])=>staffLink(id,label,section)).join('')}</nav><span class="staff-sidebar-location">SYNC · TAIPEI XINYI</span></aside>`}
   function staffBottomNav(section){const secondary=['reports','orders','points','settings'].includes(section);return `<nav class="staff-bottom-nav" aria-label="${t('Staff navigation')}"><div>${[['overview','Today'],['people','People'],['checkin','Scan'],['schedule','Schedule']].map(([id,label])=>staffLink(id,label,section,'staff-bottom-link '+(id==='checkin'?'staff-scan-link':''))).join('')}<button class="staff-bottom-link ${secondary?'selected':''}" data-staff-menu="more" aria-haspopup="dialog" aria-controls="staff-menu" aria-expanded="false" aria-label="${t('More navigation')}"><span class="staff-nav-icon">${staffIcon('more')}</span><span>${t('More')}</span></button></div></nav>`}
-  function renderStaffHeader(active){staffHeader.innerHTML=active?`<button class="staff-account-trigger" data-staff-menu="account" aria-label="${t('Open staff account')}" aria-haspopup="dialog" aria-expanded="false" aria-controls="staff-menu"><span aria-hidden="true">${staffInitials()}</span></button>`:'';}
+  function renderStaffHeader(active,memberActive){
+    staffHeader.innerHTML=active?`<button class="staff-account-trigger" data-staff-menu="account" aria-label="${t('Open account menu')}" aria-haspopup="dialog" aria-expanded="false" aria-controls="staff-menu"><span aria-hidden="true">${staffInitials()}</span></button>`:'';
+    const avatar=document.querySelector('.avatar');
+    if(memberActive){delete avatar.dataset.action;avatar.dataset.staffMenu='account';avatar.setAttribute('aria-haspopup','dialog');avatar.setAttribute('aria-controls','staff-menu');avatar.setAttribute('aria-expanded','false')}
+    else{delete avatar.dataset.staffMenu;avatar.dataset.action='profile';for(const attribute of ['aria-haspopup','aria-controls','aria-expanded'])avatar.removeAttribute(attribute)}
+    avatar.title=t(memberActive?'Open account menu':'Your account');avatar.setAttribute('aria-label',t(memberActive?'Open account menu':'Your account'));
+  }
   function openStaffMenu(kind,trigger){
-    if((!staff()&&!isInstructor())||!['more','account'].includes(kind)||(isInstructor()&&kind!=='account'))return;
+    loadLatest();if(!access||!['more','account'].includes(kind)||(!staff()&&kind!=='account'))return;
     if(staffMenu.open&&staffMenu.dataset.kind===kind){closeStaffMenu();return}
     closeStaffMenu(false);staffMenuTrigger=trigger;staffMenuReturnFocus=true;staffMenu.dataset.kind=kind;
     const rows=[['reports','Reports','Read attendance trends and class reports.'],['orders','Orders & passes','Review purchases and pass balances.'],['points','Points & rewards','View activity and validate vouchers.'],...(manager()?[['settings','Settings','Manage accounts and view club policies.']]:[])];
-    staffMenu.innerHTML=`<div class="staff-menu-panel"><div class="staff-menu-heading"><div><p id="staff-menu-description">${t(kind==='more'?'Club management':'Workspace')}</p><h2 id="staff-menu-title">${t(kind==='more'?'More':'Staff account')}</h2></div><button class="staff-menu-close" data-staff-menu="close" aria-label="${t('Close menu')}">${staffIcon('close')}</button></div>${kind==='more'?`<nav class="staff-more-links" aria-label="${t('More navigation')}">${rows.map(([id,label,description])=>`<a href="#admin-${id}" data-staff-nav ${staffSection===id?'aria-current="page"':''}><span class="staff-menu-icon">${staffIcon(id)}</span><span><strong>${t(label)}</strong><small>${t(description)}</small></span><span class="staff-menu-arrow" aria-hidden="true">↗</span></a>`).join('')}</nav>`:`<div class="staff-account-identity"><span class="staff-account-initials" aria-hidden="true">${staffInitials()}</span><div><strong>${staffRole()}${isInstructor()?' · '+esc(instructorProfile().name):''}</strong><span>${esc(access.email)}</span></div></div><div class="staff-account-actions">${isInstructor()?`<a class="instructor-menu-account" href="#instructor-account" data-instructor-nav><span class="staff-menu-icon">${staffIcon('members')}</span><span><strong>${t('My account')}</strong></span></a>`:`<button data-portal="member-demo"><span class="staff-menu-icon">${staffIcon('preview')}</span><span><strong>${t('Member preview')}</strong><small>${t('Open the member experience.')}</small></span><span class="staff-menu-arrow" aria-hidden="true">↗</span></button>`}<button data-portal="logout" class="staff-sign-out"><span class="staff-menu-icon">${staffIcon('logout')}</span><span><strong>${t('Sign out')}</strong></span></button></div>`}</div>`;
+    const person=sessionAccount(access),accountLink=isMember()?`<a class="account-menu-profile" href="#account/profile" data-account-menu-link><span class="staff-menu-icon">${staffIcon('members')}</span><span><strong>${t('My account')}</strong></span></a>`:isInstructor()?`<a class="account-menu-profile" href="#instructor-account" data-instructor-nav><span class="staff-menu-icon">${staffIcon('members')}</span><span><strong>${t('My account')}</strong></span></a>`:`<button data-portal="member-demo"><span class="staff-menu-icon">${staffIcon('preview')}</span><span><strong>${t('Member preview')}</strong><small>${t('Open the member experience.')}</small></span><span class="staff-menu-arrow" aria-hidden="true">↗</span></button>`;
+    staffMenu.innerHTML=`<div class="staff-menu-panel"><div class="staff-menu-heading"><div><p id="staff-menu-description">SYNC · ${staffRole()}</p><h2 id="staff-menu-title">${t(kind==='more'?'More':'Account')}</h2></div><button class="staff-menu-close" data-staff-menu="close" aria-label="${t('Close menu')}">${staffIcon('close')}</button></div>${kind==='more'?`<nav class="staff-more-links" aria-label="${t('More navigation')}">${rows.map(([id,label,description])=>`<a href="#admin-${id}" data-staff-nav ${staffSection===id?'aria-current="page"':''}><span class="staff-menu-icon">${staffIcon(id)}</span><span><strong>${t(label)}</strong><small>${t(description)}</small></span><span class="staff-menu-arrow" aria-hidden="true">↗</span></a>`).join('')}</nav>`:`<div class="staff-account-identity"><span class="staff-account-initials" aria-hidden="true">${staffInitials()}</span><div><strong>${esc(person.name)}</strong><span>${esc(access.email)}</span></div></div><div class="staff-account-actions">${accountLink}<button data-portal="logout" class="staff-sign-out"><span class="staff-menu-icon">${staffIcon('logout')}</span><span><strong>${t('Sign out')}</strong></span></button></div>`}</div>`;
     staffMenu.showModal();document.body.classList.add('staff-menu-open');syncStaffMenuButtons();staffMenu.querySelector('a, [data-portal]')?.focus({preventScroll:true});
   }
   function focusStaffPage(){const heading=$('.staff-heading h1');if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true})}}
   function routeTo(hash){location.hash=hash;render()}
+  function endSession(message='Signed out.'){
+    instructorWorkspace.reset();clearAccess();closeStaffMenu(false);$('#modal').close();$('#modal-content').replaceChildren();closeCancellationNotice();
+    sessionStorage.removeItem('sync-demo-return-to');sessionStorage.removeItem('sync-demo-pending');queuedAccountRefresh=false;
+    signInFocusPending=true;routeTo('login');toast(message);
+  }
+  function signOutEverywhere(){
+    const id=sessionAccountId(access);let shared=true;
+    try{if(id)localStorage.setItem(logoutKey(id),crypto.randomUUID())}catch{shared=false}
+    endSession(shared?'Signed out.':'Signed out of this tab. Close other SYNC tabs to finish signing out.');
+  }
   function begin(role,memberId='jamie',remember=false,email=null){
     if(isInstructor()||role==='instructor')instructorWorkspace.reset();
     const fallback=role==='member'?(accountRecords().find(a=>a.id===memberId&&a.role==='member'&&a.status==='active')||accountRecords().find(a=>a.role==='member'&&a.status==='active')):staffAccounts().find(a=>a.role===role&&a.status==='active');
     const account=email?accountFor(email):fallback;
     if(!account||account.role!==role||account.status!=='active'){toast('No active Member account is available for preview.');return}
     activeMemberId=account.memberId;
-    access={role,memberId:activeMemberId,email:account.email,accountId:account.id,authVersion:account.authVersion,remember,...(role==='instructor'?{instructorId:account.instructorId}:{})};
-    sessionStorage.setItem('sync-demo-access',JSON.stringify(access));if(remember)localStorage.setItem('sync-demo-access',JSON.stringify(access));else localStorage.removeItem('sync-demo-access');
+    access={role,memberId:activeMemberId,email:account.email,accountId:account.id,authVersion:account.authVersion,logoutVersion:logoutVersion(account.id),remember,...(role==='instructor'?{instructorId:account.instructorId}:{})};
+    sessionStorage.setItem('sync-demo-access',JSON.stringify(access));if(remember)localStorage.setItem('sync-demo-access',JSON.stringify(access));else forgetRemembered(access);
     if(role!=='instructor'){state=clone(currentMember().wallet);save()}
     const preference=currentMember().preferences?.language;if(role==='member'&&preference)I18n.setLanguage(preference);
     const returnTo=sessionStorage.getItem('sync-demo-return-to');sessionStorage.removeItem('sync-demo-return-to');
@@ -486,15 +524,16 @@
     if((admin&&!staff())||(instructor&&!isInstructor())){if(/^admin-members\/[^/]+\/visits$/.test(hash))sessionStorage.setItem('sync-demo-return-to',hash);location.hash=instructor&&staff()?'admin-overview':'login';render();return}
     if(instructor&&!/^instructor-(today|schedule|reports|account)$/.test(hash)&&!/^instructor-session\/[^/]+(?:\/scan)?$/.test(hash)){location.hash='instructor-today';render();return}
     if(auth||admin||instructor)document.body.classList.remove('overview-shell');
-    document.body.classList.toggle('auth-shell',auth);document.querySelector('meta[name=theme-color]')?.setAttribute('content',auth?'#101f1b':'#eaf0ed');document.body.classList.toggle('admin-shell',admin||instructor);document.body.classList.toggle('instructor-shell',instructor&&!auth);document.body.classList.toggle('member-shell',!auth&&!admin&&!instructor);if(auth||(!admin&&!instructor))staffMenu.innerHTML='';
+    document.body.classList.toggle('auth-shell',auth);document.querySelector('meta[name=theme-color]')?.setAttribute('content',auth?'#101f1b':'#eaf0ed');document.body.classList.toggle('admin-shell',admin||instructor);document.body.classList.toggle('instructor-shell',instructor&&!auth);document.body.classList.toggle('member-shell',!auth&&!admin&&!instructor);if(auth)staffMenu.innerHTML='';
     const brand=document.querySelector('.brand');brand.href=instructor?'#instructor-today':'#home';
     if(auth){$('#navigation').innerHTML='';$('#app').innerHTML=authPage(hash);I18n.chrome()}
     else if(instructor){$('#navigation').innerHTML='';$('#app').innerHTML=instructorWorkspace.page(hash);I18n.chrome()}
     else if(admin){let section=hash.slice(6).split('/')[0];if(section==='members')section='people';if(!staffNav.some(([id])=>id===section)||(!manager()&&section==='settings'))section='overview';staffSection=section;$('#navigation').innerHTML='';$('#app').innerHTML=adminPage(section);I18n.chrome()}
     else originalRender();
-    renderStaffHeader((admin&&staff())||(instructor&&isInstructor()));if(staffRouteFocus){staffRouteFocus=false;if((admin&&staff())||instructor)focusStaffPage()}
-    document.querySelector('.avatar').title=t('Your account');document.querySelector('.avatar').textContent=state.name.trim().split(/\s+/).map(n=>n[0]).slice(0,2).join('').toUpperCase();
+    renderStaffHeader((admin&&staff())||(instructor&&isInstructor()),isMember()&&!auth&&!admin&&!instructor);if(staffRouteFocus){staffRouteFocus=false;if((admin&&staff())||instructor)focusStaffPage()}
+    document.querySelector('.avatar').textContent=state.name.trim().split(/\s+/).map(n=>n[0]).slice(0,2).join('').toUpperCase();
     if(isMember()&&!auth&&!admin&&!instructor)memberAccount.afterRender();if(admin&&!auth&&staff())checkinScanner.afterRender();if(instructor&&!auth&&isInstructor())instructorScanner.afterRender();
+    if(auth&&hash==='login'&&signInFocusPending)requestAnimationFrame(()=>{if(location.hash!=='#login'||access)return;const heading=$('#app h1');if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true})}signInFocusPending=false});
   };
   function ownerOnly(){if(manager())return true;toast('Owner access required.');return false}
   function detail(id){if(!db.members.some(m=>m.id===id))return;memberFocus=id;routeTo('admin-members/'+encodeURIComponent(id)+'/overview');requestAnimationFrame(()=>$('#member-profile-title')?.focus())}
@@ -507,15 +546,16 @@
   document.addEventListener('change',e=>{if(e.target.matches('#staff-form [name=service]')&&manager()){const select=$('#session-instructor');if(select){const chosen=select.value;select.innerHTML=instructorOptions(e.target.value,chosen)}}if(e.target.id==='staff-date'){staffDate=e.target.value;render()}if(e.target.id==='booking-date')render()});
   document.addEventListener('click',e=>{
     const menuButton=e.target.closest('[data-staff-menu]');if(menuButton){if(menuButton.dataset.staffMenu==='close')closeStaffMenu();else openStaffMenu(menuButton.dataset.staffMenu,menuButton);return}
+    const accountLink=e.target.closest('[data-account-menu-link]');if(accountLink&&isMember()&&!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&!e.altKey&&e.button===0){closeStaffMenu(false);if(accountLink.hash===location.hash){e.preventDefault();const heading=$('#app h1');if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true})}}}
     const instructorLink=e.target.closest('[data-instructor-nav]');if(instructorLink&&isInstructor()&&!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&!e.altKey&&e.button===0){closeStaffMenu(false);if(instructorLink.hash===location.hash){e.preventDefault();focusStaffPage()}else staffRouteFocus=true}
     const navLink=e.target.closest('[data-staff-nav]');if(navLink&&staff()&&!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&!e.altKey&&e.button===0){closeStaffMenu(false);if(navLink.hash===location.hash){e.preventDefault();focusStaffPage();window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})}else staffRouteFocus=true}
     if(e.target.closest('[data-action=language]')&&isMember())commitAccount(member=>{member.preferences={...(member.preferences||{}),language:I18n.language}});const b=e.target.closest('[data-portal]');if(!b)return;if(staffMenu.contains(b))closeStaffMenu(false);const action=b.dataset.portal,id=b.dataset.id;
-    if(action==='account-switch'){access=null;sessionStorage.removeItem('sync-demo-access');localStorage.removeItem('sync-demo-access');routeTo('login')}
+    if(action==='account-switch'){signOutEverywhere();return}
     if(action==='demo-fill'){const form=$('#auth-form');if(form?.dataset.mode!=='login')return;form.elements.email.value=b.dataset.email;form.elements.password.value=demoPassword;$('#auth-error').textContent='';form.querySelector('[type=submit]').focus();toast('Demo account selected.')}
     if(action==='password'){const field=$('#auth-form [name="password"]');if(!field)return;field.type=field.type==='password'?'text':'password';b.innerHTML=authPasswordIcon(field.type==='text');b.setAttribute('aria-label',t(field.type==='password'?'Show password':'Hide password'))}
     if(action==='member-demo'&&staff()){$('#modal').close();begin('member')}
     if(action==='verify'){sessionStorage.removeItem('sync-demo-pending');toast('Demo verification complete.');routeTo('home')}
-    if(action==='logout'){if(isInstructor())instructorWorkspace.reset();access=null;sessionStorage.removeItem('sync-demo-access');localStorage.removeItem('sync-demo-access');$('#modal').close();routeTo('login');toast('Signed out.')}
+    if(action==='logout'){signOutEverywhere();return}
     if(action==='terms')modal('Demo membership terms',`<p class="modal-body">${t('Registration is free. This prototype does not create a real membership or accept payments.')}</p>`);
     loadLatest();if(!staff())return;
     if(action==='today-schedule')staffDate=addDays(0);
@@ -549,10 +589,12 @@
           db.members.push({id,name:values.name.trim(),email,phone:values.phone.trim(),createdAt:new Date().toISOString(),demoCredential,wallet:emptyWallet(values.name.trim())});
           persist();begin('member',id);sessionStorage.setItem('sync-demo-pending',id);routeTo('verify');return;
         }
-        const account=accountFor(email),valid=await passwordMatches(account,values.password);
+        const account=accountFor(email),attemptLogoutVersion=account?logoutVersion(account.id):null,valid=await passwordMatches(account,values.password);
         if(!form.isConnected)return;
         if(!valid){error.textContent=t('Email or password is incorrect.');return}
-        loadLatest();const latestAccount=accountFor(email);if(!latestAccount||latestAccount.status!=='active'||latestAccount.role!==account.role||latestAccount.authVersion!==account.authVersion||JSON.stringify(latestAccount.credential)!==JSON.stringify(account.credential)){error.textContent=t('Email or password is incorrect.');return}begin(latestAccount.role,latestAccount.memberId,!!values.remember,latestAccount.email);
+        loadLatest();const latestAccount=accountFor(email);if(!latestAccount||latestAccount.status!=='active'||latestAccount.role!==account.role||latestAccount.authVersion!==account.authVersion||JSON.stringify(latestAccount.credential)!==JSON.stringify(account.credential)){error.textContent=t('Email or password is incorrect.');return}
+        if(logoutVersion(account.id)!==attemptLogoutVersion){error.textContent=t('This sign-in was interrupted. Please try again.');return}
+        begin(latestAccount.role,latestAccount.memberId,!!values.remember,latestAccount.email);
       }catch{
         if(form.isConnected)error.textContent=t('Unable to sign in. Please try again.');
       }finally{
@@ -584,8 +626,13 @@
   let queuedAccountRefresh=false;
   $('#modal').addEventListener('close',()=>{if(!$('#modal').open&&queuedAccountRefresh){queuedAccountRefresh=false;render()}});
   window.addEventListener('storage',event=>{
+    const id=sessionAccountId(access);
+    if(id&&event.key===logoutKey(id)){refreshAccess();return}
     if(event.key!==dbKey||!event.newValue)return;
-    try{const next=JSON.parse(event.newValue);if(!Array.isArray(next.members)||!next.members.every(m=>validDemo(m.wallet))||!['sessions','audit','checkins','usedVouchers','sampleBookings','orders'].every(k=>Array.isArray(next[k])))return;if(!Array.isArray(next.accounts))next.accounts=[];db=next;accountMetadata();if(!refreshAccess()){render();return}if(isInstructor()){if($('#modal').open)$('#modal').close();render();return}const member=currentMember();if(!member)return;if(isMember()&&access.email!==member.email){access=null;sessionStorage.removeItem('sync-demo-access');localStorage.removeItem('sync-demo-access');$('#modal').close();routeTo('login');return}state=clone(member.wallet);if(!$('#modal').open)render();else {queuedAccountRefresh=true;if(isMember()&&currentModal?.title==='Your check-in code')memberAccount.refreshCheckin()}}catch{}
+    try{const next=JSON.parse(event.newValue);if(!Array.isArray(next.members)||!next.members.every(m=>validDemo(m.wallet))||!['sessions','audit','checkins','usedVouchers','sampleBookings','orders'].every(k=>Array.isArray(next[k])))return;if(!Array.isArray(next.accounts))next.accounts=[];db=next;accountMetadata();if(!refreshAccess()){render();return}if(isInstructor()){if($('#modal').open)$('#modal').close();render();return}const member=currentMember();if(!member)return;if(isMember()&&access.email!==member.email){endSession('Your account access changed. Please sign in again.');return}state=clone(member.wallet);if(!$('#modal').open)render();else {queuedAccountRefresh=true;if(isMember()&&currentModal?.title==='Your check-in code')memberAccount.refreshCheckin()}}catch{}
   });
+  function resumeAccess(){if(access){loadLatest();refreshAccess()}}
+  window.addEventListener('focus',resumeAccess);window.addEventListener('pageshow',resumeAccess);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)resumeAccess()});
   persist();render();
 })();
