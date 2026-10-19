@@ -1,0 +1,129 @@
+/* People directory: shared identity, role-specific details, and phone cards. */
+.staff-heading.people-heading h1{margin-bottom:10px}
+.staff-heading.people-heading p:last-child{font-size:13px;line-height:1.7;color:#5d7164}
+.people-directory{background:#fcfdf9e8;border:1px solid #dce5da;border-radius:22px;padding:24px;box-shadow:0 12px 35px #29473504;margin-bottom:24px}
+.people-toolbar{display:flex;align-items:center;gap:20px;justify-content:space-between;margin-bottom:22px}
+.people-search{display:flex;align-items:center;gap:11px;flex:1;max-width:440px;min-width:0;background:#fff;border:1px solid #cedacf;border-radius:12px;padding:0 14px;color:#627b69}
+.people-search>svg{width:19px;height:19px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.7}
+.people-search input{width:100%;min-width:0;min-height:46px;background:transparent;border:0;padding:11px 0;color:#284635;font:inherit;font-size:13px;outline:0}
+.people-search input::placeholder{color:#687c6b}
+.people-search:focus-within{outline:2px solid #5c7b65;outline-offset:3px;border-color:#5c7b65}
+.people-toolbar .people-add{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:11px 18px;border:1px solid #294d3b;border-radius:12px;background:#294d3b;color:#f8fbf3;font-size:13px;font-weight:500;white-space:nowrap}
+.people-add>span{font-size:21px;font-weight:400;line-height:1}
+.people-filters{display:flex;flex-wrap:wrap;gap:7px;padding-bottom:20px;border-bottom:1px solid #e0e7dd}
+.people-filters button{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:42px;padding:8px 12px;border:1px solid transparent;border-radius:10px;background:transparent;color:#536c59;font-size:12px;white-space:nowrap;transition:background 150ms ease,border-color 150ms ease}
+.people-filters button:hover{background:#edf2e8}
+.people-filters button[aria-pressed=true]{background:#e8efdd;border-color:#d2dfc7;color:#294c35;font-weight:600}
+.people-count{display:grid;place-items:center;min-width:23px;min-height:23px;padding:2px 5px;border-radius:7px;background:#eaf0e5;color:#536a48;font-size:10px;line-height:1}
+.people-filters button[aria-pressed=true] .people-count{background:#f9fcf2;color:#315039}
+.people-results-heading{display:flex;gap:12px;justify-content:space-between;align-items:center;padding:18px 2px 13px;color:#637561;font-size:11px;line-height:1.6}
+.people-results-heading p{margin:0}
+.people-results-heading>span{font-size:10px}
+.people-table{width:100%;border-collapse:collapse;text-align:left;table-layout:auto;color:#3f5b46}
+.people-table th{padding:12px 14px;background:#f0f4ec;color:#5a705d;border-bottom:1px solid #dbe4d6;font-size:10px;font-weight:500;line-height:1.5}
+.people-table th:first-child{border-radius:8px 0 0 0}
+.people-table th:last-child{border-radius:0 8px 0 0;text-align:right}
+.people-table td{padding:18px 14px;border-bottom:1px solid #e4eade;font-size:12px;line-height:1.6;vertical-align:middle}
+.people-table tbody tr:last-child td{border-bottom:0}
+.people-table tbody tr{transition:background 150ms ease}
+.people-table tbody tr:hover{background:#f2f6ed}
+.people-table td:first-child{width:40%;padding-left:10px}
+.people-table td:last-child{text-align:right;white-space:nowrap}
+.people-table--member td:first-child{width:36%}
+.people-table--instructor td:first-child{width:37%}
+.people-person{display:flex;align-items:center;gap:12px;min-width:0;color:#284735;text-decoration:none;min-height:44px}
+.people-avatar{display:grid;place-items:center;width:42px;height:42px;flex-shrink:0;border-radius:14px;background:#e7eddd;color:#47613e;font-size:12px;font-weight:550;overflow:hidden;border:1px solid #d9e2d0}
+.people-avatar img{width:100%;height:100%;object-fit:cover}
+.people-person>span:last-child{min-width:0}
+.people-person strong{display:block;font-size:13px;font-weight:550;line-height:1.5;overflow-wrap:anywhere}
+.people-person small{display:block;font-size:11px;color:#617565;line-height:1.6;margin-top:3px;overflow-wrap:anywhere}
+.people-role{display:inline-flex;align-items:center;gap:6px;width:fit-content;border:1px solid #d7e2c9;background:#eaf0df;color:#46613c;border-radius:7px;padding:5px 9px;font-size:10px;font-weight:500;line-height:1.4;white-space:nowrap}
+.people-role:before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.7}
+.people-role--instructor,.people-avatar--instructor{background:#e6eef5;border-color:#cfdeeb;color:#3f6077}
+.people-role--frontdesk,.people-avatar--frontdesk{background:#e1eeeb;border-color:#c9dfd9;color:#36635a}
+.people-role--admin,.people-avatar--admin{background:#eeE8f2;border-color:#ded0e7;color:#70527b}
+.people-table .staff-tier{font-size:10px;padding:6px 10px}
+.people-profile-link{display:inline-flex;align-items:center;justify-content:space-between;gap:11px;min-height:40px;padding:8px 11px;border-radius:9px;border:1px solid #d5e0cf;background:#fff9;color:#3c6045;font-size:11px;text-decoration:none;transition:background 150ms ease,border-color 150ms ease}
+.people-profile-link:hover{background:#e8efdf;border-color:#bacdac}
+.people-unavailable{color:#6b7c68}
+.people-empty{text-align:center;padding:40px 18px 32px;color:#60785f}
+.people-empty>span{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 17px;border:1px solid #dbe5d1;border-radius:17px;background:#edf3e5;color:#6a825b}
+.people-empty .icon{width:26px;height:26px}
+.people-empty h2{font-size:19px;font-weight:500;color:#36533b;margin:0 0 10px}
+.people-empty p{font-size:12px;line-height:1.7;margin:0}
+.people-empty button{margin-top:20px;min-height:44px;padding:10px 16px;border:1px solid #cad9c0;border-radius:10px;background:#f5f8ef;color:#41653f;font-size:12px}
+.people-pagination{display:flex;align-items:center;justify-content:flex-end;gap:14px;border-top:1px solid #e0e7d8;padding-top:16px;margin-top:12px;font-size:12px;color:#5b7355}
+.people-pagination button{width:42px;height:42px;border:1px solid #d4dfca;border-radius:10px;background:#f9fbf5;color:#42663e;font-size:17px}
+.people-pagination button:disabled{opacity:.4;cursor:default}
+.people-directory button:focus-visible,.people-directory a:focus-visible,.people-profile a:focus-visible,.people-profile button:focus-visible{outline:2px solid #537864;outline-offset:4px}
+.people-back{display:inline-flex;align-items:center;min-height:44px;margin:0 0 12px;font-size:12px;color:#4e7053;text-decoration:none}
+.people-profile-identity{display:flex;align-items:center;gap:19px;flex-wrap:wrap;padding:27px;border:1px solid #dbe4d6;border-radius:20px;background:#fbfcf8;margin-bottom:20px}
+.people-profile-identity>.people-avatar{width:62px;height:62px;border-radius:20px;font-size:18px}
+.people-profile-identity>div{flex:1;min-width:0}
+.people-profile-identity h2{font-size:26px;font-weight:450;letter-spacing:-.6px;overflow-wrap:anywhere;margin:0 0 7px;line-height:1.25;color:#294735}
+.people-profile-identity p{font-size:12px;color:#60775e;overflow-wrap:anywhere;margin:0;line-height:1.6}
+.people-profile-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.people-profile-panel{padding:25px;border:1px solid #dce5d6;border-radius:18px;background:#fcfdf9;margin-bottom:20px;min-width:0}
+.people-profile-panel h3{font-size:16px;font-weight:500;color:#34543a;margin:0 0 22px}
+.people-profile-panel dl{margin:0}
+.people-profile-panel dl>div{display:flex;justify-content:space-between;gap:22px;padding:13px 0;border-top:1px solid #e4eadd;font-size:12px;line-height:1.7}
+.people-profile-panel dl>div:first-child{border:0;padding-top:0}
+.people-profile-panel dt{color:#677b60;flex-shrink:0}
+.people-profile-panel dd{margin:0;text-align:right;color:#35533c;overflow-wrap:anywhere;min-width:0}
+.people-access-description{font-size:13px;color:#5c7357;line-height:1.8;margin:17px 0}
+.people-service-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;font-size:12px;color:#4e6e59}
+.people-service-tags span{border:1px solid #d5e2dc;background:#edf3ef;border-radius:9px;padding:9px 12px}
+.people-account-source{font-size:11px;color:#687b60;border-top:1px solid #e1e8d8;padding-top:18px;margin-top:24px}
+.people-classes-heading{display:flex;gap:20px;justify-content:space-between;align-items:center;margin-bottom:8px}
+.people-classes-heading h3{margin-bottom:9px}
+.people-classes-heading p{margin:0;font-size:11px;color:#667c5d;line-height:1.6}
+.people-classes-heading>a{font-size:12px;color:#4b6e4a;min-height:44px;display:flex;align-items:center;text-decoration:none;white-space:nowrap}
+.people-class{display:flex;align-items:center;gap:22px;border-top:1px solid #e1e9d9;padding:18px 0;color:#35553d;text-decoration:none}
+.people-class:first-of-type{margin-top:16px}
+.people-class>time{font-size:10px;line-height:1.6;color:#637a59;min-width:105px}
+.people-class>time strong{display:block;font-size:19px;font-weight:450;color:#395b3e}
+.people-class>span:nth-child(2){flex:1;min-width:0}
+.people-class>span>strong{font-size:13px;font-weight:500;line-height:1.6;overflow-wrap:anywhere}
+.people-class small{display:block;margin-top:5px;color:#657d5c;font-size:11px;line-height:1.6}
+.people-profile-empty{font-size:12px;color:#687d60;line-height:1.8;margin:22px 0 4px}
+.people-settings-shortcut .staff-panel-heading p{font-size:12px;line-height:1.7;color:#61755e;margin:8px 0 0}
+.people-settings-shortcut .staff-panel-heading .button{font-size:12px;white-space:nowrap;min-height:44px}
+@media(max-width:760px){
+  .people-directory{padding:20px 16px}
+  .people-table th,.people-table td{padding-left:9px;padding-right:9px}
+  .people-person{gap:9px}.people-person strong{font-size:12px}.people-person small{font-size:10px}
+  .people-profile-grid{grid-template-columns:minmax(0,1fr);gap:0}
+}
+@media(max-width:600px){
+  .people-directory{padding:18px 14px;border-radius:18px}
+  .people-toolbar{flex-wrap:wrap;gap:13px;margin-bottom:18px}
+  .people-toolbar .people-add{order:-1;margin-left:auto;min-height:44px;font-size:12px;padding:10px 15px}
+  .people-search{flex-basis:100%;max-width:none}
+  .people-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding-bottom:17px}
+  .people-filters button{justify-content:space-between;white-space:normal;text-align:left;padding:9px 10px;font-size:11px;border-color:#e0e8d9;min-width:0}
+  .people-filters button:first-child{grid-column:1 / -1}
+  .people-results-heading{padding:15px 1px;font-size:10px}
+  .people-table,.people-table tbody{display:block}
+  .people-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .people-table tbody{display:grid;gap:12px}
+  .people-table tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 12px;padding:16px;border:1px solid #dce6d4;border-radius:14px;background:#fff}
+  .people-table--member tbody tr{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .people-table td,.people-table tbody tr:last-child td{display:block;border:0;padding:0!important;min-width:0;width:auto!important;font-size:12px;overflow-wrap:anywhere}
+  .people-table td:first-child{grid-column:1 / -1}
+  .people-table td[data-label]:before{content:attr(data-label);display:block;font-size:10px;line-height:1.5;color:#657b5c;margin-bottom:7px}
+  .people-table td:last-child{grid-column:1 / -1;text-align:left;padding-top:12px!important;border-top:1px solid #e7ecdf!important}
+  .people-person{gap:12px}.people-person strong{font-size:14px}.people-person small{font-size:11px}
+  .people-profile-link{display:flex;min-height:42px;border:0;background:transparent;padding:7px 0;font-size:12px}
+  .people-role{font-size:10px;white-space:normal}
+  .people-profile-identity{display:grid;grid-template-columns:50px minmax(0,1fr);padding:20px;gap:12px 15px}
+  .people-profile-identity>.people-avatar{width:50px;height:50px;border-radius:16px;font-size:15px}
+  .people-profile-identity h2{font-size:23px}
+  .people-profile-identity>.people-role{grid-column:2;margin-left:0}
+  .people-profile-panel{padding:20px}
+  .people-profile-panel dl>div{gap:14px;font-size:11px}
+  .people-classes-heading{align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .people-class{gap:15px}.people-class>time{min-width:78px;font-size:9px}
+  .people-class>span>strong{font-size:12px}.people-class small{font-size:10px}
+  .people-settings-shortcut .staff-panel-heading{align-items:flex-start}
+}
+@media(prefers-reduced-motion:reduce){.people-filters button,.people-profile-link,.people-table tbody tr{transition:none}}
