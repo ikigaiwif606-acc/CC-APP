@@ -140,7 +140,7 @@ html[lang="zh-TW"] .tier-card ul{font-size:13px;line-height:1.7}html[lang="zh-TW
 .auth-login .password-field .portal-field{margin-bottom:14px}
 .auth-login .password-field input{padding-right:78px}
 .auth-login .password-field button{right:4px;bottom:4px;width:62px;height:44px;padding:0;font-size:12px;border-left:1px solid var(--sync-line);border-radius:0 8px 8px 0}
-.auth-login .auth-forgot{position:absolute;top:-8px;right:0;padding:8px 0;font-size:12px;line-height:18px;color:var(--sync-muted);text-decoration:underline;text-underline-offset:3px}
+.auth-login .auth-forgot{position:absolute;top:-8px;right:0;padding:8px 0;font-size:12px;line-height:18px;color:var(--sync-muted);text-decoration:none}
 .auth-login .auth-options{margin:0 0 18px;min-height:32px}
 .auth-login .portal-checkbox{font-size:12px;gap:9px;color:var(--sync-muted);min-height:32px}
 .auth-login .portal-checkbox input{width:16px;height:16px;margin:0;accent-color:var(--sync-accent)}

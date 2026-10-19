@@ -55,7 +55,7 @@
 .instructor-date-controls .button{padding:10px 13px;min-height:44px;border-radius:11px;font-size:13px}
 .instructor-date-controls label{min-width:0}
 .instructor-date-controls input{border:1px solid var(--sync-line);min-width:0;min-height:44px;border-radius:10px;padding:10px 12px;background:var(--sync-input);color:var(--sync-muted);font-size:12px}
-.instructor-today-link{background:transparent;color:var(--sync-muted);text-decoration:underline;text-underline-offset:4px;font-size:11px;min-height:44px;padding:8px}
+.instructor-today-link{background:transparent;color:var(--sync-muted);text-decoration:none;font-size:11px;min-height:44px;padding:8px}
 .instructor-back{display:inline-flex;align-items:center;min-height:40px;color:var(--sync-muted);font-size:11px;margin:-8px 0 15px}
 .instructor-detail-hero{display:flex;align-items:center;justify-content:space-between;gap:28px;padding:26px 29px;border-radius:20px;background:var(--sync-glass);border:1px solid var(--sync-line);margin-bottom:22px;color:var(--sync-muted)}
 .instructor-detail-hero.contrast{background:var(--sync-blue-soft);border-color:var(--sync-blue-line);color:var(--sync-blue)}

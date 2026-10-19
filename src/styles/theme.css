@@ -39,6 +39,8 @@
   --ink:var(--sync-text);--blue:var(--sync-blue);--mint:var(--sync-sage);--lime:var(--sync-accent);--snow:var(--sync-text);--muted:var(--sync-muted);--line:var(--sync-line);
 }
 html{background:var(--sync-bg);scrollbar-color:#667f64 #152b22}
+/* Links use colour and focus outlines consistently, without text underlines. */
+:where(a,button,summary,label,[role="button"]),:where(a,button,summary,label,[role="button"]):is(:hover,:focus,:active,:visited){text-decoration:none!important}
 body{background:var(--sync-bg);color:var(--sync-text);isolation:isolate;position:relative;min-height:100svh}
 ::selection{background:#e2edb738;color:var(--sync-text)}
 body:not(.auth-shell)>.ambient{position:fixed;z-index:-1;pointer-events:none;opacity:.34;filter:blur(50px);animation:none}
