@@ -55,7 +55,9 @@ Membership benefits and booking policies are prototype settings.
 - `src/features/` — JavaScript and CSS grouped by feature.
 - `assets/logos/` — SYNC brand assets.
 - `vendor/` — bundled QR libraries and their licenses.
-- `docs/` — workflow diagrams and review notes.
+- `docs/` — workflow diagrams, review notes and future planning.
+
+Future consideration: [Invite to SYNC referral program](docs/planning/referral-program.md).
 
 ## Built with
 
