@@ -1,0 +1,36 @@
+/* Public contact links share the forest glass theme without text underlines. */
+.sync-sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.sync-club-link,.sync-social-link{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;color:var(--sync-accent);font-size:14px;line-height:1.5;text-decoration:none;min-width:0}
+.sync-link-label{min-width:0;overflow-wrap:anywhere}.sync-club-link .icon,.sync-social-link .icon{width:18px;height:18px;flex-shrink:0}.sync-external-icon{width:14px!important;height:14px!important;flex-shrink:0}
+.sync-social-links{display:flex;flex-wrap:wrap;gap:10px;min-width:0}
+.sync-social-link{padding:10px 13px;border:1px solid var(--sync-line);border-radius:12px;background:var(--sync-accent-soft);color:var(--sync-muted);font-size:13px;transition:background 180ms ease,border-color 180ms ease,transform 180ms ease}
+.sync-social-link>.sync-external-icon{opacity:.65;width:12px!important;height:12px!important}
+.sync-social-link:focus-visible,.sync-club-link:focus-visible,.sync-contact-actions .button:focus-visible{outline:3px solid var(--sync-accent);outline-offset:4px}
+.account-settings-group .account-settings-body.sync-contact-body{padding-top:16px}
+.sync-contact-card{padding:24px;border:1px solid var(--sync-line);border-radius:18px;background:var(--sync-glass);box-shadow:inset 0 1px 0 #ffffff0c;min-width:0}
+.sync-contact-heading{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.sync-club-symbol{display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--sync-line);border-radius:12px;color:var(--sync-accent);background:var(--sync-accent-soft);flex-shrink:0}
+.sync-club-symbol .icon{width:21px;height:21px}.sync-contact-card h3{font-size:21px;line-height:1.4;font-weight:500;margin:0;color:var(--sync-text)}
+.sync-contact-card address,.sync-booking-location address{font-style:normal;font-size:14px;line-height:1.8;color:var(--sync-text);overflow-wrap:anywhere;max-width:62ch}
+.sync-contact-card>p{font-size:14px;line-height:1.7;color:var(--sync-muted);margin:12px 0 0}
+.sync-contact-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:21px}
+.sync-contact-actions .button{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:12px 17px;font-size:14px;line-height:1.5;min-width:0}
+.sync-contact-actions .icon{width:20px;height:20px;flex-shrink:0}.sync-contact-actions .sync-line-button{background:var(--sync-accent);color:var(--sync-on-accent);border-color:var(--sync-accent)}
+.sync-contact-social{margin-top:24px;padding-top:18px;border-top:1px solid var(--sync-line)}.sync-contact-social>p{font-size:13px;color:var(--sync-muted);line-height:1.6;margin:0 0 12px}
+.sync-contact-body>.account-help-links{margin-top:12px}
+.sync-booking-location{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px 18px;padding:18px 0 4px;margin-top:8px;border-top:1px solid var(--sync-line)}
+.sync-booking-location>div{display:flex;gap:11px;flex:1;min-width:190px}.sync-booking-location>div>.icon{flex-shrink:0;color:var(--sync-sage);margin-top:3px;width:19px;height:19px}
+.sync-booking-location strong{font-size:14px;line-height:1.6;color:var(--sync-text);font-weight:500}.sync-booking-location address{color:var(--sync-muted);margin-top:3px}.sync-booking-location>.sync-club-link{flex-shrink:0}
+.overview-next-actions .sync-club-link{font-size:14px;min-height:44px}.cancellation-contact{margin:18px 0 20px}.cancellation-contact p{font-size:14px;line-height:1.7;color:var(--sync-muted);margin:0 0 10px}.cancellation-contact .button{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;font-size:14px;padding:12px 16px}
+footer.sync-site-footer{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;max-width:1264px;padding:28px 0 36px;min-width:0}
+.sync-footer-main{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;flex-wrap:wrap;min-width:0}.sync-footer-brand p{margin:0;color:var(--sync-muted);font-size:13px;line-height:1.8;letter-spacing:0}.sync-footer-brand p:first-child{font-size:11px;letter-spacing:1.4px;margin-bottom:6px;color:var(--sync-text)}
+.sync-footer-follow{min-width:0}.sync-footer-follow>p{font-size:13px;line-height:1.6;margin:0 0 11px;color:var(--sync-muted);letter-spacing:0}
+footer.sync-site-footer .sync-link-label{display:inline}.sync-footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px 20px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--sync-line)}
+footer.sync-site-footer .sync-footer-bottom button{font-size:12px;min-height:44px;padding:9px 0;color:var(--sync-muted)}
+.auth-shell footer.sync-site-footer{max-width:680px;padding:10px 24px 30px;margin:18px auto 0;gap:12px;text-align:center}
+.auth-shell .sync-footer-main,.auth-shell .sync-footer-follow{width:100%}.auth-shell .sync-footer-main{justify-content:center;gap:14px}.auth-shell .sync-footer-brand p:first-child{display:none}.auth-shell .sync-footer-follow>p{display:none}.auth-shell .sync-social-links{justify-content:center}.auth-shell .sync-footer-bottom{width:100%;justify-content:center;border-top:0;padding-top:0}
+.admin-shell footer.sync-site-footer{display:none}
+@media(hover:hover) and (pointer:fine){.sync-social-link:hover{color:var(--sync-text);background:var(--sync-surface-soft);border-color:var(--sync-line-strong);transform:translateY(-2px)}.sync-club-link:hover{color:var(--sync-text)}}
+@media(max-width:700px){footer.sync-site-footer{margin-top:14px;padding-bottom:116px;gap:18px}.sync-footer-main{gap:18px}.sync-footer-follow{width:100%}.sync-social-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.sync-social-link{justify-content:flex-start;padding:11px 13px;font-size:13px}.sync-social-link>.sync-external-icon{margin-left:auto}.sync-footer-follow>.sync-social-links{max-width:440px}.sync-contact-card{padding:20px}.sync-contact-card h3{font-size:19px}.sync-contact-actions{display:grid;grid-template-columns:1fr}.sync-contact-actions .button{width:100%}.sync-booking-location>div{min-width:0;flex-basis:100%}.sync-booking-location>.sync-club-link{margin-left:30px}.auth-shell footer.sync-site-footer{padding:8px 24px 24px}.auth-shell .sync-footer-follow>.sync-social-links{margin:auto}.sync-footer-bottom>.sync-club-link{font-size:13px}}
+@media(max-width:480px){.sync-contact-social .sync-social-links{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.sync-social-link{transition:none}.sync-social-link:hover{transform:none}}
