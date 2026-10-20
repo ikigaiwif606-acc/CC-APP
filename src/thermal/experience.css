@@ -35,3 +35,24 @@
 :root[data-motion=paused] .button:hover{transform:none}.thermal-stage[data-visible=false] .dial-pin{animation-play-state:paused!important}
 @media(max-height:480px){.header{position:relative}.sequence-track{height:auto;min-height:0}.thermal-stage{position:relative;top:auto;height:440px;min-height:380px;max-height:none}.stage-scroll-hint{display:none}}
 .scene-panel[data-active=false] .stage-caption,.scene-panel[data-active=false] .stage-topline,.scene-panel[data-active=false] .thermal-instrument{visibility:hidden}
+
+/* Thermal halo: the hero stays readable above a decorative music-responsive field. */
+.hero-opening{--halo-surface:244,244,239;position:relative;isolation:isolate;display:flex;flex-direction:column;min-height:clamp(350px,29vw,430px);margin-bottom:35px}
+[data-theme=night] .hero-opening{--halo-surface:17,19,17}
+.thermal-halo{position:absolute;inset:-20px -20px 0;overflow:hidden;pointer-events:none;z-index:0}
+.thermal-halo canvas{display:block;width:100%;height:100%}
+.thermal-halo:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgb(var(--halo-surface)) 0%,rgba(var(--halo-surface),.85) 26%,rgba(var(--halo-surface),.12) 60%,rgba(var(--halo-surface),0) 78%),linear-gradient(0deg,rgba(var(--halo-surface),.85),rgba(var(--halo-surface),0) 48%)}
+.hero-opening .hero-kicker{position:relative;z-index:1;margin:5px 0 0}
+.motion-front .hero-opening .hero-copy{position:relative;z-index:1;flex:1;align-items:center;margin:0;padding:36px 0 32px}
+.hero-opening .hero-invitation{align-self:flex-end}
+@media(max-width:1000px) and (min-width:701px){.hero-opening{min-height:370px}.hero-opening .hero-invitation{max-width:183px!important}.motion-front .hero-opening .hero-copy{gap:24px}}
+@media(max-width:700px){
+  .hero-opening{min-height:500px;margin-bottom:26px}
+  .thermal-halo{inset:-10px -16px 0}
+  .thermal-halo:after{background:linear-gradient(180deg,rgba(var(--halo-surface),.3),rgba(var(--halo-surface),.52) 36%,rgba(var(--halo-surface),0) 62%,rgba(var(--halo-surface),.94) 98%)}
+  .hero-opening .hero-kicker{margin:0}
+  .hero-opening .hero-kicker>.micro:last-child{display:block}
+  .motion-front .hero-opening .hero-copy{padding:44px 0 0}
+  .hero-opening .hero-invitation{position:absolute;left:0;right:0;bottom:24px;width:auto;margin:0!important}
+}
+@media(max-width:380px){.hero-opening{min-height:495px}.hero-opening .hero-invitation{bottom:21px}}

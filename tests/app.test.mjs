@@ -153,12 +153,12 @@ test('purchase confirmation rechecks inventory against a newer saved database',a
 });
 
 function audioHarness({fail=false,hold=false,blocked=false}={}){
- const calls={contexts:0,resumes:0,suspends:0,fetches:0,sources:[],tones:[],nodes:[]};let release,allowed=!blocked;
+ const calls={contexts:0,resumes:0,suspends:0,fetches:0,sources:[],tones:[],nodes:[],analysers:[],spectrumReads:0};let release,allowed=!blocked;
  class Param{value=0;setValueAtTime(v){this.value=v}setTargetAtTime(v){this.value=v}linearRampToValueAtTime(v){this.value=v}exponentialRampToValueAtTime(v){this.value=v}cancelScheduledValues(){}}
  class Node{gain=new Param();frequency=new Param();threshold=new Param();knee=new Param();ratio=new Param();attack=new Param();release=new Param();connections=[];connect(node){this.connections.push(node)}disconnect(){this.disconnected=true}start(at=0){this.started=at}stop(at=0){this.stopped=at;this.onended?.()}}
  class Context{
   state='suspended';currentTime=1;destination={};constructor(){calls.contexts++}resume(){calls.resumes++;if(!allowed)return new Promise(()=>{});this.state='running';return Promise.resolve()}suspend(){calls.suspends++;this.state='suspended';return Promise.resolve()}addEventListener(){}
-  createGain(){const n=new Node();calls.nodes.push(n);return n}createDynamicsCompressor(){return new Node()}createBufferSource(){const n=new Node();calls.sources.push(n);return n}createOscillator(){const n=new Node();calls.tones.push(n);return n}decodeAudioData(){return Promise.resolve({duration:36.9231})}
+  createGain(){const n=new Node();calls.nodes.push(n);return n}createDynamicsCompressor(){return new Node()}createAnalyser(){const n=new Node();n.frequencyBinCount=512;n.getByteFrequencyData=data=>{calls.spectrumReads++;data.fill(180)};calls.analysers.push(n);return n}createBufferSource(){const n=new Node();calls.sources.push(n);return n}createOscillator(){const n=new Node();calls.tones.push(n);return n}decodeAudioData(){return Promise.resolve({duration:36.9231})}
  }
  const fetch=async()=>{calls.fetches++;if(hold)await new Promise(r=>release=r);if(fail)throw new Error('Offline');return {ok:true,arrayBuffer:async()=>new ArrayBuffer(8)}};
  return {Context,fetch,calls,release:()=>release?.(),allow:()=>{allowed=true}};
@@ -208,4 +208,53 @@ test('audio failure and cancellation never report playback or affect app actions
 test('audio volume and mute are remembered, and Chinese labels are covered',async t=>{
  const audio=audioHarness(),w=boot(t,{audioMock:audio,language:'zh-TW',musicPreference:'off'});q(w,'#sound-button').click();assert.match(q(w,'#sound-title').textContent,/氛圍/);assert.match(q(w,'[data-experience=motion]').textContent,/暫停/);
  const range=q(w,'[data-volume=music]');range.value=12;range.dispatchEvent(new w.Event('input',{bubbles:true}));assert.equal(JSON.parse(w.localStorage.getItem('handc-volume')).music,12);assert.equal(w.HandCExperience.state.music,false);assert.equal(audio.calls.contexts,0);assert.equal(q(w,'#music-level').textContent,'12%');
+});
+
+test('the halo receives actual music energy, with no response to muted audio or button effects',async t=>{
+ const audio=audioHarness(),w=boot(t,{audioMock:audio,musicPreference:'off'});let signal;
+ const mount=w.HandCHalo.mount;w.HandCHalo.mount=options=>{signal=options.readAudio;mount(options)};w.HandCExperience.mount();
+ assert.equal(q(w,'.thermal-halo').getAttribute('aria-hidden'),'true');assert.equal(w.document.querySelector('.hero-opening [data-experience=motion]'),null);
+ assert.equal(signal(),0);assert.equal(audio.calls.spectrumReads,0);
+ q(w,'#sound-button').click();q(w,'[data-experience=effects]').click();await settle();assert.equal(signal(),0);
+ q(w,'[data-experience=music]').click();await settle();assert.ok(signal()>0);assert.equal(audio.calls.spectrumReads,1);
+ assert.ok(audio.calls.nodes[0].connections.includes(audio.calls.analysers[0]));assert.ok(!audio.calls.nodes[1].connections.includes(audio.calls.analysers[0]));
+ const volume=q(w,'[data-volume=music]');volume.value=0;volume.dispatchEvent(new w.Event('input',{bubbles:true}));assert.equal(signal(),0);assert.equal(audio.calls.spectrumReads,1);
+ volume.value=25;volume.dispatchEvent(new w.Event('input',{bubbles:true}));assert.ok(signal()>0);
+ q(w,'[data-experience=mute]').click();const reads=audio.calls.spectrumReads;assert.equal(signal(),0);assert.equal(audio.calls.spectrumReads,reads);
+ q(w,'[data-experience=sound-close]').click();await go(w,'passes');assert.equal(w.document.querySelector('.thermal-halo'),null);await go(w,'home');assert.ok(w.document.querySelector('.thermal-halo'));
+});
+
+function haloHarness(t){
+ const w=new Window({url:'https://handc.test/',settings:{enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
+ t.after(()=>{w.HandCHalo?.destroy();w.happyDOM.abort()});
+ w.document.body.innerHTML='<div class="thermal-halo"><canvas></canvas></div>';
+ const calls={paints:0,signals:0,observers:[]},frames=new Map();let id=0;
+ const ctx={setTransform(){},clearRect(){calls.paints++},createRadialGradient(){return {addColorStop(){}}},fillRect(){},beginPath(){},arc(){},fill(){},save(){},translate(){},rotate(){},ellipse(){},stroke(){},restore(){}};
+ w.HTMLCanvasElement.prototype.getContext=()=>ctx;
+ q(w,'.thermal-halo').getBoundingClientRect=()=>({width:800,height:380});
+ w.requestAnimationFrame=fn=>{frames.set(++id,fn);return id};w.cancelAnimationFrame=id=>frames.delete(id);
+ w.IntersectionObserver=class{constructor(callback){this.callback=callback;calls.observers.push(this)}observe(){}disconnect(){this.disconnected=true}};
+ w.ResizeObserver=class{observe(){}disconnect(){this.disconnected=true}};
+ w.eval(readFileSync(root+'src/thermal/halo.js','utf8'));
+ const readAudio=()=>{calls.signals++;return .7};
+ return {w,calls,frames,readAudio,step(now){const pending=[...frames.values()];frames.clear();pending.forEach(fn=>fn(now))}};
+}
+
+test('halo animation stops offscreen, when hidden and on disposal; remounting keeps one loop',t=>{
+ const {w,calls,frames,readAudio,step}=haloHarness(t),host=q(w,'.thermal-halo');w.HandCHalo.mount({readAudio});
+ assert.equal(frames.size,1);step(0);step(40);const painted=calls.paints;assert.ok(painted>1);assert.ok(calls.signals>0);
+ calls.observers.at(-1).callback([{isIntersecting:false}]);assert.equal(frames.size,0);assert.equal(host.dataset.haloState,'offscreen');step(100);assert.equal(calls.paints,painted);
+ calls.observers.at(-1).callback([{isIntersecting:true}]);assert.equal(frames.size,1);
+ Object.defineProperty(w.document,'hidden',{configurable:true,value:true});w.document.dispatchEvent(new w.Event('visibilitychange'));assert.equal(frames.size,0);assert.equal(host.dataset.haloState,'hidden');
+ Object.defineProperty(w.document,'hidden',{configurable:true,value:false});w.document.dispatchEvent(new w.Event('visibilitychange'));assert.equal(frames.size,1);
+ const oldObserver=calls.observers.at(-1);w.HandCHalo.mount({readAudio});assert.equal(oldObserver.disconnected,true);assert.equal(frames.size,1);
+ w.HandCHalo.destroy();assert.equal(frames.size,0);assert.equal(calls.observers.at(-1).disconnected,true);
+});
+
+test('reduced and paused halos stay static without sampling audio or scheduling animation',t=>{
+ const {w,calls,frames,readAudio,step}=haloHarness(t),host=q(w,'.thermal-halo');w.HandCHalo.mount({motion:'reduced',readAudio});
+ assert.equal(host.dataset.haloState,'reduced');assert.equal(calls.paints,1);assert.equal(calls.signals,0);assert.equal(frames.size,0);
+ w.HandCHalo.setMotion('full');assert.equal(frames.size,1);step(50);assert.ok(calls.signals>0);
+ w.HandCHalo.setMotion('paused');const painted=calls.paints,signals=calls.signals;assert.equal(frames.size,0);assert.equal(host.dataset.haloState,'paused');step(100);assert.equal(calls.paints,painted);assert.equal(calls.signals,signals);
+ w.HandCHalo.setMotion('full');assert.equal(frames.size,1);
 });

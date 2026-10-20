@@ -3,7 +3,7 @@ window.HandCExperience=(() => {
   'use strict';
   const root=document.documentElement;
   const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-  let t=value=>value,context=null,effectsBus=null,musicBus=null,buffer=null,source=null;
+  let t=value=>value,context=null,effectsBus=null,musicBus=null,buffer=null,source=null,analyser=null,spectrum=null;
   let loading=false,music=false,effects=false,request=0,abort=null,audioError='',lastClick=-1;
   let musicPreference='on',waitingForGesture=false,autoplayAttempted=false;
   let observer=null,raf=0,stage=null,manualStep=null,lastStep=-1,motionPreference='full';
@@ -52,7 +52,9 @@ window.HandCExperience=(() => {
     if(!context){
       const Audio=window.AudioContext||window.webkitAudioContext;context=new Audio();
       const limiter=context.createDynamicsCompressor();limiter.threshold.value=-10;limiter.knee.value=12;limiter.ratio.value=4;limiter.attack.value=.005;limiter.release.value=.12;limiter.connect(context.destination);
-      musicBus=context.createGain();effectsBus=context.createGain();musicBus.connect(limiter);effectsBus.connect(limiter);setVolumes();
+      musicBus=context.createGain();effectsBus=context.createGain();
+      analyser=context.createAnalyser();analyser.fftSize=1024;analyser.smoothingTimeConstant=.55;spectrum=new Uint8Array(analyser.frequencyBinCount);
+      musicBus.connect(analyser);analyser.connect(limiter);effectsBus.connect(limiter);setVolumes();
       context.addEventListener?.('statechange',()=>{if(context.state==='closed'){music=false;effects=false;syncSound()}});
     }
     return context;
@@ -67,6 +69,13 @@ window.HandCExperience=(() => {
     for(const [node,value] of [[musicBus,musicVolume/100*.8],[effectsBus,effectsVolume/100*.4]]){
       node.gain.cancelScheduledValues(context.currentTime);node.gain.setTargetAtTime(value,context.currentTime,.025);
     }
+  }
+  function musicEnergy(){
+    if(!music||loading||!musicVolume||context?.state!=='running'||!analyser)return 0;
+    analyser.getByteFrequencyData(spectrum);
+    // Only the music bus contributes; button sounds never move the halo.
+    let bass=0;for(let i=1;i<=4;i++)bass+=spectrum[i];
+    return Math.max(0,Math.min(1,(bass/(4*255)-.15)/.85));
   }
   function stopMusic(){
     request++;abort?.abort();abort=null;loading=false;music=false;waitingForGesture=false;
@@ -192,6 +201,7 @@ window.HandCExperience=(() => {
   function schedulePosition(){if(!raf)raf=requestAnimationFrame(position)}
   function applyMotion(){
     root.dataset.motion=motion();
+    window.HandCHalo?.setMotion(motion());
     $$('[data-experience="motion"]').forEach(button=>{
       button.disabled=motion()==='reduced';button.setAttribute('aria-pressed',String(motion()!=='full'));
       button.innerHTML=`<span aria-hidden="true">${motion()==='full'?'Ⅱ':'▷'}</span> ${t(motion()==='reduced'?'Reduced motion':motion()==='paused'?'Resume motion':'Pause motion')}`;
@@ -209,6 +219,7 @@ window.HandCExperience=(() => {
       observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-revealed');observer.unobserve(entry.target)}}),{threshold:.08,rootMargin:'0px 0px -15px 0px'});
       $$('#app [data-reveal]').forEach(el=>observer.observe(el));root.classList.add('motion-ready');
     }
+    window.HandCHalo?.mount({motion:motion(),readAudio:musicEnergy});
     if(!$('#sound-panel')?.open)soundControls();syncSound();applyMotion();attemptDefaultMusic();
   }
   window.addEventListener('scroll',schedulePosition,{passive:true});
