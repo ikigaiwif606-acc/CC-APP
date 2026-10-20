@@ -305,8 +305,8 @@ test('an expiry refresh preserves an unfinished studio settings form and an open
 });
 
 test('a guest can review and keep a selected visit date through sign-in and confirmation',async t=>{
- const w=boot(t,{route:'home'});assert.equal(w.document.querySelectorAll('.quick-pass').length,6);assert.ok(q(w,'.quick-passes').compareDocumentPosition(q(w,'.sequence-track'))&w.Node.DOCUMENT_POSITION_FOLLOWING);
- q(w,'.quick-pass[data-product=sunrise]').click();assert.equal(q(w,'#modal-title').textContent,'Review your pass');const date=q(w,'[name=visitDate]');date.value='2026-10-21';
+ const w=boot(t,{route:'home'});assert.equal(w.document.querySelector('.quick-passes'),null);assert.ok(q(w,'.hero-opening').nextElementSibling.matches('.sequence-track'));
+ await go(w,'passes');assert.equal(w.document.querySelectorAll('.pass-card').length,6);q(w,'[data-product=sunrise][data-action=buy]').click();assert.equal(q(w,'#modal-title').textContent,'Review your pass');const date=q(w,'[name=visitDate]');date.value='2026-10-21';
  await submit(w,'[data-form=guest-purchase]');assert.equal(w.location.hash,'#login');assert.match(q(w,'[data-purchase-context]').textContent,/Sunrise Pass/);assert.match(q(w,'[data-purchase-context]').textContent,/21 Oct 2026/);assert.equal(db(w).orders.length,2);
  q(w,'[name=email]').value='jamie@handc.demo';q(w,'[name=password]').value='HandCDemo2026!';await submit(w,'#auth-form');assert.equal(q(w,'[name=visitDate]').value,'2026-10-21');assert.equal(db(w).orders.length,2);
  await submit(w,'[data-form=purchase]');assert.equal(db(w).passes[0].visitDate,'2026-10-21');assert.equal(db(w).passes[0].productId,'sunrise');
@@ -326,6 +326,6 @@ test('a guest review left open past its window shows expiry and cannot continue 
 });
 
 test('new pass review, selection context and admission states are translated into Chinese',async t=>{
- const w=boot(t,{language:'zh-TW'});assert.match(q(w,'.hero-invitation').textContent,/RM30/);q(w,'.quick-pass[data-product=sunset]').click();assert.match(q(w,'#modal-title').textContent,/確認通行證/);assert.match(q(w,'[data-form=guest-purchase]').textContent,/建立帳戶/);await submit(w,'[data-form=guest-purchase]');assert.match(q(w,'[data-purchase-context]').textContent,/晚間通行證/);
+ const w=boot(t,{language:'zh-TW'});assert.match(q(w,'.hero-invitation').textContent,/RM30/);await go(w,'passes');q(w,'[data-product=sunset][data-action=buy]').click();assert.match(q(w,'#modal-title').textContent,/確認通行證/);assert.match(q(w,'[data-form=guest-purchase]').textContent,/建立帳戶/);await submit(w,'[data-form=guest-purchase]');assert.match(q(w,'[data-purchase-context]').textContent,/晚間通行證/);
  const a=boot(t,{language:'zh-TW',userId:'admin',route:'staff-home',clock:{now:at('2026-10-20',21)}});assert.match(q(a,'[data-admission-status]').textContent,/已關閉/);
 });
