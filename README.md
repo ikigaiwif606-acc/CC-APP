@@ -1,8 +1,10 @@
-# HandC APP
+# Mekansm APP
+
+Mekansm is the studio name. The identity uses an original dot-matrix wordmark and an M symbol, shared with the studio concept and private business plan. Logo SVGs live in `assets/logos/mekansm-wordmark.svg` and `assets/logos/mekansm-symbol.svg`. Existing deployment URLs, browser storage keys and demo credentials stay compatible with earlier previews.
 
 Cold. Heat. A moment to reset.
 
-A thermal wellness pass and studio operations prototype for Raja Uda, Butterworth, Penang. The app was developed from [SYNC-APP](https://github.com/ikigaiwif606-acc/SYNC-APP); the current interface and access model are specific to HandC.
+A thermal wellness pass and studio operations prototype for Raja Uda, Butterworth, Penang. The app was developed from [SYNC-APP](https://github.com/ikigaiwif606-acc/SYNC-APP); the current interface and access model are specific to Mekansm.
 
 ## Passes and access
 
@@ -25,7 +27,7 @@ The founding counter is calculated from saved demo purchases, capped at 200, and
 
 ## Design and workflows
 
-The day and night palettes follow the [HandC business concept](https://handc-business-summary.vercel.app/): pale concrete, brushed steel, dark industrial surfaces, warm timber, dot-matrix identity, thin grids and small red indicators. Optimized concept images from that brief are bundled under `assets/studio/`. Temperatures of 4°C and 8°C are labelled as targets, not live readings.
+The day and night palettes follow the [Mekansm business concept](https://handc-business-summary.vercel.app/): pale concrete, brushed steel, dark industrial surfaces, warm timber, dot-matrix identity, thin grids and small red indicators. Optimized concept images from that brief are bundled under `assets/studio/`. Temperatures of 4°C and 8°C are labelled as targets, not live readings.
 
 Visitors can browse the studio and six passes before signing in. Members can purchase demo passes, see exact validity, display their entry QR, inspect visits and purchase history, and update their profile. Reception and admin can sell passes, review member records and process group enquiries. All staff can confirm entry/departure, pause admissions and change manual facility status. Only admin can configure an approved operating occupancy limit; no limit is inferred from pool or sauna design capacities.
 

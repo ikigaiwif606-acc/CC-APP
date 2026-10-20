@@ -1,4 +1,4 @@
-/* HandC sound and motion. Audio never gates navigation or transactions. */
+/* Mekansm sound and motion. Audio never gates navigation or transactions. */
 window.HandCExperience=(() => {
   'use strict';
   const root=document.documentElement;
@@ -24,8 +24,8 @@ window.HandCExperience=(() => {
   const waveform='<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M3 10v4m4-7v10m5-14v18m5-14v10m4-7v4"/></svg>';
   function soundControls(){
     const panel=$('#sound-panel');if(!panel)return;
-    panel.innerHTML=`<div class="modal-heading"><div><p class="micro">HANDC / SOUND SYSTEM</p><h2 id="sound-title">${t('Set the atmosphere.')}</h2></div><button class="icon-button close" data-experience="sound-close" aria-label="${t('Close sound settings')}">×</button></div>
-      <div class="sound-track"><span class="sound-disc" aria-hidden="true">${waveform}</span><div><span class="micro">HANDC 001 / ORIGINAL COMPOSITION</span><h3>${t('Thermal / 104')}</h3><p>${t('Ambient dub techno. Made for this space.')}</p></div><span class="mono">104<br><small>BPM</small></span></div>
+    panel.innerHTML=`<div class="modal-heading"><div><p class="micro">MEKANSM / SOUND SYSTEM</p><h2 id="sound-title">${t('Set the atmosphere.')}</h2></div><button class="icon-button close" data-experience="sound-close" aria-label="${t('Close sound settings')}">×</button></div>
+      <div class="sound-track"><span class="sound-disc" aria-hidden="true">${waveform}</span><div><span class="micro">MEKANSM 001 / ORIGINAL COMPOSITION</span><h3>${t('Thermal / 104')}</h3><p>${t('Ambient dub techno. Made for this space.')}</p></div><span class="mono">104<br><small>BPM</small></span></div>
       <div class="sound-setting"><div><strong>${t('Music')}</strong><span>${t('Soft pulse. Warm chords. Water texture.')}</span></div><button class="sound-switch" role="switch" aria-checked="false" data-experience="music" aria-label="${t('Background music')}" ${audioSupported?'':'disabled'}><i></i><span>${t('Off')}</span></button></div>
       <label class="sound-volume">${t('Music volume')}<output id="music-level">${musicVolume}%</output><input type="range" data-volume="music" min="0" max="100" step="1" value="${musicVolume}" aria-label="${t('Music volume')}" ${audioSupported?'':'disabled'}></label>
       <div class="sound-setting"><div><strong>${t('Button effects')}</strong><span>${t('Tactile clicks and gentle confirmations.')}</span></div><button class="sound-switch" role="switch" aria-checked="false" data-experience="effects" aria-label="${t('Button sound effects')}" ${audioSupported?'':'disabled'}><i></i><span>${t('Off')}</span></button></div>
@@ -41,7 +41,7 @@ window.HandCExperience=(() => {
       control.setAttribute('aria-checked',String(on));control.querySelector('span').textContent=t(key==='music'&&loading?'Loading…':key==='music'&&waitingForGesture?'Ready':on?'On':'Off');
     }
     const message=$('#sound-message');
-    if(message)message.textContent=t(!audioSupported?'Sound is unavailable in this browser.':waitingForGesture?'Music will start with your first tap.':loading?'Loading the original HandC loop…':music?'Playing / Thermal 104':effects?'Button effects enabled.':'Choose music, effects, or both.');
+    if(message)message.textContent=t(!audioSupported?'Sound is unavailable in this browser.':waitingForGesture?'Music will start with your first tap.':loading?'Loading the original Mekansm loop…':music?'Playing / Thermal 104':effects?'Button effects enabled.':'Choose music, effects, or both.');
     // Keep a playback failure visible instead of masking it with the loading message.
     if(message&&audioError)message.textContent=t(audioError);
     const mute=$('[data-experience="mute"]');if(mute)mute.disabled=!music&&!effects&&!loading&&!waitingForGesture;

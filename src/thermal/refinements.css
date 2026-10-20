@@ -1,4 +1,6 @@
 /* Readable transactions and practical controls on small screens. */
+.brand img{width:156px;height:auto;aspect-ratio:209/39}
+.footer-brand img{width:122px;height:auto;aspect-ratio:209/39}
 .motion-front .hero-invitation p{font-size:14px;line-height:1.65}
 .thermal-halo:after{background:radial-gradient(ellipse at 91% 79%,rgba(var(--halo-surface),.7),rgba(var(--halo-surface),0) 35%),linear-gradient(90deg,rgb(var(--halo-surface)) 0%,rgba(var(--halo-surface),.85) 26%,rgba(var(--halo-surface),.12) 60%,rgba(var(--halo-surface),0) 78%),linear-gradient(0deg,rgba(var(--halo-surface),.85),rgba(var(--halo-surface),0) 48%)}
 .sequence-track{height:160vh;min-height:900px}
@@ -24,6 +26,8 @@ dialog .small,dialog .form-error,.purchase-note,.allocation-note{font-size:13px;
 .active-visits-table .small-button{min-height:44px}
 [data-admission-status]{font-size:12px;line-height:1.5;white-space:normal}
 @media(max-width:700px){
+  .brand img{width:120px;height:auto}
+  .brand>span{font-size:7px;letter-spacing:.17em}
   .header{column-gap:6px}
   .header-tools{gap:6px}
   .header-tools .tool-button{min-width:44px;min-height:44px;justify-content:center;padding:8px 0}
@@ -75,6 +79,7 @@ dialog .small,dialog .form-error,.purchase-note,.allocation-note{font-size:13px;
   .panel>.section-heading:has([data-admission-status]){flex-direction:column;align-items:flex-start;gap:12px}
 }
 @media(max-width:380px){
+  .brand img{width:111px}
   .header-tools{gap:3px}
   .header-tools .language-button{font-size:9px}
   .motion-front .hero-invitation p{max-width:285px}

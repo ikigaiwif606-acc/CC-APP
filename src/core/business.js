@@ -1,4 +1,4 @@
-/* HandC access rules. Pure state transitions shared by the app and its tests. */
+/* Mekansm access rules. Pure state transitions shared by the app and its tests. */
 var HandC = (() => {
   const ZONE = 'Asia/Kuala_Lumpur';
   const DAY = 86400000;
@@ -126,9 +126,9 @@ var HandC = (() => {
       {id:'jamie',number:'HC0001',name:'Jamie Lin',email:'jamie@handc.demo',role:'member',active:true},
       {id:'avery',number:'HC0002',name:'Avery Tan',email:'avery@handc.demo',role:'member',active:true},
       {id:'morgan',number:'HC0003',name:'Morgan Lee',email:'morgan@handc.demo',role:'member',active:true},
-      {id:'admin',name:'HandC Admin',email:'admin@handc.demo',role:'admin',active:true},
-      {id:'reception',name:'HandC Reception',email:'reception@handc.demo',role:'reception',active:true},
-      {id:'attendant',name:'HandC Attendant',email:'attendant@handc.demo',role:'attendant',active:true}
+      {id:'admin',name:'Mekansm Admin',email:'admin@handc.demo',role:'admin',active:true},
+      {id:'reception',name:'Mekansm Reception',email:'reception@handc.demo',role:'reception',active:true},
+      {id:'attendant',name:'Mekansm Attendant',email:'attendant@handc.demo',role:'attendant',active:true}
     ],passes:[],orders:[],visits:[],enquiries:[],settings:{capacity:null,admissionsPaused:false,note:'',facilities:{pools:'available',sauna:'available'}}};
     db=purchase(db,'jamie','weekly',{now:now-2*DAY,requestId:'seed-weekly'}).db;
     db=purchase(db,'morgan','monthly',{now:now-7*DAY,requestId:'seed-monthly'}).db;
