@@ -2,14 +2,14 @@
 (() => {
   const copy = {
     'Awaiting check-in':'待報到','Ready for your next visit.':'為下一次到訪，做好準備。','Show':'顯示','Hide':'隱藏','Show password':'顯示密碼','Hide password':'隱藏密碼','Enter your name.':'請輸入姓名。','Used.':'已使用。','No sessions available for this date.':'此日期尚無課程。','Cannot move a session with existing bookings.':'已有預約的課程無法更改日期、時間或服務。','Settings are read-only in this mockup; can issue passes and adjust points.':'此原型的設定僅供查看；可發放堂票及調整點數。','Welcome to your rhythm.':'歡迎回到你的節奏。','A little space. A better day.':'一點自己的空間，更好的每一天。','Your next moment starts here.':'下一段美好時光，從這裡開始。',
-    'Sign in':'登入','Join SYNC':'加入 SYNC','Email address':'電子郵件','Password':'密碼','Full name':'姓名','Phone number (optional)':'手機號碼（選填）','Forgot password?':'忘記密碼？',
-    'New to SYNC?':'還不是 SYNC 會員？','Create your account':'建立帳戶','Already a member?':'已經是會員？','Free to join. Yours to enjoy.':'免費加入，享受專屬禮遇。','Start with Plus membership, then grow at your own pace.':'從 Plus 會員開始，依自己的步調累積更多禮遇。',
+    'Sign in':'登入','Join HandC':'加入 HandC','Email address':'電子郵件','Password':'密碼','Full name':'姓名','Phone number (optional)':'手機號碼（選填）','Forgot password?':'忘記密碼？',
+    'New to HandC?':'還不是 HandC 會員？','Create your account':'建立帳戶','Already a member?':'已經是會員？','Free to join. Yours to enjoy.':'免費加入，享受專屬禮遇。','Start with Plus membership, then grow at your own pace.':'從 Plus 會員開始，依自己的步調累積更多禮遇。',
     'I agree to the membership terms.':'我同意會員條款。','Read demo terms':'查看示範條款','Create account':'註冊帳戶','Reset your password.':'重設你的密碼。','Enter your email to preview the recovery flow.':'輸入電子郵件，體驗密碼重設流程。','Send reset link':'寄送重設連結','Back to sign in':'返回登入',
     'Check your inbox.':'請查看你的收件匣。','This is a preview only. No email was sent.':'此為流程預覽，尚未實際寄送電子郵件。','Continue to member demo':'進入會員示範','Check your email to verify your account.':'請確認電子郵件以驗證帳戶。','Complete demo verification':'完成模擬驗證',
     'Demo mode':'示範模式','Simulated access. Do not enter a real password.':'模擬登入，請勿輸入真實密碼。',
     'Owner / Admin':'負責人／管理員','Front desk':'櫃台人員','Signed out.':'已登出。','Sign out':'登出','Member preview':'會員預覽',
     'Operations, in rhythm.':'讓營運，井然有序。','A clearer view of your club.':'掌握會館的每一個環節。','Admin workspace':'管理工作台','Front desk workspace':'櫃台工作台','Local demo data · no real transactions':'本機示範資料 · 無真實交易',
-    'Today at SYNC':'SYNC 今日動態','Members':'會員管理','Schedule & bookings':'課表與預約','Orders & passes':'訂單與堂票','Points & rewards':'點數與獎勵','Settings':'設定','Today’s bookings':'今日預約','Checked in':'已報到','Active members':'會員總數','Recent package sales':'近期套票銷售',
+    'Today at HandC':'HandC 今日動態','Members':'會員管理','Schedule & bookings':'課表與預約','Orders & passes':'訂單與堂票','Points & rewards':'點數與獎勵','Settings':'設定','Today’s bookings':'今日預約','Checked in':'已報到','Active members':'會員總數','Recent package sales':'近期套票銷售',
     'Today’s arrivals':'今日到館','View schedule':'查看課表','Recent activity':'近期紀錄','No activity yet.':'尚無紀錄。','Member':'會員','Session':'課程','Time':'時間','Status':'狀態','Action':'操作','Booked':'已預約','Check in':'報到','No bookings for this date.':'此日期尚無預約。','Search by name or email':'搜尋姓名或電子郵件','Tier':'等級','Points':'點數','Passes':'堂票','View member':'查看會員','Member details':'會員資料','No members found.':'找不到符合的會員。',
     'Qualifying spend':'有效消費','Add session':'新增課程','Date':'日期','Service':'服務','Title':'課程名稱','Instructor':'指導老師','Capacity':'名額','Save session':'儲存課程','Edit session':'編輯課程','Cancel session':'取消課程','Cancel this session?':'要取消此課程嗎？','Booked passes will be restored with their original expiry.':'已扣除的堂票將退回並保留原使用期限。','Keep session':'保留課程','Confirm cancellation':'確認取消','Session saved.':'課程已儲存。','Session cancelled and passes restored.':'課程已取消，堂票已退回。','A session already exists at this time.':'此時段已有相同服務的課程。','Capacity cannot be lower than current bookings.':'名額不得少於目前預約人數。','Cancelled':'已取消','Yoga session':'瑜伽課程',
     'Upcoming sessions':'即將到來的課程','Booking roster':'預約名單','Attendance recorded.':'報到紀錄已儲存。','Use check-in on the session date.':'請於課程當天操作報到。','Sample orders':'示範訂單','Order':'訂單','Amount':'金額','Paid':'已付款','Pass wallet':'堂票錢包','Issue passes':'發放堂票','Quantity':'堂數','Expiry date':'到期日','Reason':'原因','Confirm issue':'確認發放','Passes issued.':'堂票已發放。',
@@ -20,7 +20,7 @@
     'Yoga guest reward':'瑜伽好友獎勵','Manual points adjustment':'手動點數調整','Pass issue':'堂票發放','Check-in':'報到','Session creation':'新增課程','Session update':'更新課程','Session cancellation':'取消課程','Guest voucher use':'好友券使用','Demo registration':'模擬註冊','Member check-in':'會員報到','Refunds are not implemented in this version.':'此版本尚未提供退款功能。','No orders yet.':'尚無訂單。','No active passes.':'尚無有效堂票。','Staff only':'工作人員專用','Manage your next moment.':'管理下一段療癒時光。'
   };
   Object.assign(copy, {
-    'SIGN IN':'登入','Welcome back':'歡迎回來','Sign in to your SYNC account.':'登入你的 SYNC 帳戶。',
+    'SIGN IN':'登入','Welcome back':'歡迎回來','Sign in to your HandC account.':'登入你的 HandC 帳戶。',
     'Enter your password':'輸入密碼','Create a demo password (8+ characters)':'設定示範密碼（至少 8 個字元）',
     'Keep me signed in':'保持登入','Create an account':'建立帳戶','Try a demo account':'試用示範帳戶','Demo':'示範',
     'Sample accounts':'示範帳戶','Shared demo password':'共用示範密碼','Use a sample account to fill the form, then sign in.':'選取示範帳戶以填入資料，再按登入。',
@@ -28,7 +28,7 @@
     'Use a different account':'切換帳戶','Demo account selected.':'已選取示範帳戶。',
     'Open account menu':'開啟帳戶選單','Signed out in another tab.':'你已在另一個分頁登出。',
     'This sign-in was interrupted. Please try again.':'此次登入已中斷，請重新登入。',
-    'Signed out of this tab. Close other SYNC tabs to finish signing out.':'此分頁已登出，請關閉其他 SYNC 分頁以完成登出。',
+    'Signed out of this tab. Close other HandC tabs to finish signing out.':'此分頁已登出，請關閉其他 HandC 分頁以完成登出。',
     'Today':'今天','Scan':'掃碼','Schedule':'課表','More':'更多','Workspace':'工作台',
     'Staff navigation':'工作台導覽','Staff account':'工作人員帳戶','Open staff account':'開啟工作人員帳戶',
     'More navigation':'更多工作台功能','Close menu':'關閉選單','Club management':'會館管理',
@@ -38,7 +38,7 @@
     'Open the member experience.':'開啟會員介面。'
   });
   Object.assign(copy, {
-    'Today at SYNC':'今日概覽',
+    'Today at HandC':'今日概覽',
     'Ready for arrivals':'準備迎接下一位會員',
     'Welcome your next arrival':'為下一位會員辦理報到',
     'All check-ins complete':'今日預約皆已報到',
@@ -51,10 +51,10 @@
   const t = I18n.translate, esc = escapeHTML;
   const clone = value => JSON.parse(JSON.stringify(value));
   const emptyWallet = name => ({name,points:0,spend:0,packages:[],bookings:[],vouchers:[],activity:[],visitHistory:[]});
-  const dbKey='sync-staff-demo-v1';
+  const dbKey='handc-staff-demo-v1';
   function newDb(){
-    const members=[{id:'jamie',name:state.name,email:'jamie@sync.demo',phone:'',wallet:clone(state)}];
-    for(const [id,name,email,spend,points] of [['avery','Avery Chen','avery@sync.demo',22000,8000],['morgan','Morgan Wu','morgan@sync.demo',36000,18000],['riley','Riley Huang','riley@sync.demo',4000,4000]]){
+    const members=[{id:'jamie',name:state.name,email:'jamie@handc.demo',phone:'',wallet:clone(state)}];
+    for(const [id,name,email,spend,points] of [['avery','Avery Chen','avery@handc.demo',22000,8000],['morgan','Morgan Wu','morgan@handc.demo',36000,18000],['riley','Riley Huang','riley@handc.demo',4000,4000]]){
       const wallet=emptyWallet(name);Object.assign(wallet,{spend,points,packages:[{id:crypto.randomUUID(),service:'yoga',remaining:5,total:5,expiry:addDays(80)}]});members.push({id,name,email,phone:'',wallet});
     }
     const sessionList=[];
@@ -72,23 +72,23 @@
     if(!Array.isArray(m.wallet.attendance))m.wallet.attendance=[];
     for(const b of [...m.wallet.bookings,...m.wallet.visitHistory,...db.sampleBookings.filter(b=>b.memberId===m.id)])if(b.checkedInAt||db.checkins.includes(b.id))SyncMembership.record(m.wallet,b,b.checkedInAt);
   }
-  const demoPassword='SyncDemo2026!';
-  const sampleStaffAccounts=[{id:'sample-admin',name:'SYNC Admin',email:'admin@sync.demo',role:'admin',memberId:'jamie'},{id:'sample-frontdesk',name:'SYNC Front desk',email:'frontdesk@sync.demo',role:'frontdesk',memberId:'jamie'},...SyncInstructor.accounts.map(p=>({...p,role:'instructor',memberId:'jamie',instructorId:p.id}))];
+  const demoPassword='HandCDemo2026!';
+  const sampleStaffAccounts=[{id:'sample-admin',name:'HandC Admin',email:'admin@handc.demo',role:'admin',memberId:'jamie'},{id:'sample-frontdesk',name:'HandC Front desk',email:'frontdesk@handc.demo',role:'frontdesk',memberId:'jamie'},...SyncInstructor.accounts.map(p=>({...p,role:'instructor',memberId:'jamie',instructorId:p.id}))];
   const accountRecords=()=>SyncAccountManagement.records(db,sampleStaffAccounts);
   const staffAccounts=()=>accountRecords().filter(a=>a.role!=='member');
   const instructorProfiles=(historical=false)=>accountRecords().filter(a=>historical?(a.role==='instructor'||db.sessions.some(s=>s.instructorId===a.id)):(a.role==='instructor'&&a.status==='active')).map(a=>({id:a.id,name:a.name,email:a.email,services:a.services,status:a.status}));
   function accountFor(email){return accountRecords().find(a=>a.email===String(email||'').trim().toLowerCase())||null}
   // Keep revocation outside the wallet database, including for non-remembered sessions.
-  const logoutKey=id=>'sync-demo-logout-v1:'+encodeURIComponent(id);
+  const logoutKey=id=>'handc-demo-logout-v1:'+encodeURIComponent(id);
   function sessionAccount(session){return !session?null:session.accountId?accountRecords().find(a=>a.id===session.accountId):accountFor(session.email||(session.role==='member'?db.members.find(m=>m.id===session.memberId)?.email:staffAccounts().find(a=>a.role===session.role)?.email))}
   const sessionAccountId=session=>session?.accountId||sessionAccount(session)?.id;
   const logoutVersion=id=>localStorage.getItem(logoutKey(id));
   function forgetRemembered(session){
     const id=sessionAccountId(session);if(!id)return;
     try{
-      const remembered=JSON.parse(localStorage.getItem('sync-demo-access'));
+      const remembered=JSON.parse(localStorage.getItem('handc-demo-access'));
       const sameVersion=remembered&&(remembered.logoutVersion??null)===(session.logoutVersion??null)&&(remembered.authVersion||0)===(session.authVersion||0);
-      if(sessionAccountId(remembered)===id&&(sameVersion||(remembered.logoutVersion??null)!==logoutVersion(id)))localStorage.removeItem('sync-demo-access');
+      if(sessionAccountId(remembered)===id&&(sameVersion||(remembered.logoutVersion??null)!==logoutVersion(id)))localStorage.removeItem('handc-demo-access');
     }catch{}
   }
   function validAccess(){
@@ -98,7 +98,7 @@
     access.accountId=account.id;access.authVersion=account.authVersion;access.email=account.email;return true;
   }
   function clearAccess(){
-    forgetRemembered(access);access=null;sessionStorage.removeItem('sync-demo-access');
+    forgetRemembered(access);access=null;sessionStorage.removeItem('handc-demo-access');
   }
   function refreshAccess(){
     if(access&&!validAccess()){
@@ -120,7 +120,7 @@
     const candidate=await passwordCredential(password,new Uint8Array(stored.salt),stored.iterations);
     return candidate.hash.length===stored.hash.length&&candidate.hash.every((byte,i)=>byte===stored.hash[i]);
   }
-  let access;try{access=JSON.parse(sessionStorage.getItem('sync-demo-access')||localStorage.getItem('sync-demo-access'))}catch{}
+  let access;try{access=JSON.parse(sessionStorage.getItem('handc-demo-access')||localStorage.getItem('handc-demo-access'))}catch{}
   if(access&&!validAccess())clearAccess();
   let activeMemberId=access?.memberId||'jamie',staffDate=addDays(0),memberFocus='jamie';
   const persist=()=>localStorage.setItem(dbKey,JSON.stringify(db));
@@ -133,7 +133,7 @@
   const audit=(action,memberId,reason)=>{const actor=accountFor(access?.email);db.audit.unshift({id:crypto.randomUUID(),action,memberId,reason,who:isInstructor()?'Instructor':manager()?'Owner / Admin':'Front desk',...(actor?{actorId:actor.id||actor.email,actorName:actor.name||actor.email}:{}),at:new Date().toISOString()});persist()};
   function allBookings(){return [...db.sampleBookings,...db.members.flatMap(m=>m.wallet.bookings.map(b=>({...b,memberId:m.id})))].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))}
   function bookingsFor(s){return allBookings().filter(b=>b.service===s.service&&b.date===s.date&&b.time===s.time)}
-  window.syncPortal={allowMemberAction(action){loadLatest();if(isMember()){state=clone(currentMember().wallet);return true}return ['language','close','rules'].includes(action)},memberNumber(){const index=db.members.findIndex(m=>m.id===activeMemberId);return '0000 '+String(2088+index)},walletSaved(wallet){if(isMember())loadLatest();if(!isMember()&&!staff())return;const m=currentMember();if(m){m.wallet=clone({...wallet,name:m.name});state=clone(m.wallet);persist();localStorage.setItem('sync-demo-v1',JSON.stringify(state))}},purchaseRecorded(service,qty,amount,metadata={}){if(isInstructor())return;db.orders.unshift({id:'DEMO-'+crypto.randomUUID().slice(0,8).toUpperCase(),memberId:activeMemberId,title:(service==='yoga'?'Yoga':'Contrast Therapy')+' · '+qty+' passes',amount,date:addDays(0),...metadata});persist()},sessionsFor(service,date){const records=db.sessions.filter(s=>s.service===service&&s.date===date);if(!records.length)return [];return records.filter(s=>!s.cancelled).sort((a,b)=>a.time.localeCompare(b.time)).map(s=>[s.time,s.title,service==='yoga'?'Gentle vinyasa · All levels':'Infrared Steam Bath included',`${Math.max(0,s.capacity-bookingsFor(s).length)} spaces`])}};
+  window.syncPortal={allowMemberAction(action){loadLatest();if(isMember()){state=clone(currentMember().wallet);return true}return ['language','close','rules'].includes(action)},memberNumber(){const index=db.members.findIndex(m=>m.id===activeMemberId);return '0000 '+String(2088+index)},walletSaved(wallet){if(isMember())loadLatest();if(!isMember()&&!staff())return;const m=currentMember();if(m){m.wallet=clone({...wallet,name:m.name});state=clone(m.wallet);persist();localStorage.setItem('handc-demo-v1',JSON.stringify(state))}},purchaseRecorded(service,qty,amount,metadata={}){if(isInstructor())return;db.orders.unshift({id:'DEMO-'+crypto.randomUUID().slice(0,8).toUpperCase(),memberId:activeMemberId,title:(service==='yoga'?'Yoga':'Contrast Therapy')+' · '+qty+' passes',amount,date:addDays(0),...metadata});persist()},sessionsFor(service,date){const records=db.sessions.filter(s=>s.service===service&&s.date===date);if(!records.length)return [];return records.filter(s=>!s.cancelled).sort((a,b)=>a.time.localeCompare(b.time)).map(s=>[s.time,s.title,service==='yoga'?'Gentle vinyasa · All levels':'Infrared Steam Bath included',`${Math.max(0,s.capacity-bookingsFor(s).length)} spaces`])}};
   if(access?.role==='member')state=clone(currentMember().wallet);
   // Account owns only the signed-in member's profile, settings and records.
   const isMember=()=>access?.role==='member';
@@ -150,10 +150,10 @@
     try{persist()}catch{member.wallet=previous;return {ok:false,error:'Unable to save your reward. Please try again.'}}
     state=clone(member.wallet);
     // This cache is recoverable from the canonical wallet on sign-in.
-    try{localStorage.setItem('sync-demo-v1',JSON.stringify(state))}catch{}
+    try{localStorage.setItem('handc-demo-v1',JSON.stringify(state))}catch{}
     return {ok:true,wallet:clone(member.wallet),voucher:clone(result.voucher)};
   };
-  const demoResetBackupKey='sync-demo-reset-backups-v1';
+  const demoResetBackupKey='handc-demo-reset-backups-v1';
   function resetBackups(){try{const value=JSON.parse(localStorage.getItem(demoResetBackupKey));return value&&typeof value==='object'&&!Array.isArray(value)?value:{}}catch{return {}}}
   function resetRecords(member){
     const bookings=[...member.wallet.bookings,...(member.wallet.visitHistory||[]),...(member.wallet.attendance||[]),...db.sampleBookings.filter(b=>b.memberId===member.id)];
@@ -170,7 +170,7 @@
   }
   function resetMemberDemo(undo=false){
     if(!isMember())return {ok:false,error:'Member access required.'};
-    loadLatest();const member=currentMember(),before=clone(db),previousWallet=localStorage.getItem('sync-demo-v1'),backups=resetBackups(),previousBackups=localStorage.getItem(demoResetBackupKey);
+    loadLatest();const member=currentMember(),before=clone(db),previousWallet=localStorage.getItem('handc-demo-v1'),backups=resetBackups(),previousBackups=localStorage.getItem(demoResetBackupKey);
     try{
       if(undo){
         const backup=backups[member.id];
@@ -185,11 +185,11 @@
         backups[member.id]={at:new Date().toISOString(),records:original,after:JSON.stringify(resetRecords(member))};
       }
       localStorage.setItem(demoResetBackupKey,JSON.stringify(backups));
-      localStorage.setItem('sync-demo-v1',JSON.stringify(member.wallet));persist();state=clone(member.wallet);
+      localStorage.setItem('handc-demo-v1',JSON.stringify(member.wallet));persist();state=clone(member.wallet);
       return {ok:true,wallet:clone(member.wallet)};
     }catch{
       db=before;state=clone(currentMember().wallet);
-      try{persist();if(previousWallet===null)localStorage.removeItem('sync-demo-v1');else localStorage.setItem('sync-demo-v1',previousWallet);if(previousBackups===null)localStorage.removeItem(demoResetBackupKey);else localStorage.setItem(demoResetBackupKey,previousBackups)}catch{}
+      try{persist();if(previousWallet===null)localStorage.removeItem('handc-demo-v1');else localStorage.setItem('handc-demo-v1',previousWallet);if(previousBackups===null)localStorage.removeItem(demoResetBackupKey);else localStorage.setItem(demoResetBackupKey,previousBackups)}catch{}
       return {ok:false,error:'Unable to save changes. Please try again.'};
     }
   }
@@ -207,8 +207,8 @@
     loadLatest();
     if(!isMember())throw new Error('Member access required');
     const member=currentMember(),before=clone(member),previousState=clone(state);
-    try{change(member);member.revision=(member.revision||0)+1;state=clone(member.wallet);persist();localStorage.setItem('sync-demo-v1',JSON.stringify(state))}
-    catch(error){Object.keys(member).forEach(key=>delete member[key]);Object.assign(member,before);state=previousState;try{persist();localStorage.setItem('sync-demo-v1',JSON.stringify(state))}catch{}throw error}
+    try{change(member);member.revision=(member.revision||0)+1;state=clone(member.wallet);persist();localStorage.setItem('handc-demo-v1',JSON.stringify(state))}
+    catch(error){Object.keys(member).forEach(key=>delete member[key]);Object.assign(member,before);state=previousState;try{persist();localStorage.setItem('handc-demo-v1',JSON.stringify(state))}catch{}throw error}
   }
   const memberAccount=SyncAccount.create({
     isMember:()=>{loadLatest();return isMember()},member:()=>clone(currentMember()),orders:()=>clone(db.orders.filter(o=>o.memberId===activeMemberId)),bookings:()=>clone(allBookings().filter(b=>b.memberId===activeMemberId)),checked:id=>db.checkins.includes(id),
@@ -248,7 +248,7 @@
       if(!pending||!Number.isFinite(Date.parse(pending.requestedAt))||Date.now()-Date.parse(pending.requestedAt)>900000)return 'This verification preview expired. Start the email change again.';
       if(accountFor(pending.email))return 'This email is already in use.';
       commitAccount(member=>{member.email=pending.email;delete member.pendingEmailChange});
-      access.email=currentMember().email;sessionStorage.setItem('sync-demo-access',JSON.stringify(access));if(access.remember)localStorage.setItem('sync-demo-access',JSON.stringify(access));return null;
+      access.email=currentMember().email;sessionStorage.setItem('handc-demo-access',JSON.stringify(access));if(access.remember)localStorage.setItem('handc-demo-access',JSON.stringify(access));return null;
     },
     cancelEmail(){if(isMember())commitAccount(member=>{delete member.pendingEmailChange})}
   });
@@ -273,7 +273,7 @@
   const checkinScanner=SyncCheckin.create({
     isStaff:()=>!!staff(),
     find(code){if(!staff())return null;const member=db.members.find((m,index)=>code.type==='id'?m.id===code.value:code.type==='email'?m.email.toLowerCase()===code.value:code.type==='number'?[String(2088+index),'0000'+String(2088+index)].includes(code.value):false);return member?{id:member.id}:null},
-    member(id){if(!staff())return null;const index=db.members.findIndex(m=>m.id===id),member=db.members[index];return member?{id:member.id,name:member.name,email:member.email,number:'SYNC 0000 '+String(2088+index),tier:memberTier(member)}:null},
+    member(id){if(!staff())return null;const index=db.members.findIndex(m=>m.id===id),member=db.members[index];return member?{id:member.id,name:member.name,email:member.email,number:'HandC 0000 '+String(2088+index),tier:memberTier(member)}:null},
     bookings(id){return staff()?allBookings().filter(b=>b.memberId===id&&b.date===addDays(0)&&!bookingCancelled(b)).map(b=>({...clone(b),checked:bookingChecked(b)})):[]},
     confirm:confirmCheckin
   });
@@ -282,7 +282,7 @@
   function loadLatest(){try{const next=JSON.parse(localStorage.getItem(dbKey));if(next&&Array.isArray(next.members)&&next.members.every(m=>validDemo(m.wallet))&&['sessions','audit','checkins','usedVouchers','sampleBookings','orders'].every(k=>Array.isArray(next[k]))){if(!Array.isArray(next.accounts))next.accounts=[];db=next;accountMetadata();refreshAccess()}}catch{}}
   function assignedSession(id){const profile=instructorProfile();if(!profile||typeof id!=='string')return null;return db.sessions.find(s=>s.id===id&&s.instructorId===profile.id&&profile.services.includes(s.service))||null}
   function sessionView(s){return s?{id:s.id,title:s.title,service:s.service,date:s.date,time:s.time,capacity:s.capacity,room:s.room||'',cancelled:!!s.cancelled,delivery:clone(s.delivery||{})}:null}
-  function instructorRoster(id){const s=assignedSession(id);if(!s)return [];return bookingsFor(s).filter(b=>!bookingCancelled(b)).map(b=>{const m=db.members.find(m=>m.id===b.memberId),index=db.members.indexOf(m);if(!m)return null;return {id:b.id,memberId:m.id,name:m.name,number:'SYNC 0000 '+String(2088+index),photo:typeof m.photo==='string'&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(m.photo)?m.photo:null,checked:bookingChecked(b),first:!(m.wallet.attendance||[]).some(v=>(v.bookingId||v.id)!==b.id&&v.service===s.service)}}).filter(Boolean)}
+  function instructorRoster(id){const s=assignedSession(id);if(!s)return [];return bookingsFor(s).filter(b=>!bookingCancelled(b)).map(b=>{const m=db.members.find(m=>m.id===b.memberId),index=db.members.indexOf(m);if(!m)return null;return {id:b.id,memberId:m.id,name:m.name,number:'HandC 0000 '+String(2088+index),photo:typeof m.photo==='string'&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(m.photo)?m.photo:null,checked:bookingChecked(b),first:!(m.wallet.attendance||[]).some(v=>(v.bookingId||v.id)!==b.id&&v.service===s.service)}}).filter(Boolean)}
   function delivery(s){if(!s.delivery||typeof s.delivery!=='object'||Array.isArray(s.delivery))s.delivery={};if(!s.delivery.preparation||typeof s.delivery.preparation!=='object')s.delivery.preparation={};if(!Array.isArray(s.delivery.handovers))s.delivery.handovers=[];return s.delivery}
   function instructorWrite(id){loadLatest();if(!isInstructor())return {error:'Instructor access required.'};const session=assignedSession(id);return session?{session}:{error:'This session is not assigned to you.'}}
   const scanSessionId=()=>{const match=location.hash.match(/^#instructor-session\/([^/]+)\/scan$/);if(!match)return null;try{return decodeURIComponent(match[1])}catch{return null}};
@@ -313,7 +313,7 @@
       if(!s){const id=b.sessionId||'history:'+b.service+'|'+b.date+'|'+b.time;s={id,date:b.date,time:b.time,service:b.service,title:b.title,instructorId:null,instructorName:'',cancelled:b.cancelReason==='Session cancellation',completed:false};byId.set(id,s);bySlot.set(slot,[...(bySlot.get(slot)||[]),s]);sessions.push(row(s))}
       const m=db.members.find(m=>m.id===b.memberId);if(!m)continue;
       const attendance=(m.wallet.attendance||[]).find(a=>(a.bookingId||a.id)===b.id);
-      bookings.push({id:b.id,sessionId:s.id,memberId:m.id,memberName:m.name,memberNumber:'SYNC 0000 '+String(2088+db.members.indexOf(m)),date:b.date,time:b.time,service:b.service,cancelled:b.status==='cancelled',checked:bookingChecked(b),checkedInAt:b.checkedInAt||attendance?.checkedInAt||null});
+      bookings.push({id:b.id,sessionId:s.id,memberId:m.id,memberName:m.name,memberNumber:'HandC 0000 '+String(2088+db.members.indexOf(m)),date:b.date,time:b.time,service:b.service,cancelled:b.status==='cancelled',checked:bookingChecked(b),checkedInAt:b.checkedInAt||attendance?.checkedInAt||null});
     }
     if(!own)for(const m of db.members)for(const a of m.wallet.attendance||[]){const key=m.id+'|'+(a.bookingId||a.id);if(!seen.has(key)){seen.add(key);unlinked.push({date:a.date,service:a.service})}}
     return {sessions,bookings,unlinked};
@@ -368,7 +368,7 @@
       const p=m.wallet.packages.find(p=>p.id===values.passId&&p.service===s.service&&p.remaining>0&&p.expiry>=s.date);
       if(!p)return {error:'Choose a pass valid on the session date.'};
       const before=clone(db),booking={id:crypto.randomUUID(),service:s.service,title:s.title,date:s.date,time:s.time,sessionId:s.id,passId:p.id,createdAt:new Date().toISOString(),bookedBy:access.role==='admin'?'Owner / Admin':'Front desk',bookedByEmail:access.email};
-      try{p.remaining--;m.wallet.bookings.push(booking);m.wallet.bookings.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));audit('Staff booking',m.id,s.title+' · '+s.date+' '+s.time);if(m.id===activeMemberId){state=clone(m.wallet);localStorage.setItem('sync-demo-v1',JSON.stringify(state))}}catch{db=before;state=clone(currentMember().wallet);try{persist()}catch{}return {error:'Unable to save changes. Please try again.'}}
+      try{p.remaining--;m.wallet.bookings.push(booking);m.wallet.bookings.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));audit('Staff booking',m.id,s.title+' · '+s.date+' '+s.time);if(m.id===activeMemberId){state=clone(m.wallet);localStorage.setItem('handc-demo-v1',JSON.stringify(state))}}catch{db=before;state=clone(currentMember().wallet);try{persist()}catch{}return {error:'Unable to save changes. Please try again.'}}
       return {ok:true,memberId:m.id};
     }
   });
@@ -386,9 +386,9 @@
     samples:sampleStaffAccounts,db:()=>db,load:loadLatest,isAdmin:manager,actorId:()=>access?.accountId,
     today:()=>addDays(0),sessionStart,emptyWallet,
     commit(next){
-      const before=db,previousState=clone(state),previousWallet=localStorage.getItem('sync-demo-v1');
-      try{db=next;persist();state=clone(currentMember().wallet);localStorage.setItem('sync-demo-v1',JSON.stringify(state))}
-      catch(error){db=before;state=previousState;try{persist();if(previousWallet===null)localStorage.removeItem('sync-demo-v1');else localStorage.setItem('sync-demo-v1',previousWallet)}catch{}throw error}
+      const before=db,previousState=clone(state),previousWallet=localStorage.getItem('handc-demo-v1');
+      try{db=next;persist();state=clone(currentMember().wallet);localStorage.setItem('handc-demo-v1',JSON.stringify(state))}
+      catch(error){db=before;state=previousState;try{persist();if(previousWallet===null)localStorage.removeItem('handc-demo-v1');else localStorage.setItem('handc-demo-v1',previousWallet)}catch{}throw error}
     }
   });
   const adminPeople=SyncAdminPeople.create({
@@ -405,7 +405,7 @@
     scheduleDate:date=>{if(staff()&&/^\d{4}-\d{2}-\d{2}$/.test(date))staffDate=date},render:()=>render(),icon:id=>staffIcon(id)
   });
   const originalRender=render;
-  const staffNav=[['overview','Today at SYNC'],['checkin','Scan check-in'],['people','People'],['schedule','Schedule & bookings'],['reports','Reports'],['orders','Orders & passes'],['points','Points & rewards'],['settings','Settings']];
+  const staffNav=[['overview','Today at HandC'],['checkin','Scan check-in'],['people','People'],['schedule','Schedule & bookings'],['reports','Reports'],['orders','Orders & passes'],['points','Points & rewards'],['settings','Settings']];
   const staffNavIcons={
     overview:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
     members:'<circle cx="9" cy="8" r="3"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6m3 10v-2a6 6 0 0 0-2.5-4.9"/>',
@@ -427,7 +427,7 @@
     date:()=>staffDate,setDate:date=>{staffDate=date},render:()=>render(),modal
   });
   const staffRole=()=>t(isMember()?'Member':isInstructor()?'Instructor':manager()?'Owner / Admin':'Front desk');
-  const staffInitials=()=>(sessionAccount(access)?.name||'SYNC').trim().split(/\s+/).map(n=>n[0]).slice(0,2).join('').toUpperCase();
+  const staffInitials=()=>(sessionAccount(access)?.name||'HandC').trim().split(/\s+/).map(n=>n[0]).slice(0,2).join('').toUpperCase();
   let staffSection='overview',staffMenuTrigger=null,staffMenuReturnFocus=true,staffRouteFocus=false,signInFocusPending=false;
   const staffMenu=document.createElement('dialog');staffMenu.id='staff-menu';staffMenu.className='staff-menu-dialog';staffMenu.setAttribute('aria-labelledby','staff-menu-title');staffMenu.setAttribute('aria-describedby','staff-menu-description');document.body.append(staffMenu);
   const staffHeader=document.createElement('div');staffHeader.id='staff-header-account';document.querySelector('.header-right').append(staffHeader);
@@ -439,7 +439,7 @@
   staffMenu.addEventListener('click',event=>{if(event.target===staffMenu)closeStaffMenu()});
   compactStaff.addEventListener('change',()=>closeStaffMenu(false));
   function staffLink(id,label,section,classes=''){return `<a class="${classes} ${section===id?'selected':''}" href="#admin-${id}" data-staff-nav ${section===id?'aria-current="page"':''}><span class="staff-nav-icon">${staffIcon(id)}</span><span>${t(label)}</span></a>`}
-  function staffSidebar(section){return `<aside class="staff-sidebar"><div class="staff-sidebar-heading"><span>${t('Workspace')}</span><strong>${t(manager()?'Admin workspace':'Front desk workspace')}</strong></div><nav aria-label="${t('Staff navigation')}">${staffNav.filter(([id])=>manager()||id!=='settings').map(([id,label])=>staffLink(id,label,section)).join('')}</nav><span class="staff-sidebar-location">SYNC · TAIPEI XINYI</span></aside>`}
+  function staffSidebar(section){return `<aside class="staff-sidebar"><div class="staff-sidebar-heading"><span>${t('Workspace')}</span><strong>${t(manager()?'Admin workspace':'Front desk workspace')}</strong></div><nav aria-label="${t('Staff navigation')}">${staffNav.filter(([id])=>manager()||id!=='settings').map(([id,label])=>staffLink(id,label,section)).join('')}</nav><span class="staff-sidebar-location">HandC · TAIPEI XINYI</span></aside>`}
   function staffBottomNav(section){const secondary=['reports','orders','points','settings'].includes(section);return `<nav class="staff-bottom-nav" aria-label="${t('Staff navigation')}"><div>${[['overview','Today'],['people','People'],['checkin','Scan'],['schedule','Schedule']].map(([id,label])=>staffLink(id,label,section,'staff-bottom-link '+(id==='checkin'?'staff-scan-link':''))).join('')}<button class="staff-bottom-link ${secondary?'selected':''}" data-staff-menu="more" aria-haspopup="dialog" aria-controls="staff-menu" aria-expanded="false" aria-label="${t('More navigation')}"><span class="staff-nav-icon">${staffIcon('more')}</span><span>${t('More')}</span></button></div></nav>`}
   function renderStaffHeader(active,memberActive){
     staffHeader.innerHTML=active?`<button class="staff-account-trigger" data-staff-menu="account" aria-label="${t('Open account menu')}" aria-haspopup="dialog" aria-expanded="false" aria-controls="staff-menu"><span aria-hidden="true">${staffInitials()}</span></button>`:'';
@@ -454,20 +454,20 @@
     closeStaffMenu(false);staffMenuTrigger=trigger;staffMenuReturnFocus=true;staffMenu.dataset.kind=kind;
     const rows=[['reports','Reports','Read attendance trends and class reports.'],['orders','Orders & passes','Review purchases and pass balances.'],['points','Points & rewards','View activity and validate vouchers.'],...(manager()?[['settings','Settings','Manage accounts and view club policies.']]:[])];
     const person=sessionAccount(access),accountLink=isMember()?`<a class="account-menu-profile" href="#account/profile" data-account-menu-link><span class="staff-menu-icon">${staffIcon('members')}</span><span><strong>${t('My account')}</strong></span></a>`:isInstructor()?`<a class="account-menu-profile" href="#instructor-account" data-instructor-nav><span class="staff-menu-icon">${staffIcon('members')}</span><span><strong>${t('My account')}</strong></span></a>`:`<button data-portal="member-demo"><span class="staff-menu-icon">${staffIcon('preview')}</span><span><strong>${t('Member preview')}</strong><small>${t('Open the member experience.')}</small></span><span class="staff-menu-arrow" aria-hidden="true">↗</span></button>`;
-    staffMenu.innerHTML=`<div class="staff-menu-panel"><div class="staff-menu-heading"><div><p id="staff-menu-description">SYNC · ${staffRole()}</p><h2 id="staff-menu-title">${t(kind==='more'?'More':'Account')}</h2></div><button class="staff-menu-close" data-staff-menu="close" aria-label="${t('Close menu')}">${staffIcon('close')}</button></div>${kind==='more'?`<nav class="staff-more-links" aria-label="${t('More navigation')}">${rows.map(([id,label,description])=>`<a href="#admin-${id}" data-staff-nav ${staffSection===id?'aria-current="page"':''}><span class="staff-menu-icon">${staffIcon(id)}</span><span><strong>${t(label)}</strong><small>${t(description)}</small></span><span class="staff-menu-arrow" aria-hidden="true">↗</span></a>`).join('')}</nav>`:`<div class="staff-account-identity"><span class="staff-account-initials" aria-hidden="true">${staffInitials()}</span><div><strong>${esc(person.name)}</strong><span>${esc(access.email)}</span></div></div><div class="staff-account-actions">${accountLink}<button data-portal="logout" class="staff-sign-out"><span class="staff-menu-icon">${staffIcon('logout')}</span><span><strong>${t('Sign out')}</strong></span></button></div>`}</div>`;
+    staffMenu.innerHTML=`<div class="staff-menu-panel"><div class="staff-menu-heading"><div><p id="staff-menu-description">HandC · ${staffRole()}</p><h2 id="staff-menu-title">${t(kind==='more'?'More':'Account')}</h2></div><button class="staff-menu-close" data-staff-menu="close" aria-label="${t('Close menu')}">${staffIcon('close')}</button></div>${kind==='more'?`<nav class="staff-more-links" aria-label="${t('More navigation')}">${rows.map(([id,label,description])=>`<a href="#admin-${id}" data-staff-nav ${staffSection===id?'aria-current="page"':''}><span class="staff-menu-icon">${staffIcon(id)}</span><span><strong>${t(label)}</strong><small>${t(description)}</small></span><span class="staff-menu-arrow" aria-hidden="true">↗</span></a>`).join('')}</nav>`:`<div class="staff-account-identity"><span class="staff-account-initials" aria-hidden="true">${staffInitials()}</span><div><strong>${esc(person.name)}</strong><span>${esc(access.email)}</span></div></div><div class="staff-account-actions">${accountLink}<button data-portal="logout" class="staff-sign-out"><span class="staff-menu-icon">${staffIcon('logout')}</span><span><strong>${t('Sign out')}</strong></span></button></div>`}</div>`;
     staffMenu.showModal();document.body.classList.add('staff-menu-open');syncStaffMenuButtons();staffMenu.querySelector('a, [data-portal]')?.focus({preventScroll:true});
   }
   function focusStaffPage(){const heading=$('.staff-heading h1');if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true})}}
   function routeTo(hash){location.hash=hash;render()}
   function endSession(message='Signed out.'){
     instructorWorkspace.reset();clearAccess();closeStaffMenu(false);$('#modal').close();$('#modal-content').replaceChildren();closeCancellationNotice();
-    sessionStorage.removeItem('sync-demo-return-to');sessionStorage.removeItem('sync-demo-pending');queuedAccountRefresh=false;
+    sessionStorage.removeItem('handc-demo-return-to');sessionStorage.removeItem('handc-demo-pending');queuedAccountRefresh=false;
     signInFocusPending=true;routeTo('login');toast(message);
   }
   function signOutEverywhere(){
     const id=sessionAccountId(access);let shared=true;
     try{if(id)localStorage.setItem(logoutKey(id),crypto.randomUUID())}catch{shared=false}
-    endSession(shared?'Signed out.':'Signed out of this tab. Close other SYNC tabs to finish signing out.');
+    endSession(shared?'Signed out.':'Signed out of this tab. Close other HandC tabs to finish signing out.');
   }
   function begin(role,memberId='jamie',remember=false,email=null){
     if(isInstructor()||role==='instructor')instructorWorkspace.reset();
@@ -476,10 +476,10 @@
     if(!account||account.role!==role||account.status!=='active'){toast('No active Member account is available for preview.');return}
     activeMemberId=account.memberId;
     access={role,memberId:activeMemberId,email:account.email,accountId:account.id,authVersion:account.authVersion,logoutVersion:logoutVersion(account.id),remember,...(role==='instructor'?{instructorId:account.instructorId}:{})};
-    sessionStorage.setItem('sync-demo-access',JSON.stringify(access));if(remember)localStorage.setItem('sync-demo-access',JSON.stringify(access));else forgetRemembered(access);
+    sessionStorage.setItem('handc-demo-access',JSON.stringify(access));if(remember)localStorage.setItem('handc-demo-access',JSON.stringify(access));else forgetRemembered(access);
     if(role!=='instructor'){state=clone(currentMember().wallet);save()}
     const preference=currentMember().preferences?.language;if(role==='member'&&preference)I18n.setLanguage(preference);
-    const returnTo=sessionStorage.getItem('sync-demo-return-to');sessionStorage.removeItem('sync-demo-return-to');
+    const returnTo=sessionStorage.getItem('handc-demo-return-to');sessionStorage.removeItem('handc-demo-return-to');
     routeTo(role==='instructor'?'instructor-today':role!=='member'&&/^admin-members\/[^/]+\/visits$/.test(returnTo||'')?returnTo:role==='member'?'home':'admin-overview');
   }
   function input(label,name,type='text',extra=''){return `<label class="portal-field"><span>${t(label)}</span><input name="${name}" type="${type}" ${extra}></label>`}
@@ -489,12 +489,16 @@
   function authPage(mode){
     const register=mode==='register',recover=mode==='forgot',verify=mode==='verify',sent=mode==='reset-sent';
     const login=!register&&!recover&&!verify&&!sent;
-    const title=register?'Free to join. Yours to enjoy.':recover?'Reset your password.':verify||sent?'Check your inbox.':'Welcome back';
-    const description=register?'Start with Plus membership, then grow at your own pace.':recover?'Enter your email to preview the recovery flow.':verify?'Check your email to verify your account.':sent?'This is a preview only. No email was sent.':'Sign in to your SYNC account.';
-    return `<section class="auth-layout auth-forest${login?' auth-login':''}">
-      <div class="auth-forest-atmosphere" aria-hidden="true"><span></span><span></span></div>
-      <div class="auth-arrival"><span class="auth-kicker">SYNC · TAIPEI XINYI</span><p>${t('A little space. A better day.')}</p></div>
-      <div class="auth-form-panel"><div class="auth-form-content">${login?'':`<span class="portal-demo-label">${t('Demo mode')}</span>`}<h1>${t(title)}</h1><p class="auth-description">${t(description)}</p>
+    const title=register?'Free to join. Yours to enjoy.':recover?'Reset your password.':verify||sent?'Check your inbox.':'Welcome back.';
+    const description=register?'Start with Plus membership, then grow at your own pace.':recover?'Enter your email to preview the recovery flow.':verify?'Check your email to verify your account.':sent?'This is a preview only. No email was sent.':'Sign in to your HandC account.';
+    return `<section class="auth-layout handc-auth${login?' auth-login':''}">
+      <aside class="hc-arrival" aria-labelledby="hc-arrival-title">
+        <div class="hc-arrival-top"><span class="hc-micro">YOGA / CONTRAST THERAPY</span><span class="hc-coordinate">TAIPEI · 25.03° N</span></div>
+        <h2 id="hc-arrival-title">${t('A little more')}<br><span>${t('balance.')}</span></h2>
+        <div class="hc-instrument" aria-hidden="true"><div class="hc-instrument-scale"></div><div class="hc-instrument-disc"><span class="hc-disc-label">HandC</span><div class="hc-disc-mark"><i></i><i></i></div><span class="hc-disc-bottom">MOVE. RESET. REPEAT.</span></div><span class="hc-dial-dot"></span><span class="hc-dial-tag">01 — 02</span></div>
+        <div class="hc-arrival-bottom"><p>${t('Space to move. Time to reset.')}<br>${t('Your next good ritual starts here.')}</p><span class="hc-serial">( H / C )<br>WELLNESS CLUB</span></div>
+      </aside>
+      <div class="auth-form-panel"><div class="auth-form-content"><div class="hc-form-index"><span class="hc-micro">${t(register?'02 / JOIN THE CLUB':recover?'03 / ACCOUNT RECOVERY':'01 / MEMBER ACCESS')}</span><span class="hc-status-dot" aria-hidden="true"></span></div>${login?'':`<span class="portal-demo-label">${t('Demo mode')}</span>`}<h1>${t(title)}</h1><p class="auth-description">${t(description)}</p>
       ${verify||sent?`<div class="auth-success-icon" aria-hidden="true">✓</div><p class="portal-notice">${t('This is a preview only. No email was sent.')}</p>${verify?`<button class="button auth-submit" data-portal="verify">${t('Complete demo verification')} →</button>`:''}<a class="auth-back" href="#login">${t('Back to sign in')}</a>`:`
         <form id="auth-form" data-mode="${mode}">
           ${register?authInput('Full name','name','text','required maxlength="60" autocomplete="name"'):''}
@@ -504,7 +508,7 @@
           ${register?`<label class="portal-checkbox"><input type="checkbox" name="terms" required><span>${t('I agree to the membership terms.')}</span></label><button class="text-button" type="button" data-portal="terms">${t('Read demo terms')} ↗</button>`:!recover?`<div class="auth-options"><label class="portal-checkbox"><input type="checkbox" name="remember"><span>${t('Keep me signed in')}</span></label></div>`:''}
           <p id="auth-error" class="form-error" role="alert"></p><button class="button auth-submit" type="submit"><span data-auth-submit-label>${t(register?'Create account':recover?'Send reset link':'SIGN IN')}</span><span class="auth-submit-spinner" aria-hidden="true"></span>${login?'<svg class="auth-submit-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>':'<span class="auth-submit-arrow" aria-hidden="true">→</span>'}</button>
         </form>
-        ${recover?`<a class="auth-back" href="#login">${t('Back to sign in')}</a>`:`<div class="auth-bottom">${t(register?'Already a member?':'New to SYNC?')} <a href="#${register?'login':'register'}">${t(register?'Sign in':'Create an account')}</a></div>`}
+        ${recover?`<a class="auth-back" href="#login">${t('Back to sign in')}</a>`:`<div class="auth-bottom">${t(register?'Already a member?':'New to HandC?')} <a href="#${register?'login':'register'}">${t(register?'Sign in':'Create an account')}</a></div>`}
         ${login?`<details class="demo-options"><summary><span>${t('Try a demo account')}</span><span class="auth-demo-tag">${t('Demo')}</span></summary><div class="demo-accounts"><p>${t('Simulated access. Do not enter a real password.')}</p><p>${t('Use a sample account to fill the form, then sign in.')}</p><div class="demo-account-list" aria-label="${t('Sample accounts')}">${accountRecords().filter(a=>['jamie',...sampleStaffAccounts.map(s=>s.id)].includes(a.id)&&a.status==='active'&&!a.credential).map(a=>[a.role==='member'?'Member':a.role==='admin'?'Owner / Admin':a.role==='frontdesk'?'Front desk':a.services.length===2?'Instructor · Both services':a.services[0]==='yoga'?'Instructor · Yoga':'Instructor · Contrast Therapy',a.email]).map(([role,email])=>`<button type="button" data-portal="demo-fill" data-email="${email}"><strong>${t(role)}</strong><span>${email}</span><span aria-hidden="true">↗</span></button>`).join('')}</div><p class="demo-password">${t('Shared demo password')}: <code>${demoPassword}</code></p></div></details>`:''}
       `}</div></div></section>`;
   }
@@ -532,21 +536,21 @@
   function sessionHasStarted(s){return SyncInstructor.status(s)!=='scheduled'||sessionStart(s.date,s.time)<=Date.now()}
   function memberSelect(){return `<label class="portal-field"><span>${t('Member')}</span><select name="memberId">${db.members.map(m=>`<option value="${m.id}" ${m.id===memberFocus?'selected':''}>${esc(m.name)}</option>`).join('')}</select></label>`}
   function ordersPage(){return `<section class="staff-panel"><div class="staff-panel-heading"><h2>${t('Sample orders')}</h2>${manager()?`<button class="button" data-portal="issue">${t('Issue passes')} +</button>`:''}</div>${table(['Order','Member','Amount','Date','Status'],db.orders.map(o=>`<tr><td><strong>${esc(o.id)}</strong><small>${esc(t(o.title))}</small></td><td>${esc(db.members.find(m=>m.id===o.memberId)?.name||'Member')}</td><td>NT$${money(o.amount)}</td><td>${fmt(o.date)}</td><td>${statusBadge('Paid')}</td></tr>`).join(''))}<p class="portal-notice">${t('Refunds are not implemented in this version.')}</p></section><section class="staff-panel"><div class="staff-panel-heading"><h2>${t('Pass wallet')}</h2></div>${table(['Member','Service','Passes','Expiry date'],db.members.flatMap(m=>m.wallet.packages.map(p=>`<tr><td>${esc(m.name)}</td><td>${t(p.service==='yoga'?'Yoga':'Contrast Therapy')}</td><td>${p.remaining} / ${p.total}</td><td>${fmt(p.expiry)}</td></tr>`)).join(''))}</section>`}
-  function auditList(limit=30){return db.audit.length?table(['What changed','Who','When','Why'],db.audit.slice(0,limit).map(a=>`<tr><td><strong>${t(a.action)}</strong><small>${esc(db.members.find(m=>m.id===a.memberId)?.name||'SYNC')}</small></td><td>${t(a.who)}${a.actorName?`<small>${esc(a.actorName)}</small>`:''}</td><td>${new Date(a.at).toLocaleDateString(I18n.language==='en'?'en-GB':'zh-TW')} ${new Date(a.at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</td><td>${esc(a.reason)}</td></tr>`).join('')):`<div class="empty">${t('No activity yet.')}</div>`}
+  function auditList(limit=30){return db.audit.length?table(['What changed','Who','When','Why'],db.audit.slice(0,limit).map(a=>`<tr><td><strong>${t(a.action)}</strong><small>${esc(db.members.find(m=>m.id===a.memberId)?.name||'HandC')}</small></td><td>${t(a.who)}${a.actorName?`<small>${esc(a.actorName)}</small>`:''}</td><td>${new Date(a.at).toLocaleDateString(I18n.language==='en'?'en-GB':'zh-TW')} ${new Date(a.at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</td><td>${esc(a.reason)}</td></tr>`).join('')):`<div class="empty">${t('No activity yet.')}</div>`}
   function pointsPage(){return `<div class="staff-actions-row">${manager()?`<button class="button" data-portal="adjust">${t('Adjust points')} + / −</button>`:''}<button class="button light" data-portal="voucher">${t('Validate voucher')} ↗</button></div><section class="staff-panel"><div class="staff-panel-heading"><h2>${t('Audit trail')}</h2></div>${auditList()}</section>`}
   function settingsPage(){return `${staffTools.accountsPanel()}<div class="staff-settings-grid"><section class="staff-panel"><div class="staff-panel-heading"><h2>${t('Current demo policies')}</h2><span class="badge">${t('Read-only')}</span></div>${[['Tier thresholds',`Core · ${SyncMembership.levels[1].visits} ${t('visits')} / Luxe · ${SyncMembership.levels[2].visits} ${t('visits')}`],['Pass validity','30 / 90 / 180'],['Cancellation window',t('24 hours before the session')]].map(([k,v])=>`<div class="profile-detail"><span>${t(k)}</span><strong>${v}</strong></div>`).join('')}<p class="portal-notice">${t('Policies are read-only in this mockup.')}</p></section><section class="staff-panel"><div class="staff-panel-heading"><h2>${t('Staff permissions')}</h2></div><h3>${t('Owner / Admin')}</h3><p class="subtitle">${t('Can create accounts, assign Instructors, issue passes and adjust points.')}</p><h3>${t('Front desk')}</h3><p class="subtitle">${t('Can view members, manage bookings, check in, and validate guest vouchers.')}</p><h3>${t('Instructor')}</h3><p class="subtitle">${t('Assigned sessions only.')} ${t('Your assigned sessions and participants.')}</p></section></div>`}
-  function adminPage(section){return `<div class="staff-layout">${staffSidebar(section)}<div class="staff-content"><div class="staff-heading ${section==='overview'?'staff-overview-heading':section==='people'?'people-heading':''}"><div><p class="eyebrow">SYNC · XINYI</p><h1>${t(section==='people'&&location.hash.includes('/')?(location.hash.startsWith('#admin-members/')?'Member profile':'Person profile'):(section==='reports'?'Attendance reports':staffNav.find(([id])=>id===section)?.[1]||'Today at SYNC'))}</h1><p>${section==='overview'?staffOverviewDate():t(section==='people'?(manager()?'Manage everyone at SYNC.':'Find members and instructors.'):'Local demo data · no real transactions')}</p></div><span class="portal-demo-label">${t('Demo mode')}</span></div>${({overview,checkin:checkinScanner.page,people:peoplePage,schedule:schedulePage,reports:attendanceReports.page,orders:ordersPage,points:pointsPage,settings:settingsPage})[section]()}</div></div>${staffBottomNav(section)}`}
+  function adminPage(section){return `<div class="staff-layout">${staffSidebar(section)}<div class="staff-content"><div class="staff-heading ${section==='overview'?'staff-overview-heading':section==='people'?'people-heading':''}"><div><p class="eyebrow">HandC · XINYI</p><h1>${t(section==='people'&&location.hash.includes('/')?(location.hash.startsWith('#admin-members/')?'Member profile':'Person profile'):(section==='reports'?'Attendance reports':staffNav.find(([id])=>id===section)?.[1]||'Today at HandC'))}</h1><p>${section==='overview'?staffOverviewDate():t(section==='people'?(manager()?'Manage everyone at HandC.':'Find members and instructors.'):'Local demo data · no real transactions')}</p></div><span class="portal-demo-label">${t('Demo mode')}</span></div>${({overview,checkin:checkinScanner.page,people:peoplePage,schedule:schedulePage,reports:attendanceReports.page,orders:ordersPage,points:pointsPage,settings:settingsPage})[section]()}</div></div>${staffBottomNav(section)}`}
   render=function(){
     refreshAccess();
     let hash=location.hash.slice(1)||(access?(isInstructor()?'instructor-today':staff()?'admin-overview':'home'):'login');
     const auth=['login','register','forgot','verify','reset-sent'].includes(hash),admin=hash.startsWith('admin-'),instructor=hash.startsWith('instructor-');
     closeStaffMenu(false);checkinScanner.beforeRender(hash);instructorScanner.beforeRender(hash);
-    if(!auth&&!access){if(/^admin-members\/[^/]+\/visits$/.test(hash))sessionStorage.setItem('sync-demo-return-to',hash);location.hash='login';render();return}
+    if(!auth&&!access){if(/^admin-members\/[^/]+\/visits$/.test(hash))sessionStorage.setItem('handc-demo-return-to',hash);location.hash='login';render();return}
     if(!auth&&isInstructor()&&!instructor){location.hash='instructor-today';render();return}
-    if((admin&&!staff())||(instructor&&!isInstructor())){if(/^admin-members\/[^/]+\/visits$/.test(hash))sessionStorage.setItem('sync-demo-return-to',hash);location.hash=instructor&&staff()?'admin-overview':'login';render();return}
+    if((admin&&!staff())||(instructor&&!isInstructor())){if(/^admin-members\/[^/]+\/visits$/.test(hash))sessionStorage.setItem('handc-demo-return-to',hash);location.hash=instructor&&staff()?'admin-overview':'login';render();return}
     if(instructor&&!/^instructor-(today|schedule|reports|account)$/.test(hash)&&!/^instructor-session\/[^/]+(?:\/scan)?$/.test(hash)){location.hash='instructor-today';render();return}
     if(auth||admin||instructor)document.body.classList.remove('overview-shell');
-    document.body.classList.toggle('auth-shell',auth);document.querySelector('meta[name=theme-color]')?.setAttribute('content','#101f1b');document.body.classList.toggle('admin-shell',admin||instructor);document.body.classList.toggle('instructor-shell',instructor&&!auth);document.body.classList.toggle('member-shell',!auth&&!admin&&!instructor);if(auth)staffMenu.innerHTML='';
+    document.body.classList.toggle('auth-shell',auth);document.querySelector('meta[name=theme-color]')?.setAttribute('content','#f2f1ec');document.body.classList.toggle('admin-shell',admin||instructor);document.body.classList.toggle('instructor-shell',instructor&&!auth);document.body.classList.toggle('member-shell',!auth&&!admin&&!instructor);if(auth)staffMenu.innerHTML='';
     const brand=document.querySelector('.brand');brand.href=instructor?'#instructor-today':'#home';
     if(auth){$('#navigation').innerHTML='';$('#app').innerHTML=authPage(hash);I18n.chrome()}
     else if(instructor){$('#navigation').innerHTML='';$('#app').innerHTML=instructorWorkspace.page(hash);I18n.chrome()}
@@ -577,7 +581,7 @@
     if(action==='demo-fill'){const form=$('#auth-form');if(form?.dataset.mode!=='login')return;form.elements.email.value=b.dataset.email;form.elements.password.value=demoPassword;$('#auth-error').textContent='';form.querySelector('[type=submit]').focus();toast('Demo account selected.')}
     if(action==='password'){const field=$('#auth-form [name="password"]');if(!field)return;field.type=field.type==='password'?'text':'password';b.innerHTML=authPasswordIcon(field.type==='text');b.setAttribute('aria-label',t(field.type==='password'?'Show password':'Hide password'))}
     if(action==='member-demo'&&staff()){$('#modal').close();begin('member')}
-    if(action==='verify'){sessionStorage.removeItem('sync-demo-pending');toast('Demo verification complete.');routeTo('home')}
+    if(action==='verify'){sessionStorage.removeItem('handc-demo-pending');toast('Demo verification complete.');routeTo('home')}
     if(action==='logout'){signOutEverywhere();return}
     if(action==='terms')modal('Demo membership terms',`<p class="modal-body">${t('Registration is free. This prototype does not create a real membership or accept payments.')}</p>`);
     loadLatest();if(!staff())return;
@@ -589,7 +593,7 @@
     if(action==='checkin'){const result=confirmCheckin(id);if(!result.ok){toast(result.error);return}render();toast('Attendance recorded.')}
     if(action==='session-cancel'){const s=db.sessions.find(s=>s.id===id);if(!s||s.cancelled)return;if(sessionHasStarted(s)){toast('A started session cannot be moved, reassigned or cancelled.');return}modal('Cancel this session?',`<p class="modal-body">${esc(t(s.title))} · ${fmt(s.date)} · ${s.time}<br>${t('Booked passes will be restored with their original expiry.')}</p><p id="session-cancel-error" class="form-error" role="alert"></p><div class="modal-actions"><button class="button light" data-action="close">${t('Keep session')}</button><button class="button" data-portal="session-cancel-confirm" data-id="${id}">${t('Confirm cancellation')}</button></div>`)}
     if(action==='session-cancel-confirm'){loadLatest();const s=db.sessions.find(s=>s.id===id);if(!s||s.cancelled)return;if(sessionHasStarted(s)){const feedback=$('#session-cancel-error');if(feedback)feedback.textContent=t('A started session cannot be moved, reassigned or cancelled.');else toast('A started session cannot be moved, reassigned or cancelled.');return}for(const m of db.members){const affected=m.wallet.bookings.filter(b=>b.service===s.service&&b.date===s.date&&b.time===s.time);for(const b of affected){const p=m.wallet.packages.find(p=>p.id===b.passId);if(p)p.remaining++;m.wallet.visitHistory.unshift({...b,status:'cancelled',cancelledAt:new Date().toISOString(),cancelledBy:manager()?'Owner / Admin':'Front desk',cancelReason:'Session cancellation'})}m.wallet.bookings=m.wallet.bookings.filter(b=>!affected.some(a=>a.id===b.id))}for(const b of db.sampleBookings.filter(b=>b.service===s.service&&b.date===s.date&&b.time===s.time)){const m=db.members.find(m=>m.id===b.memberId);if(m)m.wallet.visitHistory.unshift({...b,status:'cancelled',cancelledAt:new Date().toISOString(),cancelledBy:manager()?'Owner / Admin':'Front desk',cancelReason:'Session cancellation'})}db.sampleBookings=db.sampleBookings.filter(b=>!(b.service===s.service&&b.date===s.date&&b.time===s.time));s.cancelled=true;state=clone(currentMember().wallet);save();audit('Session cancellation',null,s.title);$('#modal').close();render();toast('Session cancelled and passes restored.')}
-    if(action==='voucher')modal('Validate voucher',`<form id="voucher-form">${input('Voucher code','code','text','required maxlength="30" placeholder="SYNC-ABC123"')}<p class="form-error" id="voucher-error" role="alert"></p><button class="button auth-submit">${t('Look up voucher')}</button></form>`);
+    if(action==='voucher')modal('Validate voucher',`<form id="voucher-form">${input('Voucher code','code','text','required maxlength="30" placeholder="HandC-ABC123"')}<p class="form-error" id="voucher-error" role="alert"></p><button class="button auth-submit">${t('Look up voucher')}</button></form>`);
     if(action==='voucher-use'){const v=db.members.flatMap(m=>m.wallet.vouchers.map(v=>({...v,memberId:m.id}))).find(v=>v.code===b.dataset.code);if(!v||!v.guest||db.usedVouchers.includes(v.code)||v.expiry<addDays(0))return;db.usedVouchers.push(v.code);Object.assign(db.members.find(m=>m.id===v.memberId).wallet.vouchers.find(item=>item.code===v.code),{used:true,usedAt:new Date().toISOString()});state=clone(currentMember().wallet);save();audit('Guest voucher use',v.memberId,v.code);$('#modal').close();render();toast('Voucher marked as used.')}
   });
   document.addEventListener('submit',async e=>{const form=e.target;if(!['auth-form','staff-form','voucher-form'].includes(form.id))return;e.preventDefault();if(!form.checkValidity()){form.reportValidity();return}const values=Object.fromEntries(new FormData(form));
@@ -610,7 +614,7 @@
           loadLatest();if(accountFor(email)){error.textContent=t('Email already exists in this demo.');return}
           const id=crypto.randomUUID();
           db.members.push({id,name:values.name.trim(),email,phone:values.phone.trim(),createdAt:new Date().toISOString(),demoCredential,wallet:emptyWallet(values.name.trim())});
-          persist();begin('member',id);sessionStorage.setItem('sync-demo-pending',id);routeTo('verify');return;
+          persist();begin('member',id);sessionStorage.setItem('handc-demo-pending',id);routeTo('verify');return;
         }
         const account=accountFor(email),attemptLogoutVersion=account?logoutVersion(account.id):null,valid=await passwordMatches(account,values.password);
         if(!form.isConnected)return;

@@ -1,9 +1,9 @@
 // Canonical English content is retained in demo records. Translate only presentation.
 const I18n = (() => {
   let language = 'en';
-  try { language = localStorage.getItem('sync-language') === 'zh-TW' ? 'zh-TW' : 'en'; } catch {}
+  try { language = localStorage.getItem('handc-language') === 'zh-TW' ? 'zh-TW' : 'en'; } catch {}
   const strings = {
-    'SYNC membership':'SYNC 會員',
+    'HandC membership':'HandC 會員',
     'View member benefits':'查看會員禮遇',
     'Yoga class credit':'瑜伽單堂票',
     'Contrast Therapy credit':'冷熱交替療程單堂票',
@@ -75,7 +75,7 @@ const I18n = (() => {
     'Confirmed':'已確認',
     'Checked in':'已報到',
     'View rewards':'查看獎勵',
-    'SYNC Xinyi':'SYNC 信義會館',
+    'HandC Xinyi':'HandC 信義會館',
     'Your first class starts here.':'從這裡，開啟第一堂課。',
     'Make time for your next visit.':'為下一次到訪，留點時間。',
     'Your passes are ready. Choose a class that fits your day.':'堂票已準備好，選一堂適合你的課吧。',
@@ -151,10 +151,10 @@ const I18n = (() => {
     'BENEFITS INCLUDED':'已享有的權益','NEXT TIER':'下一會員等級','HIGHEST TIER':'最高會員等級','EXCLUSIVE PRIVILEGES':'專屬尊榮禮遇','MEMBER BENEFITS':'會員專屬權益',
     'Your space. Your pace.':'你的空間，你的步調。','More moments. More connection.':'更多時光，更深連結。','A little extraordinary.':'為日常，添一點非凡。',
     'Overview':'總覽','Book':'預約','Rewards':'獎勵','Membership':'會員','Account':'帳戶',
-    'WELLNESS CLUB':'身心健康俱樂部','TAIPEI · XINYI':'台北 · 信義','SYNC WELLNESS CLUB · TAIPEI':'SYNC 身心健康俱樂部 · 台北',
+    'WELLNESS CLUB':'身心健康俱樂部','TAIPEI · XINYI':'台北 · 信義','HandC WELLNESS CLUB · TAIPEI':'HandC 身心健康俱樂部 · 台北',
     'Find your rhythm. Feel like yourself.':'找回自己的節奏，回到自在的你。','About this prototype ↗':'關於此原型 ↗',
-    'SYNC home':'SYNC 首頁','Main navigation':'主要導覽','Your account':'你的帳戶','Membership and points':'會員與點數','Close dialog':'關閉視窗',
-    'A little space for yourself':'留一點空間給自己','Your wellness, in rhythm.':'讓身心，回到自己的節奏。','Your SYNC rewards':'你的 SYNC 獎勵',
+    'HandC home':'HandC 首頁','Main navigation':'主要導覽','Your account':'你的帳戶','Membership and points':'會員與點數','Close dialog':'關閉視窗',
+    'A little space for yourself':'留一點空間給自己','Your wellness, in rhythm.':'讓身心，回到自己的節奏。','Your HandC rewards':'你的 HandC 獎勵',
     'points to make time for you':'用點數，換一段自己的時間','Explore rewards':'探索獎勵','Points history':'點數紀錄','MEMBER · 0000 2088':'會員 · 0000 2088',
     'YOUR SPACE. YOUR PACE.':'你的空間，你的步調。','View bookings →':'查看預約 →','View benefits ↗':'查看權益 ↗',
     'of the way':'升等進度','Luxe status':'Luxe 會員資格','You’re in your Luxe era.':'享受你的 Luxe 時光。','Your next chapter awaits.':'下一段旅程，等你開啟。',
@@ -170,7 +170,7 @@ const I18n = (() => {
     'Your points, your possibilities':'你的點數，更多可能','Time well rewarded.':'好好犒賞自己的時間。','Turn your points into moments that feel good.':'把累積的點數，換成讓身心舒暢的時光。',
     'SHARE THE FEELING':'分享美好感受','A MOMENT FOR YOU':'給自己的時光','points':'點','Redeem reward ↗':'兌換獎勵 ↗',
     'Reward prices are illustrative for this prototype. Redeeming points does not reduce your tier progress.':'此原型的兌換點數僅供示範。兌換獎勵不會影響會員升等進度。',
-    'A ritual worth returning to':'值得持續的身心日常','Make time for yourself.':'留一段時間給自己。','Choose your next 60-minute reset at SYNC Xinyi.':'在 SYNC 信義，預約下一段 60 分鐘的療癒時光。',
+    'A ritual worth returning to':'值得持續的身心日常','Make time for yourself.':'留一段時間給自己。','Choose your next 60-minute reset at HandC Xinyi.':'在 HandC 信義，預約下一段 60 分鐘的療癒時光。',
     'Session date':'預約日期','Morning Flow':'晨間流動','Midday Balance':'午間平衡','Evening Unwind':'晚間舒緩',
     'Gentle vinyasa · All levels':'溫和流動瑜伽 · 適合各程度','Slow flow · All levels':'慢流瑜伽 · 適合各程度','Restorative yoga · All levels':'修復瑜伽 · 適合各程度',
     'Infrared Steam Bath included':'含紅外線蒸氣浴','Book session ↗':'預約課程 ↗','Your bookings':'你的預約',
@@ -179,14 +179,14 @@ const I18n = (() => {
     'Belong, at your own pace':'依自己的步調，享受會員禮遇','A membership that grows with you.':'隨你一起成長的會員體驗。','Join freely. Earn with every purchase. Unlock more as you return.':'免費加入，消費累積點數，每次回訪都更接近新禮遇。',
     'Free registration':'免費註冊','Redeem wellness rewards':'兌換身心療癒獎勵','Member pass wallet':'會員堂票錢包','All Plus benefits':'享有所有 Plus 會員權益',
     'Early access to selected sessions':'指定課程優先預約','Birthday yoga guest pass':'生日瑜伽好友體驗券','All Core benefits':'享有所有 Core 會員權益',
-    'Priority booking window':'專屬優先預約時段','Birthday Contrast Therapy reward':'生日冷熱交替療法禮遇','SYNC MEMBERSHIP':'SYNC 會員',
+    'Priority booking window':'專屬優先預約時段','Birthday Contrast Therapy reward':'生日冷熱交替療法禮遇','HandC MEMBERSHIP':'HandC 會員',
     'YOUR CURRENT TIER':'目前會員等級','YOUR FOUNDATION':'你的起點','YOUR NEXT POSSIBILITIES':'更多會員禮遇','Your membership journey':'你的會員旅程',
     'Tier thresholds and benefits are proposed for this prototype. Upgrades apply immediately and remain valid through the end of the following calendar year.':'此原型的升等門檻與權益為建議方案。達標後即刻升等，資格有效至下一個曆年年底。',
     'ACTIVITY':'交易內容','DATE':'日期','POINTS':'點數','Your personal space':'你的個人空間','All your moments, together.':'所有美好時光，盡在這裡。','Your profile, passes, and rewards in one place.':'個人資料、堂票與獎勵，一站掌握。',
     'Member number':'會員編號','Home club':'所屬會館','Taipei · Xinyi':'台北 · 信義','Available points':'可用點數','Reset demo data ↺':'重設示範資料 ↺','Points activity':'點數明細','Your pass wallet':'你的堂票錢包','EXPIRED':'已到期','ACTIVE':'可使用','USED':'已使用完畢','Your redeemed rewards':'已兌換獎勵',
     'Share this voucher with your guest.':'將此體驗券分享給你的朋友。','Your reward pass is in your wallet.':'獎勵堂票已加入你的錢包。','Your redeemed rewards will appear here.':'已兌換的獎勵將顯示於此。',
     'Make it a ritual.':'讓療癒成為日常。','Single session':'單堂體驗','Demo purchases only. No payment is collected.':'僅供模擬購買，不會實際收款。',
-    'Your points history':'你的點數紀錄','Your upcoming moments':'即將到來的療癒時光','Your rewards':'你的獎勵','A first look at SYNC.':'初見 SYNC。',
+    'Your points history':'你的點數紀錄','Your upcoming moments':'即將到來的療癒時光','Your rewards':'你的獎勵','A first look at HandC.':'初見 HandC。',
     'This interactive prototype uses sample member data and simulated transactions.':'此互動原型使用示範會員資料與模擬交易。','Confirmed:':'已確認：','Proposed:':'建議方案：',
     'free Plus membership, three tiers, NT$1 = 1 point, and the supplied service pricing.':'免費 Plus 會員、三個會員等級、每消費 NT$1 累積 1 點，以及已提供的服務價格。',
     '30 / 90 / 180-day pass validity; Core at NT$15,000 and Luxe at NT$30,000 annual spend; tier benefits; reward costs; and a 24-hour cancellation window.':'堂票效期為 30／90／180 天；Core 年度消費門檻為 NT$15,000、Luxe 為 NT$30,000；會員權益、獎勵兌換點數，以及課程開始前 24 小時的取消規則。',
@@ -194,7 +194,7 @@ const I18n = (() => {
     'Your next ritual.':'你的下一段身心日常。','Total':'總金額','Points earned':'獲得點數','Use by':'使用期限','This is a simulated purchase. No payment is collected.':'此為模擬購買，不會實際收款。','Back':'返回','Confirm demo purchase':'確認模擬購買',
     'Your next chapter.':'你的新篇章。','Your membership has grown with you.':'你的會員等級已升級。','Your new benefits are ready to explore.':'全新會員禮遇，等你探索。','Discover your benefits ↗':'探索會員權益 ↗',
     'Choose a date within the next 30 days.':'請選擇未來 30 天內的日期。','You’ll need a pass valid on your session date.':'你需要一張在課程當天仍有效的堂票。','Choose an upcoming session time.':'請選擇尚未開始的課程。','You already have a booking at this time.':'你已在此時段預約課程。',
-    'A moment, just for you.':'專屬於你的時光。','SYNC Wellness Club · Xinyi, Taipei':'SYNC 身心健康俱樂部 · 台北信義','Payment':'付款方式',
+    'A moment, just for you.':'專屬於你的時光。','HandC Wellness Club · Xinyi, Taipei':'HandC 身心健康俱樂部 · 台北信義','Payment':'付款方式',
     'Cancel at least 24 hours before your session to restore your pass with its original expiry. This is a demo reservation.':'於課程開始前至少 24 小時取消，可退回堂票並保留原使用期限。此為示範預約。',
     'Go back':'返回','Confirm booking ↗':'確認預約 ↗','You’re booked. A little time for yourself, reserved.':'預約成功，屬於你的療癒時光已保留。','This session is within the 24-hour cancellation window.':'距離課程開始已不足 24 小時，無法在線上取消。',
     'Cancel this moment?':'要取消這次預約嗎？','Your pass will be returned with its original expiry.':'堂票將退回，並保留原使用期限。','Keep booking':'保留預約','Cancel session':'取消預約','Booking cancelled. Your pass has been returned.':'預約已取消，堂票已退回。',
@@ -254,8 +254,18 @@ const I18n = (() => {
     return leading+text+trailing;
   }
   function html(markup){return markup.split(/(<[^>]*>)/g).map(part=>part.startsWith('<')?part.replace(/aria-label="([^"]+)"/g,(_,label)=>`aria-label="${translate(label)}"`):translate(part)).join('')}
-  function chrome(){document.documentElement.lang=language;document.title=language==='en'?'SYNC — Your wellness, in rhythm':'SYNC — 讓身心回到自己的節奏';document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=translate(el.dataset.i18n));const b=document.querySelector('[data-action="language"]');b.textContent=language==='en'?'繁體中文':'English';b.setAttribute('aria-label',language==='en'?'切換為繁體中文':'Switch to English');b.setAttribute('lang',language==='en'?'zh-TW':'en');document.querySelector('.brand').setAttribute('aria-label',translate('SYNC home'));document.querySelector('#navigation').setAttribute('aria-label',translate('Main navigation'));document.querySelector('.avatar').setAttribute('aria-label',translate('Your account'));window.SyncClub?.renderFooter()}
-  function setLanguage(value){language=value==='zh-TW'?'zh-TW':'en';try{localStorage.setItem('sync-language',language)}catch{}chrome()}
+  function chrome(){document.documentElement.lang=language;document.title=language==='en'?'HandC — Move. Reset. Repeat.':'HandC — 讓身心回到自己的節奏';document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=translate(el.dataset.i18n));const b=document.querySelector('[data-action="language"]');b.textContent=language==='en'?'繁體中文':'English';b.setAttribute('aria-label',language==='en'?'切換為繁體中文':'Switch to English');b.setAttribute('lang',language==='en'?'zh-TW':'en');document.querySelector('.brand').setAttribute('aria-label',translate('HandC home'));document.querySelector('#navigation').setAttribute('aria-label',translate('Main navigation'));document.querySelector('.avatar').setAttribute('aria-label',translate('Your account'));window.SyncClub?.renderFooter()}
+  function setLanguage(value){language=value==='zh-TW'?'zh-TW':'en';try{localStorage.setItem('handc-language',language)}catch{}chrome()}
   function toggle(){setLanguage(language==='en'?'zh-TW':'en')}
   return {translate,html,chrome,toggle,setLanguage,extend(entries){Object.assign(strings,entries)},get language(){return language}};
 })();
+
+I18n.extend({
+  'A little more':'讓生活多一點','balance.':'平衡。','Space to move. Time to reset.':'自在伸展，好好重啟。','Your next good ritual starts here.':'從這裡開始你的日常好習慣。',
+  '01 / MEMBER ACCESS':'01 / 會員登入','02 / JOIN THE CLUB':'02 / 加入會館','03 / ACCOUNT RECOVERY':'03 / 帳戶復原','Welcome back.':'歡迎回來。',
+  '( 01 ) YOUR DAILY RHYTHM':'( 01 ) 你的日常節奏','Move a little. Reset completely.':'自在動一動，徹底好好休息。',
+  '01 / THE TIMETABLE':'01 / 課程時間表','Make room for a reset.':'為自己留一段重啟時光。','Yoga or Contrast Therapy. One hour, just for you.':'瑜伽或冷熱療程，專屬於你的一小時。',
+  'Cancellation':'取消預約','Balance after booking':'預約後剩餘堂數','Pass expiry':'套票到期日','Skip to content':'跳至主要內容',
+  'Studio information':'會館資訊','Contact reception':'聯絡櫃台','Contact details will be announced here.':'會館聯絡資訊將於此公布。',
+  'Move. Reset. Repeat.':'伸展、重啟，再出發。','Your wellness, in balance.':'找回身心的平衡。'
+});

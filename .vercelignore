@@ -3,3 +3,5 @@ README.md
 .DS_Store
 docs/reviews
 docs/planning
+tests
+package-lock.json

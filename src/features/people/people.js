@@ -1,7 +1,7 @@
 /* A role-scoped directory backed by the existing member and staff accounts. */
 window.SyncPeople = (() => {
   I18n.extend({
-    'People':'人員','Manage everyone at SYNC.':'在同一處管理 SYNC 的所有人員。',
+    'People':'人員','Manage everyone at HandC.':'在同一處管理 HandC 的所有人員。',
     'Find members and instructors.':'查找會員與指導老師資料。','Add person':'新增人員',
     'All people':'所有人員','Instructors':'指導老師','Admins':'管理員','Person':'人員',
     'People directory':'人員列表','Filter people by role':'依角色篩選人員',

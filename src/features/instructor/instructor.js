@@ -1,9 +1,9 @@
 /* Instructor presentation. The portal supplies scoped reads and guarded writes. */
 window.SyncInstructor=(()=>{
   const accounts=[
-    {id:'instructor-alex',name:'Alex Chen',email:'instructor@sync.demo',services:['yoga','contrast']},
-    {id:'instructor-maya',name:'Maya Wu',email:'yoga@sync.demo',services:['yoga']},
-    {id:'instructor-kai',name:'Kai Lin',email:'contrast@sync.demo',services:['contrast']}
+    {id:'instructor-alex',name:'Alex Chen',email:'instructor@handc.demo',services:['yoga','contrast']},
+    {id:'instructor-maya',name:'Maya Wu',email:'yoga@handc.demo',services:['yoga']},
+    {id:'instructor-kai',name:'Kai Lin',email:'contrast@handc.demo',services:['contrast']}
   ];
   const preparation=service=>service==='yoga'?[['setup','Mats and props ready'],['participants','Participant list reviewed']]:[['room','Room readiness confirmed'],['briefing','Participant briefing complete']];
   const status=s=>s.cancelled?'cancelled':['in_progress','completed'].includes(s.delivery?.status)?s.delivery.status:'scheduled';
@@ -60,7 +60,7 @@ window.SyncInstructor=(()=>{
     function navigation(section){
       const items=[['today','Today','overview'],['schedule','My schedule','schedule'],['reports','Reports','reports'],['account','Account','members']];
       const links=items.map(([id,label,ic])=>`<a class="staff-bottom-link ${section===id?'selected':''}" href="#instructor-${id}" data-instructor-nav ${section===id?'aria-current="page"':''}><span class="staff-nav-icon">${api.icon(ic)}</span><span>${t(label)}</span></a>`).join('');
-      return {side:`<aside class="staff-sidebar instructor-sidebar"><div class="staff-sidebar-heading"><span>${t('Workspace')}</span><strong>${t('Instructor workspace')}</strong></div><nav aria-label="${t('Instructor workspace')}">${links}</nav><div class="instructor-sidebar-identity"><strong>${e(own().name)}</strong><span>${own().services.map(serviceName).join(' · ')}</span></div><span class="staff-sidebar-location">SYNC · TAIPEI XINYI</span></aside>`,bottom:`<nav class="staff-bottom-nav instructor-bottom-nav" aria-label="${t('Instructor workspace')}"><div>${links}</div></nav>`};
+      return {side:`<aside class="staff-sidebar instructor-sidebar"><div class="staff-sidebar-heading"><span>${t('Workspace')}</span><strong>${t('Instructor workspace')}</strong></div><nav aria-label="${t('Instructor workspace')}">${links}</nav><div class="instructor-sidebar-identity"><strong>${e(own().name)}</strong><span>${own().services.map(serviceName).join(' · ')}</span></div><span class="staff-sidebar-location">HandC · TAIPEI XINYI</span></aside>`,bottom:`<nav class="staff-bottom-nav instructor-bottom-nav" aria-label="${t('Instructor workspace')}"><div>${links}</div></nav>`};
     }
     function filters(){return own().services.length>1?`<div class="instructor-filters" role="group" aria-label="${t('Service')}">${[['all','All sessions'],['yoga','Yoga'],['contrast','Contrast Therapy']].map(([id,label])=>`<button type="button" data-instructor="filter" data-value="${id}" aria-pressed="${filter===id}">${t(label)}</button>`).join('')}</div>`:''}
     const counts=s=>{const roster=api.roster(s.id);return {booked:roster.length,arrived:roster.filter(b=>b.checked).length}};
@@ -86,7 +86,7 @@ window.SyncInstructor=(()=>{
       const r=route(),s=r?api.session(r.id):null,section=hash==='instructor-account'?'account':hash==='instructor-reports'?'reports':hash==='instructor-schedule'||r?'schedule':'today',nav=navigation(section);
       const title=r?(r.scan?'Scan check-in':'Session details'):section==='today'?'Your day, in rhythm.':section==='schedule'?'My schedule':section==='reports'?'Attendance reports':'Instructor account';
       const content=r?(s?(r.scan?api.scannerPage(s):detail(s)):unavailable()):section==='today'?today():section==='schedule'?schedule():section==='reports'?api.reports():account();
-      return `<div class="staff-layout instructor-layout">${nav.side}<div class="staff-content"><div class="staff-heading instructor-heading"><div><p class="eyebrow">SYNC · XINYI</p><h1>${t(title)}</h1><p>${r&&s?e(t(s.title))+' · '+e(t(fmt(s.date)))+' · '+e(s.time):t(section==='today'?'Your assigned sessions and participants.':'Assigned sessions only.')}</p></div><span class="portal-demo-label">${t('Demo mode')}</span></div>${content}</div></div>${nav.bottom}`;
+      return `<div class="staff-layout instructor-layout">${nav.side}<div class="staff-content"><div class="staff-heading instructor-heading"><div><p class="eyebrow">HandC · XINYI</p><h1>${t(title)}</h1><p>${r&&s?e(t(s.title))+' · '+e(t(fmt(s.date)))+' · '+e(s.time):t(section==='today'?'Your assigned sessions and participants.':'Assigned sessions only.')}</p></div><span class="portal-demo-label">${t('Demo mode')}</span></div>${content}</div></div>${nav.bottom}`;
     }
     document.addEventListener('click',event=>{
       if(!api.isInstructor())return;const button=event.target.closest('[data-instructor]');if(!button)return;

@@ -1,64 +1,72 @@
-# SYNC APP
+# HandC APP
 
-A wellness web app for Yoga and Contrast Therapy bookings, member rewards and daily studio operations.
+Move. Reset. Repeat.
 
-**[Open the live demo](https://sync-wellness.vercel.app/)**
+A wellness booking and studio operations prototype, developed from [SYNC-APP](https://github.com/ikigaiwif606-acc/SYNC-APP) with an original HandC identity inspired by functional transparency, minimalist industrial design and analog instruments.
+
+## Design
+
+Warm paper backgrounds, charcoal displays, aluminium neutrals and restrained red indicators. The local dot-matrix wordmark and CSS instrument illustrations need no external image or font service.
+
+- A clear next-visit ticket and pass ledger on the member home screen.
+- A timetable with explicit session availability and status.
+- A booking receipt showing the selected package, balance after booking, expiry and cancellation deadline. Bookings inside the cancellation window are labelled explicitly.
+- Ticket-style pass wallets and a ten-visit membership punch card.
+- Consistent forms, dialogs, reports and workspaces for reception, instructors and administrators.
+- Responsive navigation, keyboard focus, reduced-motion support, English and Traditional Chinese.
+
+The shared design system is in `src/styles/theme.css`; feature files contain their layouts. The previous forest, glass and floating-card skins have been retired.
 
 ## Features
 
-- **Book classes** — browse sessions, check availability and manage bookings.
-- **Wallet** — view Yoga and Contrast Therapy passes, expiry dates and redeemed rewards.
-- **Rewards** — redeem points and track visit-based Plus, Core and Luxe membership progress.
-- **Account** — edit your profile, view purchases and points activity, and show your check-in QR code.
-- **People & staff tools** — browse people by role, manage sessions, book for members and scan check-in codes.
-- **Admin controls** — create accounts, edit profiles, change roles, activate/deactivate access and review change history.
-- **Attendance reports** — weekly and monthly dashboards with filters and CSV export.
-
-Responsive layouts support English and Traditional Chinese.
-
-## Demo accounts
-
-Use **Try a demo account** on the sign-in page, or enter one of these accounts. All use the demo password: `SyncDemo2026!`
-
-| Role | Email | Workspace |
-| --- | --- | --- |
-| Member | `jamie@sync.demo` | Bookings, wallet, rewards and profile |
-| Admin | `admin@sync.demo` | Studio management, account creation, passes, points and reports |
-| Front desk | `frontdesk@sync.demo` | Member assistance, bookings, check-in and reports |
-| Instructor | `instructor@sync.demo` | Assigned classes, preparation, attendance and reports |
-
-One sign-in form opens the workspace assigned to each account. Admin can create accounts for all four roles.
+Book Yoga and Contrast Therapy, manage passes and bookings, redeem rewards, inspect points history and display a member check-in QR code. Staff can manage schedules and people, assist with bookings, scan arrivals and inspect attendance reports. Admin can assign instructors, issue passes and adjust points. Instructors have scoped schedules, preparation and attendance tools.
 
 ## Run locally
 
-No build step or package installation is required. With Python 3 installed:
+No build or package installation is needed to run the application:
 
 ```sh
-git clone https://github.com/ikigaiwif606-acc/SYNC-APP.git
-cd SYNC-APP
-python3 -m http.server 4173 --bind 127.0.0.1
+git clone https://github.com/ikigaiwif606-acc/HandC-APP.git
+cd HandC-APP
+python3 -m http.server 4184 --bind 127.0.0.1
 ```
 
-Open [localhost:4173](http://127.0.0.1:4173/).
+Open <http://127.0.0.1:4184/>.
 
-## Demo scope
+## Demo accounts
 
-Data is saved in the current browser using local storage. Accounts and records are not shared across devices. Sign-in and purchases are simulated; no real payments or emails are sent. Use sample details when exploring.
+Choose **Try a demo account** on the sign-in page. All sample accounts use `HandCDemo2026!`.
 
-Membership benefits and booking policies are prototype settings.
+| Role | Email |
+| --- | --- |
+| Member | `jamie@handc.demo` |
+| Admin | `admin@handc.demo` |
+| Front desk | `frontdesk@handc.demo` |
+| Instructor, both services | `instructor@handc.demo` |
+| Yoga instructor | `yoga@handc.demo` |
+| Contrast Therapy instructor | `contrast@handc.demo` |
 
-## Project structure
+## Verification
 
-- `index.html` — app entry point.
-- `src/core/` — shared app logic, translations and membership rules.
-- `src/styles/` — global styles, shared theme tokens (`theme.css`) and visuals.
-- `src/features/` — JavaScript and CSS grouped by feature.
-- `assets/logos/` — SYNC brand assets.
-- `vendor/` — bundled QR libraries and their licenses.
-- `docs/` — workflow diagrams, review notes and future planning.
+Node.js 20 or later is required for the development-only integration tests:
 
-Future consideration: [Invite to SYNC referral program](docs/planning/referral-program.md).
+```sh
+npm ci
+npm test
+```
 
-## Built with
+The suite exercises account routing and permissions, member and staff pages, booking previews, pass debits, cancellation refunds, branding, isolated storage and Traditional Chinese.
 
-HTML, CSS and vanilla JavaScript, hosted on Vercel. QR tools are bundled locally: [jsQR license](vendor/jsQR-LICENSE.txt) and [QRCode.js license](vendor/qrcode-LICENSE.txt).
+## Deployment
+
+The application is static HTML, CSS and JavaScript. Vercel uses the project root as the output directory with no install or build step; `vercel.json` defines this explicitly. Development tests and internal review notes are excluded from deployment.
+
+## Prototype scope
+
+Data is stored in the current browser under HandC-specific keys. Accounts and records are not shared across devices. Authentication, purchases and email flows are simulated; no real payments or emails are sent. Use sample details when exploring.
+
+Taipei location, NT$ pricing, services and provisional membership rules are inherited demonstration settings. HandC contact channels have not been supplied, so the app does not link visitors to SYNC's external accounts. A production service needs shared storage, server-side authentication and confirmed studio policies and contact details.
+
+## Source and bundled libraries
+
+The Git history retains the SYNC-APP baseline. Local QR libraries retain their licenses: [jsQR](vendor/jsQR-LICENSE.txt) and [QRCode.js](vendor/qrcode-LICENSE.txt). Historical planning and review documents under `docs/` describe the source prototype and are not current HandC QA reports.

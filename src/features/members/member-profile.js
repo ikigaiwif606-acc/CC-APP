@@ -88,7 +88,7 @@ window.SyncMemberProfile = (() => {
   function visitPage(db,m) {
     return panel('Booking and attendance history',table(['Session','Date','Status','Booked on','Updated'],visits(db,m).map(v=>`<tr><td><strong>${e(t(v.title))}</strong><small>${service(v.service)}</small>${v.cancelReason?`<small>${e(t(v.cancelReason))}</small>`:''}</td><td>${when(null,v.date)}<small>${e(v.time)}</small></td><td>${badge(v.visitStatus)}</td><td>${when(v.createdAt)}${v.bookedBy?`<small>${t('Booked by staff')} · ${e(t(v.bookedBy))}</small>`:''}</td><td>${when(v.cancelledAt||v.checkedInAt)}${v.cancelledBy?`<small>${t(v.cancelledBy==='Member'?'Member action':v.cancelledBy)}</small>`:''}</td></tr>`),'No visits recorded.'));
   }
-  function number(db,m){return 'SYNC 0000 '+String(2088+db.members.findIndex(item=>item.id===m.id))}
+  function number(db,m){return 'HandC 0000 '+String(2088+db.members.findIndex(item=>item.id===m.id))}
   function render(db,m,tab,manager,canBook=false,management={}) {
     if(!m)return `<a class="mp-back" href="#admin-people" data-staff-nav>← ${t('Back to people')}</a>${panel('Member not found',`<p class="mp-empty">${t('This member is no longer available.')}</p>`)}`;
     if(!tabs.some(([id])=>id===tab))tab='overview';

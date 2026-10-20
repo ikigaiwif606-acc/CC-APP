@@ -73,7 +73,7 @@ window.SyncAttendanceReports=(()=>{
       const cell=value=>{let v=String(value??'');if(/^[\s]*[=+\-@]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'};
       const head=['Period start','Period end','Date (Taipei)','Time (Taipei)','Class','Service','Instructor','Status','Bookings','Checked in','Not checked in','Awaiting check-in','Cancelled bookings','Attendance rate (ended classes only)'];
       const lines=rows.map(s=>[r.range.start,r.range.end,s.date,s.time,s.title,serviceName(s.service),s.instructorName||t('Unassigned'),t(s.cancelled?'Cancelled':s.closed?'Class ended':'Upcoming / in progress'),s.booked,s.checked,s.missed,s.pending,s.cancellations,s.closed&&!s.cancelled&&s.booked?Math.round(s.checked/s.booked*100)+'%':'']);
-      const csv='\uFEFF'+[head,...lines].map(row=>row.map(cell).join(',')).join('\r\n'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='SYNC-attendance-'+mode+'-'+r.range.start+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);api.toast('Report downloaded.');
+      const csv='\uFEFF'+[head,...lines].map(row=>row.map(cell).join(',')).join('\r\n'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='HandC-attendance-'+mode+'-'+r.range.start+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);api.toast('Report downloaded.');
     }
     document.addEventListener('click',event=>{const b=event.target.closest('[data-attendance]');if(!b||!ready())return;const action=b.dataset.attendance;
       if(action==='details'){details(b.dataset.id);return}if(action==='export'){exportReport();return}
