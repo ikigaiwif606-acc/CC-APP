@@ -1,0 +1,119 @@
+/* Clear prices, readable transactions and practical controls on small screens. */
+.quick-passes{margin:0 0 44px}
+.quick-pass-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:22px}
+.quick-pass-heading .micro{font-size:11px;color:var(--muted);margin-bottom:10px}
+.quick-pass-heading h2{font-size:32px}
+.quick-pass-heading .text-link{white-space:nowrap}
+.quick-pass-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;border:1px solid var(--line);background:var(--line)}
+.quick-pass{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-width:0;min-height:170px;padding:20px 16px;background:var(--bg);text-align:left;transition:background .2s}
+.quick-pass:hover:not(:disabled){background:var(--panel)}
+.quick-pass:disabled{opacity:1;color:var(--muted)}
+.quick-pass:focus-visible{outline-offset:-3px;z-index:1}
+.quick-pass-name{font-size:14px;line-height:1.3;min-height:37px}
+.quick-pass strong{font-size:28px;line-height:1.15;font-weight:400;letter-spacing:-.055em;margin:7px 0 12px;white-space:nowrap}
+.quick-pass-period,.quick-pass-status{font-size:12px;line-height:1.5;color:var(--muted)}
+.quick-pass>.icon{position:absolute;right:14px;bottom:20px;width:15px;height:15px;color:var(--muted)}
+.quick-pass-status{padding-right:18px}
+.quick-pass-note{font-size:12px;color:var(--muted);margin-top:14px;max-width:650px}
+.motion-front .hero-invitation p{font-size:14px;line-height:1.65}
+.thermal-halo:after{background:radial-gradient(ellipse at 91% 79%,rgba(var(--halo-surface),.7),rgba(var(--halo-surface),0) 35%),linear-gradient(90deg,rgb(var(--halo-surface)) 0%,rgba(var(--halo-surface),.85) 26%,rgba(var(--halo-surface),.12) 60%,rgba(var(--halo-surface),0) 78%),linear-gradient(0deg,rgba(var(--halo-surface),.85),rgba(var(--halo-surface),0) 48%)}
+.sequence-track{height:160vh;min-height:900px}
+.purchase-context{padding:18px;border:1px solid var(--line);background:var(--panel);margin:24px 0}
+.purchase-context>.micro{font-size:10px;color:var(--muted);margin-bottom:12px}
+.selection-heading{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:10px}
+.selection-heading h2{font-size:21px;letter-spacing:-.04em}
+.selection-heading strong{font:22px var(--mono);letter-spacing:-.06em;white-space:nowrap}
+.purchase-context>p:not(.micro){font-size:13px;color:var(--muted);margin:5px 0}
+.purchase-context .text-link{font-size:12px;margin-top:9px}
+.account-step{font-size:14px;margin:15px 0 20px}
+.date-message{font-size:13px;line-height:1.7;color:var(--accent);margin-top:8px}
+.date-message:empty{display:none}
+.founding-value{font-size:13px;color:var(--muted);margin:0 0 18px}
+.modal-heading .close{width:44px;height:44px;min-width:44px;min-height:44px;display:grid;place-items:center;padding:0;flex-shrink:0}
+dialog .fact-list>div{font-size:14px}
+dialog label{font-size:14px}
+dialog .small,dialog .form-error,.purchase-note,.allocation-note{font-size:13px;line-height:1.7}
+.pass-access,.pass-validity{font-size:13px}
+.pass-card .inclusions{font-size:12px}
+.ticket-details dt{font-size:12px}
+.ticket-details dd{font-size:12px}
+.active-visits-table .small-button{min-height:44px}
+[data-admission-status]{font-size:12px;line-height:1.5;white-space:normal}
+@media(max-width:1100px){.quick-pass-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.quick-pass{min-height:158px}.quick-pass-name{min-height:20px}.quick-pass>.icon{bottom:22px}}
+@media(max-width:700px){
+  .quick-passes{margin-bottom:30px}
+  .quick-pass-heading{gap:15px;margin-bottom:18px}
+  .quick-pass-heading h2{font-size:28px}
+  .quick-pass-heading .micro{font-size:10px;max-width:200px}
+  .quick-pass-heading .text-link{font-size:12px}
+  .quick-pass-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .quick-pass{padding:18px 15px;min-height:157px}
+  .quick-pass-name{font-size:14px;min-height:19px}
+  .quick-pass strong{font-size:29px;margin:11px 0 9px}
+  .quick-pass-period,.quick-pass-status{font-size:12px}
+  .quick-pass-note{font-size:12px;line-height:1.65}
+  .quick-pass>.icon{right:12px;bottom:20px;width:14px;height:14px}
+  .header{column-gap:6px}
+  .header-tools{gap:6px}
+  .header-tools .tool-button{min-width:44px;min-height:44px;justify-content:center;padding:8px 0}
+  .header-tools .avatar{width:44px;height:44px}
+  .sign-in-link{min-height:44px}
+  .header nav{height:55px}
+  .header nav a{flex-direction:column;font-size:11px;gap:4px;line-height:1.15;white-space:normal;text-align:center}
+  [data-workspace=staff] .header nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));height:auto;overflow:visible;gap:0}
+  [data-workspace=staff] .header nav a{min-height:44px;padding:8px 5px;font-size:12px}
+  [data-workspace=staff] .header nav a:first-child{padding-left:5px}
+  .page-head p.muted,.member-intro p.muted,.home-bottom p.muted{font-size:14px}
+  .motion-front .hero-invitation p{font-size:14px;max-width:245px}
+  .hero-opening .hero-invitation{gap:18px}
+  .motion-front .hero-invitation .button{font-size:12px;min-height:44px}
+  .sequence-track{height:140svh;min-height:700px}
+  .stage-caption>div>p:last-child{font-size:12px;line-height:1.65}
+  .stage-caption .micro{font-size:8px}
+  .pass-tag{font-size:14px}
+  .pass-access,.pass-validity{font-size:14px}
+  .pass-card .inclusions{font-size:12px}
+  .info-strip{font-size:13px}
+  .ticket-details dt,.ticket-details dd,.ticket-access{font-size:12px}
+  .ticket-head .pill{font-size:11px}
+  .wallet-ticket>p.small,.inline-note{font-size:13px}
+  .member-hero-copy>p.small{font-size:12px}
+  .modal-heading{align-items:flex-start}
+  .purchase-context{padding:16px}
+  .selection-heading{flex-wrap:wrap;gap:7px 14px}
+  .purchase-context .selection-heading h2{font-size:21px}
+  .auth-form-panel>p.muted{font-size:14px}
+  .auth-layout:has(.purchase-context:not([hidden])) .auth-visual{display:none}
+  label,.fact-list>div{font-size:14px}
+  .metric>span{font-size:12px}
+  .metric>small{font-size:11px;line-height:1.6}
+  .entry-message,.entry-pass>p{font-size:14px}
+  .active-visits-table{margin:0;padding:0;overflow:visible}
+  .active-visits-table table{min-width:0;width:100%;display:block}
+  .active-visits-table thead{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+  .active-visits-table tbody{display:block}
+  .active-visits-table tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px 0;border-top:1px solid var(--line)}
+  .active-visits-table td{display:block;min-width:0;padding:0;border:0;font-size:14px}
+  .active-visits-table td:first-child,.active-visits-table td:last-child{grid-column:1/-1}
+  .active-visits-table td strong{font-size:16px}
+  .active-visits-table td small{font-size:12px;margin-top:5px}
+  .active-visits-table td[data-label]:before{content:attr(data-label);display:block;font:12px/1.5 Arial,sans-serif;color:var(--muted);margin-bottom:5px}
+  .active-visits-table .small-button{width:100%;font-size:14px;padding:11px 14px}
+  .active-visits-table .pill{font-size:10px;margin-top:7px;white-space:normal}
+  .active-visits-table .empty-cell{grid-column:1/-1}
+  .panel>.section-heading:has([data-admission-status]){flex-direction:column;align-items:flex-start;gap:12px}
+}
+@media(max-width:380px){
+  .header-tools{gap:3px}
+  .header-tools .language-button{font-size:9px}
+  .quick-pass{padding:17px 13px}
+  .quick-pass-name{font-size:13px;min-height:34px}
+  .quick-pass strong{font-size:28px;margin-top:3px}
+  .quick-pass-status{font-size:11px}
+  .quick-pass-period{font-size:12px}
+  .quick-pass-heading .text-link{white-space:normal;text-align:right;max-width:100px}
+  .motion-front .hero-invitation p{max-width:285px}
+  .hero-opening .hero-invitation .button{margin-top:17px}
+}
+@media(prefers-reduced-motion:reduce){.sequence-track{height:auto;min-height:0}}
+@media(max-height:480px){.sequence-track{height:auto;min-height:0}}

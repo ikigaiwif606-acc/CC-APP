@@ -15,11 +15,13 @@ const wait=()=>new Promise(r=>setTimeout(r,15));
 async function settle(){await wait();await wait()}
 async function go(w,route){w.location.hash=route;await settle()}
 async function submit(w,selector){q(w,selector).dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await settle()}
-function boot(t,{language='en',userId,route='home',theme,motion,reducedMotion=false,audioMock,musicPreference}={}){
+function boot(t,{language='en',userId,route='home',theme,motion,reducedMotion=false,audioMock,musicPreference,clock,database}={}){
  const w=new Window({url:'https://handc.test/#'+route,settings:{enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true,disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
  t.after(()=>w.happyDOM.abort());w.document.write(markup);w.localStorage.setItem('handc-locale',language);
  // Fix the browser clock to a Malaysian opening hour, independent of CI timezone.
- w.Date.now=()=>NOW;w.structuredClone=structuredClone;
+ w.Date.now=()=>clock?.now??NOW;w.structuredClone=structuredClone;
+ if(clock){const interval=w.setInterval.bind(w);w.setInterval=(fn,delay)=>{if(delay===1000){clock.tick=fn;return 0}return interval(fn,delay)}}
+ if(database)w.localStorage.setItem('handc-thermal-v2',JSON.stringify(database));
  if(musicPreference)w.localStorage.setItem('handc-music',musicPreference);if(theme)w.localStorage.setItem('handc-theme',theme);if(motion)w.localStorage.setItem('handc-motion',motion);
  w.matchMedia=()=>({matches:reducedMotion,addEventListener(){}});if(audioMock){w.AudioContext=audioMock.Context;w.fetch=audioMock.fetch}
  if(userId)w.sessionStorage.setItem('handc-thermal-session',JSON.stringify({userId}));
@@ -114,7 +116,8 @@ for(const [userId,routes] of [['jamie',['home','passes','wallet','visits','studi
  if(userId==='reception')assert.equal(w.document.querySelector('[name=capacity]'),null);
 });
 test('purchase intent survives sign-in and only confirmation creates a pass',async t=>{
- const w=boot(t,{route:'passes'});q(w,'[data-action=buy][data-product=monthly]').click();await settle();assert.equal(w.location.hash,'#login');
+ const w=boot(t,{route:'passes'});q(w,'[data-action=buy][data-product=monthly]').click();assert.ok(q(w,'[data-form=guest-purchase]'));assert.equal(w.location.hash,'#passes');assert.equal(db(w).orders.length,2);
+ await submit(w,'[data-form=guest-purchase]');assert.equal(w.location.hash,'#login');assert.match(q(w,'[data-purchase-context]').textContent,/Monthly Pass/);
  q(w,'[name=email]').value='jamie@handc.demo';q(w,'[name=password]').value='wrong';await submit(w,'#auth-form');assert.match(q(w,'.form-error').textContent,/incorrect/);
  q(w,'[name=password]').value='HandCDemo2026!';await submit(w,'#auth-form');assert.ok(q(w,'#modal').open);assert.ok(q(w,'[data-form=purchase]'));
  assert.equal(db(w).orders.length,2);assert.match(q(w,'#modal-content').textContent,/Unlimited entries/);await submit(w,'[data-form=purchase]');
@@ -257,4 +260,72 @@ test('reduced and paused halos stay static without sampling audio or scheduling 
  w.HandCHalo.setMotion('full');assert.equal(frames.size,1);step(50);assert.ok(calls.signals>0);
  w.HandCHalo.setMotion('paused');const painted=calls.paints,signals=calls.signals;assert.equal(frames.size,0);assert.equal(host.dataset.haloState,'paused');step(100);assert.equal(calls.paints,painted);assert.equal(calls.signals,signals);
  w.HandCHalo.setMotion('full');assert.equal(frames.size,1);
+});
+
+test('admission status distinguishes closed, paused, full and open at exact Malaysian boundaries',()=>{
+ let data=H.seed(NOW);assert.equal(H.admissionStatus(data,at('2026-10-20',9)-1),'closed');assert.equal(H.admissionStatus(data,at('2026-10-20',9)),'open');
+ data.settings.capacity=1;data=H.checkIn(data,'jamie','reception',NOW).db;assert.equal(H.admissionStatus(data,NOW),'capacity');
+ data.settings.admissionsPaused=true;assert.equal(H.admissionStatus(data,NOW),'paused');assert.equal(H.admissionStatus(data,at('2026-10-20',21)),'closed');
+ assert.equal(H.entryPreview(data,'avery',at('2026-10-20',21)).error,'studio-closed');
+});
+
+test('wallet and open pass details expire automatically at noon without closing the dialog',t=>{
+ const clock={now:at('2026-10-20',12)-1000},database=H.purchase(H.seed(clock.now),'avery','sunrise',{now:clock.now}).db;
+ const w=boot(t,{userId:'avery',route:'wallet',clock,database});assert.match(q(w,'.wallet-grid .pill').textContent,/Ready/);
+ q(w,'[data-action=pass-details]').click();const dialog=q(w,'#modal'),close=q(w,'#modal [data-action=close]');close.focus();
+ clock.now=at('2026-10-20',12);clock.tick();
+ assert.ok(dialog.open);assert.equal(w.document.activeElement,close);assert.match(q(w,'.wallet-content').textContent,/No active passes/);assert.match(q(w,'.past-passes .pill').textContent,/Expired/);assert.match(q(w,'#modal [data-pass-state]').textContent,/Expired/);
+});
+
+test('entry desk refresh preserves lookup fields and withdraws an open confirmation at closing',t=>{
+ const clock={now:at('2026-10-20',21)-1000},w=boot(t,{userId:'reception',route:'staff-entry',clock});
+ const input=q(w,'[data-form=lookup] input'),select=q(w,'[data-form=entry-member] select');input.value='HC0002';select.value='avery';
+ q(w,'[data-action=entry-review]').click();q(w,'[data-action=confirm-entry]').focus();clock.now=at('2026-10-20',21);clock.tick();
+ assert.equal(q(w,'[data-form=lookup] input'),input);assert.equal(input.value,'HC0002');assert.equal(select.value,'avery');assert.equal(q(w,'#modal').open,true);
+ assert.equal(w.document.querySelector('[data-action=confirm-entry]'),null);assert.match(q(w,'.entry-confirm').textContent,/9am to 9pm/);assert.match(q(w,'.entry-review').textContent,/Entry unavailable/);assert.equal(db(w).visits.length,0);
+});
+
+test('staff dashboard changes from closed to open and from open to closed while left on screen',t=>{
+ const clock={now:at('2026-10-20',9)-1},w=boot(t,{userId:'admin',route:'staff-home',clock});assert.equal(q(w,'[data-admission-status]').dataset.admissionStatus,'closed');
+ clock.now=at('2026-10-20',9);clock.tick();assert.equal(q(w,'[data-admission-status]').dataset.admissionStatus,'open');
+ clock.now=at('2026-10-20',21);clock.tick();assert.equal(q(w,'[data-admission-status]').dataset.admissionStatus,'closed');assert.doesNotMatch(q(w,'[data-admission-status]').textContent,/open/);
+});
+
+test('departure deadline updates the staff list and counts at its exact timestamp',t=>{
+ const clock={now:at('2026-10-20',12)-1000};let database=H.purchase(H.seed(clock.now),'avery','sunrise',{now:clock.now}).db;database=H.checkIn(database,'avery','reception',clock.now).db;
+ const w=boot(t,{userId:'reception',route:'staff-home',clock,database});assert.doesNotMatch(q(w,'.active-visits-table').textContent,/Departure due/);
+ clock.now=at('2026-10-20',12);clock.tick();assert.match(q(w,'.active-visits-table').textContent,/Departure due/);assert.match(q(w,'.metric-grid').textContent,/Departures due1/);
+});
+
+test('an expiry refresh preserves an unfinished studio settings form and an open QR dialog',async t=>{
+ const clock={now:at('2026-10-20',21)-1},w=boot(t,{userId:'admin',route:'staff-studio',clock});const note=q(w,'[name=note]');note.value='Unfinished note';note.focus();
+ clock.now=at('2026-10-20',21);clock.tick();assert.equal(q(w,'[name=note]'),note);assert.equal(note.value,'Unfinished note');assert.equal(w.document.activeElement,note);
+ const mclock={now:at('2026-10-20',21)-1},member=boot(t,{userId:'jamie',route:'wallet',clock:mclock});q(member,'[data-action=qr]').click();const qr=q(member,'.qr-code');
+ mclock.now=at('2026-10-20',21);member.document.dispatchEvent(new member.Event('visibilitychange'));assert.equal(q(member,'#modal').open,true);assert.equal(q(member,'.qr-code'),qr);assert.match(q(member,'.wallet-ticket .pill').textContent,/Outside access/);
+});
+
+test('a guest can review and keep a selected visit date through sign-in and confirmation',async t=>{
+ const w=boot(t,{route:'home'});assert.equal(w.document.querySelectorAll('.quick-pass').length,6);assert.ok(q(w,'.quick-passes').compareDocumentPosition(q(w,'.sequence-track'))&w.Node.DOCUMENT_POSITION_FOLLOWING);
+ q(w,'.quick-pass[data-product=sunrise]').click();assert.equal(q(w,'#modal-title').textContent,'Review your pass');const date=q(w,'[name=visitDate]');date.value='2026-10-21';
+ await submit(w,'[data-form=guest-purchase]');assert.equal(w.location.hash,'#login');assert.match(q(w,'[data-purchase-context]').textContent,/Sunrise Pass/);assert.match(q(w,'[data-purchase-context]').textContent,/21 Oct 2026/);assert.equal(db(w).orders.length,2);
+ q(w,'[name=email]').value='jamie@handc.demo';q(w,'[name=password]').value='HandCDemo2026!';await submit(w,'#auth-form');assert.equal(q(w,'[name=visitDate]').value,'2026-10-21');assert.equal(db(w).orders.length,2);
+ await submit(w,'[data-form=purchase]');assert.equal(db(w).passes[0].visitDate,'2026-10-21');assert.equal(db(w).passes[0].productId,'sunrise');
+});
+
+test('editing a pass selection keeps typed sign-in details, and registration keeps the selected date',async t=>{
+ const w=boot(t,{route:'passes'});q(w,'[data-product=full-day][data-action=buy]').click();q(w,'[name=visitDate]').value='2026-10-21';await submit(w,'[data-form=guest-purchase]');
+ const email=q(w,'[name=email]'),password=q(w,'[name=password]');email.value='guest@example.test';password.value='SamplePassword123!';
+ q(w,'[data-action=edit-purchase]').click();q(w,'[name=visitDate]').value='2026-10-22';await submit(w,'[data-form=guest-purchase]');assert.equal(q(w,'[name=email]'),email);assert.equal(email.value,'guest@example.test');assert.equal(password.value,'SamplePassword123!');
+ await go(w,'register');assert.match(q(w,'[data-purchase-context]').textContent,/22 Oct 2026/);q(w,'[name=name]').value='Guest Preview';q(w,'[name=email]').value='guest@example.test';q(w,'[name=password]').value='SamplePassword123!';await submit(w,'#auth-form');
+ for(let i=0;i<100&&w.location.hash==='#register';i++)await wait();await settle();assert.equal(q(w,'[name=visitDate]').value,'2026-10-22');assert.equal(db(w).orders.length,2);assert.equal(w.sessionStorage.getItem('handc-pending-purchase'),null);
+});
+
+test('a guest review left open past its window shows expiry and cannot continue with the old date',async t=>{
+ const clock={now:at('2026-10-20',12)-1000},w=boot(t,{route:'passes',clock});q(w,'[data-product=sunrise][data-action=buy]').click();const date=q(w,'[name=visitDate]');assert.equal(date.value,'2026-10-20');
+ clock.now=at('2026-10-20',12);clock.tick();assert.match(q(w,'[data-date-message]').textContent,/window has ended/);assert.equal(q(w,'[name=visitDate]'),date);await submit(w,'[data-form=guest-purchase]');assert.equal(w.location.hash,'#passes');assert.equal(db(w).orders.length,2);assert.equal(w.sessionStorage.getItem('handc-pending-purchase'),null);
+});
+
+test('new pass review, selection context and admission states are translated into Chinese',async t=>{
+ const w=boot(t,{language:'zh-TW'});assert.match(q(w,'.hero-invitation').textContent,/RM30/);q(w,'.quick-pass[data-product=sunset]').click();assert.match(q(w,'#modal-title').textContent,/確認通行證/);assert.match(q(w,'[data-form=guest-purchase]').textContent,/建立帳戶/);await submit(w,'[data-form=guest-purchase]');assert.match(q(w,'[data-purchase-context]').textContent,/晚間通行證/);
+ const a=boot(t,{language:'zh-TW',userId:'admin',route:'staff-home',clock:{now:at('2026-10-20',21)}});assert.match(q(a,'[data-admission-status]').textContent,/已關閉/);
 });

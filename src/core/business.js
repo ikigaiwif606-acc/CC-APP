@@ -33,6 +33,11 @@ var HandC = (() => {
   const actor = (db,userId) => db.users.find(u=>u.id===userId&&u.active!==false);
   const foundingSold = db => db.orders.filter(o=>o.productId==='founding').length;
   const foundingRemaining = db => Math.max(0,FOUNDING_LIMIT-foundingSold(db));
+  function visitDateError(productId,visitDate,now=Date.now()){
+    const p=product(productId);if(!p)return 'unknown-pass';if(p.kind!=='entry')return null;
+    if(!validDate(visitDate)||visitDate<dateKey(now)||visitDate>addDays(dateKey(now),90))return 'invalid-visit-date';
+    return now>=at(visitDate,p.end)?'window-ended':null;
+  }
   function purchase(db,userId,productId,{now=Date.now(),visitDate=dateKey(now),actorId=userId,requestId=id('purchase')}={}){
     const customer=actor(db,userId),by=actor(db,actorId),p=product(productId);
     if(!customer||customer.role!=='member')fail('member-required');
@@ -41,10 +46,7 @@ var HandC = (() => {
     const previous=db.orders.find(o=>o.requestId===requestId);
     if(previous){if(previous.userId!==userId||previous.productId!==productId)fail('request-conflict');return {db:copy(db),order:copy(previous),duplicate:true}}
     if(p.id==='founding'&&foundingRemaining(db)===0)fail('founding-sold-out');
-    if(p.kind==='entry'){
-      if(!validDate(visitDate)||visitDate<dateKey(now)||visitDate>addDays(dateKey(now),90))fail('invalid-visit-date');
-      if(now>=at(visitDate,p.end))fail('window-ended');
-    }
+    const dateError=visitDateError(productId,visitDate,now);if(dateError)fail(dateError);
     if(p.kind!=='entry'&&db.passes.some(pass=>pass.userId===userId&&pass.productId===p.id&&pass.validUntil>now))fail('same-membership-active');
     const validFrom=p.kind==='entry'?Math.max(now,at(visitDate,p.start)):now;
     const validUntil=p.kind==='entry'?at(visitDate,p.end):p.kind==='annual'?anniversary(now):now+p.days*DAY;
@@ -72,12 +74,18 @@ var HandC = (() => {
     });
   }
   const inside = db => db.visits.filter(v=>!v.outAt);
+  function admissionStatus(db,now=Date.now()){
+    const day=dateKey(now);if(now<at(day,9)||now>=at(day,21))return 'closed';
+    if(db.settings.admissionsPaused)return 'paused';
+    if(db.settings.capacity&&inside(db).length>=db.settings.capacity)return 'capacity';
+    return 'open';
+  }
   function entryPreview(db,userId,now=Date.now()){
     const user=actor(db,userId);if(!user||user.role!=='member')return {error:'member-required'};
     const existing=inside(db).find(v=>v.userId===userId);if(existing)return {error:'already-inside',visit:existing};
-    if(db.settings.admissionsPaused)return {error:'admissions-paused'};
-    const day=dateKey(now);if(now<at(day,9)||now>=at(day,21))return {error:'studio-closed'};
-    if(db.settings.capacity&&inside(db).length>=db.settings.capacity)return {error:'capacity-reached'};
+    const status=admissionStatus(db,now),errors={closed:'studio-closed',paused:'admissions-paused',capacity:'capacity-reached'};
+    if(errors[status])return {error:errors[status]};
+    const day=dateKey(now);
     const pass=eligiblePasses(db,userId,now)[0];if(!pass)return {error:'no-valid-pass'};
     const p=product(pass.productId);return {pass,product:p,leaveBy:Math.min(pass.validUntil,at(day,p.end))};
   }
@@ -131,6 +139,6 @@ var HandC = (() => {
     if(new Set(db.users.map(u=>u.id)).size!==db.users.length)return false;
     return db.users.every(u=>u&&typeof u.id==='string'&&typeof u.name==='string'&&typeof u.email==='string'&&['member','admin','reception','attendant'].includes(u.role))&&db.passes.every(p=>p&&product(p.productId)&&db.users.some(u=>u.id===p.userId)&&Number.isFinite(p.validFrom)&&Number.isFinite(p.validUntil)&&p.validUntil>p.validFrom)&&db.orders.every(o=>o&&product(o.productId)&&Number.isFinite(o.amount))&&db.visits.every(v=>v&&db.users.some(u=>u.id===v.userId)&&Number.isFinite(v.inAt)&&Number.isFinite(v.leaveBy));
   }
-  return {ZONE,DAY,FOUNDING_LIMIT,CATALOG,product,dateKey,at,addDays,anniversary,staff,seller,actor,foundingSold,foundingRemaining,purchase,passState,currentPasses,eligiblePasses,inside,entryPreview,checkIn,checkOut,updateStudio,createEnquiry,updateEnquiry,seed,validDatabase};
+  return {ZONE,DAY,FOUNDING_LIMIT,CATALOG,product,dateKey,at,addDays,anniversary,staff,seller,actor,foundingSold,foundingRemaining,visitDateError,purchase,passState,currentPasses,eligiblePasses,inside,admissionStatus,entryPreview,checkIn,checkOut,updateStudio,createEnquiry,updateEnquiry,seed,validDatabase};
 })();
 if(typeof module!=='undefined')module.exports=HandC;

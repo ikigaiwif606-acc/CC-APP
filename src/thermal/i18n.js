@@ -29,3 +29,13 @@ Object.assign(window.HandCChinese,{
 });
 
 Object.assign(window.HandCChinese,{'Music starts automatically. Your mute and volume choices are remembered.':'音樂會自動播放，並保留靜音及音量設定。','Sound settings. Music ready.':'聲音設定，音樂已準備好。','Ready':'已準備好','Music will start with your first tap.':'首次點選頁面後，音樂便會開始播放。'});
+
+Object.assign(window.HandCChinese,{
+  'Sauna + cold plunge in Raja Uda. Passes from RM30.':'Raja Uda 的桑拿與冷水池體驗，通行證 RM30 起。',
+  'Choose a pass':'選擇通行證','SAUNA + BOTH PLUNGE POOLS':'桑拿及兩座冷水池','Find your time.':'找到你的片刻。','Compare passes':'比較通行證',
+  'Day passes are single entry. Duration passes allow unlimited entries and begin at purchase.':'單日通行證限單次入場；定期通行證不限次入場，效期自購買時起算。',
+  'Review your pass':'確認通行證內容','Continue to account':'繼續至帳戶','Sign in or create an account to confirm your pass.':'登入或建立帳戶後，即可確認選購內容。',
+  'Your selected pass':'已選擇的通行證','YOUR SELECTION':'你的選擇','Edit selection':'修改選擇','Your selection could not be saved. Please try again.':'無法儲存選購內容，請再試一次。',
+  'Admissions open':'開放入場','Closed · 9am–9pm':'已關閉 · 上午 9 時至晚上 9 時開放','At capacity':'已達人數上限','Return to entry desk':'返回入場櫃台',
+  'Equivalent to RM250/month. Paid annually.':'相當於每月 RM250，按年一次付清。'
+});

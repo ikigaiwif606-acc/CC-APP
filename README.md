@@ -29,6 +29,10 @@ The day and night palettes follow the [HandC business concept](https://handc-bus
 
 Visitors can browse the studio and six passes before signing in. Members can purchase demo passes, see exact validity, display their entry QR, inspect visits and purchase history, and update their profile. Reception and admin can sell passes, review member records and process group enquiries. All staff can confirm entry/departure, pause admissions and change manual facility status. Only admin can configure an approved operating occupancy limit; no limit is inferred from pool or sauna design capacities.
 
+All six prices appear in a compact selector directly below the homepage hero. Visitors can review a pass and choose a visit date before authentication. Continuing saves the selection in session storage; sign-in and registration show the selected pass, price, access hours and date, with an edit action. The date survives authentication and registration, and a separate confirmation is still required to issue a demo pass. A date that expires while the visitor signs in is shown for correction rather than silently replaced. The original pending-product key is accepted during the transition.
+
+Time-sensitive views refresh at access-window and expiry boundaries without replacing the page, resetting forms, closing dialogs or restarting the halo. The dashboard distinguishes closed hours, paused admissions, full capacity and open admissions using the same rule as entry validation. Closing time takes precedence over paused/full status; existing visits remain available for departure. An open entry confirmation is withdrawn when entry becomes invalid, while purchase dates receive an inline warning. Visible pages check boundaries once per second and refresh on return from a hidden tab. Mobile departure tables use cards, and staff navigation exposes all destinations without horizontal scrolling.
+
 The app includes responsive layouts, accessible dialogs and forms, reduced-motion support, and English / Traditional Chinese. There are no classes or instructor workflows. The previous runtime has been retired; original source remains in Git history.
 
 ## Sound, motion and night mode
@@ -65,7 +69,7 @@ npm ci
 npm test
 ```
 
-Tests exercise the catalogue, Malaysian time boundaries, duration expiry, single and unlimited admission, founding stock/idempotency, role permissions, occupancy, group enquiries, public/member/staff routes, purchasing, QR entry, registration, Traditional Chinese, default theme and saved preferences, automatic audio, blocked-autoplay fallback, remembered mute, looping, cancelled playback and reduced motion. Browser checks verify actual audio decoding and the visual sequence separately from the mocked audio regression tests.
+Tests exercise the catalogue, Malaysian time boundaries, duration expiry, single and unlimited admission, founding stock/idempotency, role permissions, occupancy, group enquiries, public/member/staff routes, purchasing, QR entry, registration, Traditional Chinese, default theme and saved preferences, automatic audio, blocked-autoplay fallback, remembered mute, looping, cancelled playback and reduced motion. Clock-controlled checks cover noon expiry, opening/closing, overdue departures, open dialogs and unfinished forms. Guest checkout checks cover review before authentication, retained dates, editing with typed credentials and registration. Browser checks verify actual audio decoding and responsive layouts separately from the mocked regression tests.
 
 ## Demo accounts
 
