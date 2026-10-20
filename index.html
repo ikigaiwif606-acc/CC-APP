@@ -1,14 +1,31 @@
 <!doctype html>
-<html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f2f1ec"><title>HandC — Move. Reset. Repeat.</title><meta name="description" content="A little more balance. Book Yoga and Contrast Therapy, manage your passes, and make time for yourself with HandC."><link rel="icon" type="image/svg+xml" href="assets/logos/handc-symbol.svg"><link rel="stylesheet" href="src/styles/styles.css?v=69c273ecbc"><link rel="stylesheet" href="src/features/rewards/tiers.css?v=64e7042971"><link rel="stylesheet" href="src/features/rewards/rewards.css?v=177e6b8e00"><link rel="stylesheet" href="src/features/staff/portal.css?v=da1ed6a965"><link rel="stylesheet" href="src/styles/design.css?v=82eba1468e"><link rel="stylesheet" href="src/features/rewards/journey.css?v=27f08e5a7c"><link rel="stylesheet" href="src/features/members/member-profile.css?v=3f6f92b3d2"><link rel="stylesheet" href="src/features/wallet/wallet.css?v=d2dcd81cad"><link rel="stylesheet" href="src/features/account/account.css?v=985c24de90"><link rel="stylesheet" href="src/features/scanner/scanner.css?v=c5a9892d7b"><link rel="stylesheet" href="src/features/staff/staff-navigation.css?v=ab01511c9b"><link rel="stylesheet" href="src/features/instructor/instructor.css?v=4ae2fe58ca"><link rel="stylesheet" href="src/features/staff/staff-tools.css?v=40f7ba8ae3"><link rel="stylesheet" href="src/features/reports/attendance-reports.css?v=28499aef1c"><link rel="stylesheet" href="src/features/booking/booking-status.css?v=799f023de7"><link rel="stylesheet" href="src/features/overview/overview.css?v=0f657225a1"><link rel="stylesheet" href="src/features/people/people.css?v=a89efef0d8"><link rel="stylesheet" href="src/features/people/admin-controls.css?v=dea8c2e51e"><link rel="stylesheet" href="src/features/staff/schedule.css?v=45958f4687"><link rel="stylesheet" href="src/features/club/club.css?v=c74f065181"><link rel="stylesheet" href="src/styles/theme.css?v=74d1e58047"></head>
+<html lang="en" data-theme="day">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f4ef">
+  <meta name="description" content="HandC thermal wellness in Raja Uda, Butterworth. Explore sauna and cold-plunge passes, from a single visit to an everyday ritual.">
+  <title>HandC — Cold. Heat. A moment to reset.</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logos/handc-symbol.svg">
+  <link rel="stylesheet" href="src/thermal/thermal.css?v=2">
+</head>
 <body>
-<a class="skip-link" data-i18n="Skip to content" href="#app">Skip to content</a>
-
-<header class="header"><a class="brand" href="#home" aria-label="HandC home"><img src="assets/logos/handc-logo.svg" alt="HandC"><span data-i18n="WELLNESS CLUB">WELLNESS CLUB</span></a><nav id="navigation" aria-label="Main navigation"></nav><div class="header-right"><span class="location" data-i18n="TAIPEI · XINYI">TAIPEI · XINYI</span><button class="language-button" data-action="language" aria-label="切換為繁體中文">繁體中文</button><button class="avatar" data-action="profile" aria-label="Your account">JL</button></div></header>
-<main id="app" tabindex="-1"></main>
-<footer id="club-footer" class="sync-site-footer"><span data-i18n="Find your rhythm. Feel like yourself.">Find your rhythm. Feel like yourself.</span><span data-i18n="HandC WELLNESS CLUB · TAIPEI">HandC WELLNESS CLUB · TAIPEI</span><button data-action="rules" data-i18n="About this prototype ↗">About this prototype ↗</button></footer>
-<dialog id="modal" aria-labelledby="modal-title"><div id="modal-content"></div></dialog>
-<dialog id="cancellation-notice" role="alertdialog" aria-labelledby="cancellation-notice-title" aria-describedby="cancellation-notice-reason"><div id="cancellation-notice-content"></div></dialog>
-<div id="toast" role="status" aria-live="polite"></div>
-<script src="src/core/i18n.js"></script><script src="src/features/club/club.js"></script><script src="src/core/membership-program.js"></script><script src="src/core/app.js"></script><script src="src/features/members/member-profile.js"></script><script src="vendor/qrcode.js"></script><script src="src/features/account/account.js"></script><script src="vendor/jsQR.js"></script><script src="src/features/scanner/scanner.js"></script><script src="src/features/instructor/instructor.js"></script><script src="src/features/staff/staff-tools.js"></script><script src="src/features/reports/attendance-reports.js"></script><script src="src/features/people/people.js"></script><script src="src/features/people/account-management.js"></script><script src="src/features/people/admin-controls.js"></script><script src="src/features/staff/schedule.js"></script><script src="src/features/staff/portal.js"></script>
-</body></html>
+  <a class="skip-link" data-action="skip" href="#main-content">Skip to content</a>
+  <div class="preview-bar"><span><i class="red-dot"></i> STUDIO PREVIEW</span><span>No real payments <span class="preview-separator">/</span> Malaysia time (GMT+8)</span><button data-action="about">How this works ↗</button></div>
+  <header class="header">
+    <a id="brand-link" class="brand" href="#home" aria-label="HandC home"><img src="assets/logos/handc-logo.svg" alt="HandC"><span>THERMAL WELLNESS</span></a>
+    <nav id="navigation" aria-label="Main navigation"></nav>
+    <div class="header-tools"><button id="theme-button" class="tool-button" data-action="theme"></button><button id="language-button" class="tool-button language-button" data-action="language">繁體中文</button><div id="account-action"></div></div>
+  </header>
+  <aside id="studio-notice" class="studio-notice" aria-label="Studio updates" hidden></aside>
+  <main id="app" tabindex="-1"></main>
+  <footer id="footer"></footer>
+  <dialog id="modal" aria-labelledby="modal-title"><div id="modal-content"></div></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="src/core/business.js"></script>
+  <script src="src/thermal/i18n.js"></script>
+  <script src="vendor/qrcode.js"></script>
+  <script src="vendor/jsQR.js"></script>
+  <script src="src/thermal/app.js"></script>
+</body>
+</html>

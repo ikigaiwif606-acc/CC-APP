@@ -5,3 +5,5 @@ docs/reviews
 docs/planning
 tests
 package-lock.json
+node_modules
+docs/diagrams

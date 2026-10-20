@@ -1,72 +1,74 @@
 # HandC APP
 
-Move. Reset. Repeat.
+Cold. Heat. A moment to reset.
 
-A wellness booking and studio operations prototype, developed from [SYNC-APP](https://github.com/ikigaiwif606-acc/SYNC-APP) with an original HandC identity inspired by functional transparency, minimalist industrial design and analog instruments.
+A thermal wellness pass and studio operations prototype for Raja Uda, Butterworth, Penang. The app was developed from [SYNC-APP](https://github.com/ikigaiwif606-acc/SYNC-APP); the current interface and access model are specific to HandC.
 
-## Design
+## Passes and access
 
-Warm paper backgrounds, charcoal displays, aluminium neutrals and restrained red indicators. The local dot-matrix wordmark and CSS instrument illustrations need no external image or font service.
+Every pass includes the communal sauna and both cold-plunge pools.
 
-- A clear next-visit ticket and pass ledger on the member home screen.
-- A timetable with explicit session availability and status.
-- A booking receipt showing the selected package, balance after booking, expiry and cancellation deadline. Bookings inside the cancellation window are labelled explicitly.
-- Ticket-style pass wallets and a ten-visit membership punch card.
-- Consistent forms, dialogs, reports and workspaces for reception, instructors and administrators.
-- Responsive navigation, keyboard focus, reduced-motion support, English and Traditional Chinese.
+| Pass | Price | Access | Allowance / validity |
+| --- | --- | --- | --- |
+| Full Day | RM70 | 9am–9pm | One entry on the chosen date |
+| Sunrise | RM30 | 9am–12pm | One entry; leave by noon |
+| Sunset | RM30 | 6pm–9pm | One entry; leave by 9pm |
+| Weekly | RM200 | 9am–9pm | Unlimited entries for 7 days from purchase |
+| Monthly | RM500 | 9am–9pm | Unlimited entries for 30 days from purchase |
+| Founding Member | RM3,000 | 9am–9pm | Unlimited entries for one year from purchase; 200 passes total |
 
-The shared design system is in `src/styles/theme.css`; feature files contain their layouts. The previous forest, glass and floating-card skins have been retired.
+All times use `Asia/Kuala_Lumpur`. Duration validity begins at the exact purchase timestamp and runs continuously, including outside access hours. Annual expiry is the calendar anniversary, with 29 February clamped to 28 February in a non-leap year. Single-entry tickets offer a visit date within 90 days; an ended window cannot be bought for that date.
 
-## Features
+Reception confirms entry and departure. Showing a QR code never consumes a pass. A single-entry pass is used only after staff confirm admission. Duration passes support repeat admission after recorded departure. An eligible duration pass is used before a finite day ticket. A visit's departure deadline is the earlier of pass expiry and its access window's end. Overdue visits remain visible until staff record departure.
 
-Book Yoga and Contrast Therapy, manage passes and bookings, redeem rewards, inspect points history and display a member check-in QR code. Staff can manage schedules and people, assist with bookings, scan arrivals and inspect attendance reports. Admin can assign instructors, issue passes and adjust points. Instructors have scoped schedules, preparation and attendance tools.
+The founding counter is calculated from saved demo purchases, capped at 200, and guarded against duplicate confirmation. This is a local allocation, not shared inventory.
 
-## Run locally
+## Design and workflows
 
-No build or package installation is needed to run the application:
+The day and night palettes follow the [HandC business concept](https://handc-business-summary.vercel.app/): pale concrete, brushed steel, dark industrial surfaces, warm timber, dot-matrix identity, thin grids and small red indicators. Optimized concept images from that brief are bundled under `assets/studio/`. Temperatures of 4°C and 8°C are labelled as targets, not live readings.
+
+Visitors can browse the studio and six passes before signing in. Members can purchase demo passes, see exact validity, display their entry QR, inspect visits and purchase history, and update their profile. Reception and admin can sell passes, review member records and process group enquiries. All staff can confirm entry/departure, pause admissions and change manual facility status. Only admin can configure an approved operating occupancy limit; no limit is inferred from pool or sauna design capacities.
+
+The app includes responsive layouts, accessible dialogs and forms, reduced-motion support, and English / Traditional Chinese. There are no classes or instructor workflows. The previous runtime has been retired; original source remains in Git history.
+
+## Run and verify
+
+No build or package installation is needed to serve the static application:
 
 ```sh
-git clone https://github.com/ikigaiwif606-acc/HandC-APP.git
-cd HandC-APP
 python3 -m http.server 4184 --bind 127.0.0.1
 ```
 
-Open <http://127.0.0.1:4184/>.
-
-## Demo accounts
-
-Choose **Try a demo account** on the sign-in page. All sample accounts use `HandCDemo2026!`.
-
-| Role | Email |
-| --- | --- |
-| Member | `jamie@handc.demo` |
-| Admin | `admin@handc.demo` |
-| Front desk | `frontdesk@handc.demo` |
-| Instructor, both services | `instructor@handc.demo` |
-| Yoga instructor | `yoga@handc.demo` |
-| Contrast Therapy instructor | `contrast@handc.demo` |
-
-## Verification
-
-Node.js 20 or later is required for the development-only integration tests:
+Open <http://127.0.0.1:4184/>. For the development tests, use Node.js 20 or later:
 
 ```sh
 npm ci
 npm test
 ```
 
-The suite exercises account routing and permissions, member and staff pages, booking previews, pass debits, cancellation refunds, branding, isolated storage and Traditional Chinese.
+Tests exercise the catalogue, Malaysian time boundaries, duration expiry, single and unlimited admission, founding stock/idempotency, role permissions, occupancy, group enquiries, public/member/staff routes, purchasing, QR entry, registration and Traditional Chinese.
 
-## Deployment
+## Demo accounts
 
-The application is static HTML, CSS and JavaScript. Vercel uses the project root as the output directory with no install or build step; `vercel.json` defines this explicitly. Development tests and internal review notes are excluded from deployment.
+Choose **Try a demo account** on the sign-in page. The shared sample password is `HandCDemo2026!`.
 
-## Prototype scope
+| Role | Email |
+| --- | --- |
+| Member | `jamie@handc.demo` |
+| Admin | `admin@handc.demo` |
+| Reception | `reception@handc.demo` |
+| Studio attendant | `attendant@handc.demo` |
 
-Data is stored in the current browser under HandC-specific keys. Accounts and records are not shared across devices. Authentication, purchases and email flows are simulated; no real payments or emails are sent. Use sample details when exploring.
+Registered demo passwords are salted and hashed with PBKDF2. This browser-only account system is not production authentication. Use sample details and a throwaway password.
 
-Taipei location, NT$ pricing, services and provisional membership rules are inherited demonstration settings. HandC contact channels have not been supplied, so the app does not link visitors to SYNC's external accounts. A production service needs shared storage, server-side authentication and confirmed studio policies and contact details.
+## Deployment and scope
 
-## Source and bundled libraries
+[Live app](https://handc-app.vercel.app) · [GitHub](https://github.com/ikigaiwif606-acc/HandC-APP)
 
-The Git history retains the SYNC-APP baseline. Local QR libraries retain their licenses: [jsQR](vendor/jsQR-LICENSE.txt) and [QRCode.js](vendor/qrcode-LICENSE.txt). Historical planning and review documents under `docs/` describe the source prototype and are not current HandC QA reports.
+Vercel serves the project root without an install/build step, as defined in `vercel.json`. Development tests and historical notes are excluded from deployment.
+
+Data uses the fresh `handc-thermal-v2` namespace. Earlier demonstration records are not migrated into thermal passes. Purchases, stock, admissions, sales and enquiries are simulated in the current browser and are not shared across devices. No real payments or messages are sent. Live operation requires shared persistence, server-side authentication and authorization, payment confirmation and verified entry credentials.
+
+The final address, contact channels, drink menu/prices, refund terms and approved operating capacity have not been supplied. Group enquiries do not reserve places or confirm private access. Historical documents under `docs/planning`, `docs/reviews` and `docs/diagrams` describe the previous source prototype.
+
+Bundled QR libraries retain their licenses: [jsQR](vendor/jsQR-LICENSE.txt) and [QRCode.js](vendor/qrcode-LICENSE.txt).
