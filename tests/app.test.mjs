@@ -15,11 +15,13 @@ const wait=()=>new Promise(r=>setTimeout(r,15));
 async function settle(){await wait();await wait()}
 async function go(w,route){w.location.hash=route;await settle()}
 async function submit(w,selector){q(w,selector).dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await settle()}
-function boot(t,{language='en',userId,route='home'}={}){
+function boot(t,{language='en',userId,route='home',theme,motion,reducedMotion=false,audioMock}={}){
  const w=new Window({url:'https://handc.test/#'+route,settings:{enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true,disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
  t.after(()=>w.happyDOM.abort());w.document.write(markup);w.localStorage.setItem('handc-locale',language);
  // Fix the browser clock to a Malaysian opening hour, independent of CI timezone.
  w.Date.now=()=>NOW;w.structuredClone=structuredClone;
+ if(theme)w.localStorage.setItem('handc-theme',theme);if(motion)w.localStorage.setItem('handc-motion',motion);
+ w.matchMedia=()=>({matches:reducedMotion,addEventListener(){}});if(audioMock){w.AudioContext=audioMock.Context;w.fetch=audioMock.fetch}
  if(userId)w.sessionStorage.setItem('handc-thermal-session',JSON.stringify({userId}));
  w.eval(scripts);return w;
 }
@@ -102,8 +104,8 @@ test('public catalogue, studio themes and fresh storage have no legacy services'
  const w=boot(t);assert.match(q(w,'h1').textContent,/Cold. Heat/);assert.equal(w.document.querySelector('#auth-form'),null);assert.equal(db(w).version,2);
  await go(w,'passes');assert.equal(w.document.querySelectorAll('.pass-card').length,6);assert.match(q(w,'#product-founding').textContent,/3,000/);assert.match(q(w,'#product-weekly').textContent,/Unlimited entries/);
  assert.doesNotMatch(q(w,'#app').textContent,/yoga|instructor|NT\$|Taipei/i);
- q(w,'[data-action=theme]').click();assert.equal(w.document.documentElement.dataset.theme,'night');
- await go(w,'studio');q(w,'[data-action=scene][data-scene=sauna]').click();assert.match(q(w,'.studio-gallery img').getAttribute('src'),/sauna-night.webp/);
+ assert.equal(w.document.documentElement.dataset.theme,'night');q(w,'[data-action=theme]').click();assert.equal(w.document.documentElement.dataset.theme,'day');
+ await go(w,'studio');q(w,'[data-action=scene][data-scene=sauna]').click();assert.match(q(w,'.studio-gallery img').getAttribute('src'),/sauna-day.webp/);
 });
 for(const [userId,routes] of [['jamie',['home','passes','wallet','visits','studio','account']],['admin',['staff-home','staff-entry','staff-members','staff-sales','staff-enquiries','staff-studio','account']],['reception',['staff-home','staff-entry','staff-members','staff-sales','staff-enquiries','staff-studio']],['attendant',['staff-home','staff-entry','staff-studio']]])test(userId+' workspace routes and capabilities',async t=>{
  const w=boot(t,{userId,route:routes[0]});for(const route of routes){await go(w,route);assert.ok(q(w,'#app h1').textContent);assert.equal(w.document.querySelector('#auth-form'),null)}
@@ -148,4 +150,52 @@ test('purchase confirmation rechecks inventory against a newer saved database',a
  for(let i=0;i<200;i++)latest.orders.push({id:'allocated-'+i,requestId:'allocated-'+i,productId:'founding',userId:'avery',amount:3000,at:NOW});
  w.localStorage.setItem('handc-thermal-v2',JSON.stringify(latest));await submit(w,'[data-form=purchase]');
  assert.match(q(w,'.form-error').textContent,/All 200/);assert.equal(db(w).passes.filter(p=>p.productId==='founding').length,0);
+});
+
+function audioHarness({fail=false,hold=false}={}){
+ const calls={contexts:0,resumes:0,suspends:0,fetches:0,sources:[],tones:[],nodes:[]};let release;
+ class Param{value=0;setValueAtTime(v){this.value=v}setTargetAtTime(v){this.value=v}linearRampToValueAtTime(v){this.value=v}exponentialRampToValueAtTime(v){this.value=v}cancelScheduledValues(){}}
+ class Node{gain=new Param();frequency=new Param();threshold=new Param();knee=new Param();ratio=new Param();attack=new Param();release=new Param();connections=[];connect(node){this.connections.push(node)}disconnect(){this.disconnected=true}start(at=0){this.started=at}stop(at=0){this.stopped=at;this.onended?.()}}
+ class Context{
+  state='suspended';currentTime=1;destination={};constructor(){calls.contexts++}resume(){calls.resumes++;this.state='running';return Promise.resolve()}suspend(){calls.suspends++;this.state='suspended';return Promise.resolve()}addEventListener(){}
+  createGain(){const n=new Node();calls.nodes.push(n);return n}createDynamicsCompressor(){return new Node()}createBufferSource(){const n=new Node();calls.sources.push(n);return n}createOscillator(){const n=new Node();calls.tones.push(n);return n}decodeAudioData(){return Promise.resolve({duration:36.9231})}
+ }
+ const fetch=async()=>{calls.fetches++;if(hold)await new Promise(r=>release=r);if(fail)throw new Error('Offline');return {ok:true,arrayBuffer:async()=>new ArrayBuffer(8)}};
+ return {Context,fetch,calls,release:()=>release?.()};
+}
+
+test('night is the fresh default; an explicit day preference is preserved',t=>{
+ const w=boot(t);assert.equal(w.document.documentElement.dataset.theme,'night');assert.equal(q(w,'meta[name=theme-color]').content,'#111311');assert.match(q(w,'.scene-visual img').src,/pools-night/);
+ const day=boot(t,{theme:'day'});assert.equal(day.document.documentElement.dataset.theme,'day');assert.match(q(day,'.scene-visual img').src,/pools-day/);
+ assert.match(html,/<html lang="en" data-theme="night">/);assert.ok(html.indexOf("localStorage.getItem('handc-theme')")<html.indexOf('rel="stylesheet"'));
+});
+test('motion pause, manual scene selection and reduced motion leave content available',async t=>{
+ const w=boot(t);assert.equal(w.document.documentElement.dataset.motion,'full');q(w,'[data-experience=motion]').click();assert.equal(w.document.documentElement.dataset.motion,'paused');assert.equal(w.localStorage.getItem('handc-motion'),'paused');
+ q(w,'[data-experience=stage][data-step="2"]').click();assert.equal(q(w,'.thermal-stage').dataset.step,'2');assert.equal(q(w,'.scene-reception').getAttribute('aria-hidden'),'false');assert.equal(q(w,'.scene-pools').getAttribute('aria-hidden'),'true');
+ await go(w,'passes');await go(w,'home');assert.equal(w.document.documentElement.dataset.motion,'paused');assert.match(q(w,'[data-experience=motion]').textContent,/Resume/);
+ const reduced=boot(t,{reducedMotion:true});assert.equal(reduced.document.documentElement.dataset.motion,'reduced');assert.equal(q(reduced,'[data-experience=motion]').disabled,true);q(reduced,'[data-experience=stage][data-step="1"]').click();assert.equal(q(reduced,'.thermal-stage').dataset.step,'1');
+});
+test('audio stays off and unloaded until opted in; playback loops and survives navigation',async t=>{
+ const audio=audioHarness(),w=boot(t,{audioMock:audio});assert.equal(audio.calls.contexts,0);assert.equal(audio.calls.fetches,0);assert.equal(w.HandCExperience.state.music,false);
+ q(w,'#sound-button').click();assert.equal(q(w,'#sound-panel').open,true);assert.equal(audio.calls.contexts,0);
+ q(w,'[data-experience=music]').click();await settle();assert.equal(audio.calls.contexts,1);assert.equal(audio.calls.fetches,1);assert.equal(w.HandCExperience.state.music,true);assert.equal(w.HandCExperience.state.effects,false);assert.match(q(w,'#sound-message').textContent,/Playing/);
+ assert.equal(audio.calls.sources[0].loop,true);assert.ok(Math.abs(audio.calls.sources[0].loopEnd-60/104*64)<.001);
+ q(w,'[data-experience=sound-close]').click();await go(w,'passes');assert.equal(audio.calls.sources.length,1);assert.equal(w.HandCExperience.state.music,true);
+ q(w,'#sound-button').click();q(w,'[data-experience=mute]').click();assert.equal(w.HandCExperience.state.music,false);assert.equal(w.HandCExperience.state.effects,false);assert.ok(audio.calls.sources[0].disconnected);
+});
+test('button and keyboard activation sound once; disabled controls and muting stay silent',async t=>{
+ const audio=audioHarness(),w=boot(t,{audioMock:audio});q(w,'#sound-button').click();q(w,'[data-experience=effects]').click();await settle();assert.equal(w.HandCExperience.state.effects,true);assert.equal(audio.calls.fetches,0);
+ q(w,'[data-experience=sound-close]').click();await settle();audio.calls.tones.length=0;
+ // click() represents the browser click generated by mouse, touch or keyboard activation.
+ q(w,'[data-action=theme]').click();await settle();assert.equal(audio.calls.tones.length,2);assert.ok(audio.calls.tones.every(n=>n.disconnected));
+ const disabled=w.document.createElement('button');disabled.disabled=true;w.document.body.append(disabled);const before=audio.calls.tones.length;disabled.click();await settle();assert.equal(audio.calls.tones.length,before);
+ q(w,'#sound-button').click();q(w,'[data-experience=mute]').click();await settle();audio.calls.tones.length=0;q(w,'[data-experience=sound-close]').click();q(w,'[data-action=theme]').click();await settle();assert.equal(audio.calls.tones.length,0);
+});
+test('audio failure and cancellation never report playback or affect app actions',async t=>{
+ const failed=audioHarness({fail:true}),w=boot(t,{audioMock:failed});q(w,'#sound-button').click();q(w,'[data-experience=music]').click();await settle();assert.equal(w.HandCExperience.state.music,false);assert.match(q(w,'#sound-message').textContent,/could not start/);assert.equal(failed.calls.sources.length,0);q(w,'[data-experience=sound-close]').click();await go(w,'passes');assert.equal(w.document.querySelectorAll('.pass-card').length,6);
+ const slow=audioHarness({hold:true}),s=boot(t,{audioMock:slow});q(s,'#sound-button').click();q(s,'[data-experience=music]').click();await settle();assert.equal(s.HandCExperience.state.loading,true);q(s,'[data-experience=mute]').click();slow.release();await settle();assert.equal(s.HandCExperience.state.music,false);assert.equal(slow.calls.sources.length,0);
+});
+test('audio volume is remembered while playback stays opt-in, and Chinese labels are covered',async t=>{
+ const audio=audioHarness(),w=boot(t,{audioMock:audio,language:'zh-TW'});q(w,'#sound-button').click();assert.match(q(w,'#sound-title').textContent,/氛圍/);assert.match(q(w,'[data-experience=motion]').textContent,/暫停/);
+ const range=q(w,'[data-volume=music]');range.value=12;range.dispatchEvent(new w.Event('input',{bubbles:true}));assert.equal(JSON.parse(w.localStorage.getItem('handc-volume')).music,12);assert.equal(w.HandCExperience.state.music,false);assert.equal(audio.calls.contexts,0);assert.equal(q(w,'#music-level').textContent,'12%');
 });

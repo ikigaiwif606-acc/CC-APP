@@ -31,6 +31,23 @@ Visitors can browse the studio and six passes before signing in. Members can pur
 
 The app includes responsive layouts, accessible dialogs and forms, reduced-motion support, and English / Traditional Chinese. There are no classes or instructor workflows. The previous runtime has been retired; original source remains in Git history.
 
+## Sound, motion and night mode
+
+New visitors start in night mode. An early theme check preserves an explicit day preference before the first paint. Later theme choices are remembered.
+
+The front page introduces **Cold → Heat → Reset** through a natural scrolling sequence of the pools, sauna and reception. It includes a dot-matrix logo reveal, large animated typography, slow image movement, water light and warm highlights. The three scene selectors also work without scrolling. Motion can be paused from the hero or sound settings; device reduced-motion preferences take priority and remove the extended scrolling sequence. Lower sections reveal once as they enter view. Offscreen scenes and hidden tabs pause their continuous animation.
+
+The header's waveform button opens independent **Music** and **Button effects** controls, separate volume sliders and **Mute all sound**. Both channels start off on each page load; audio is initialized only after opting in, and music is downloaded only when selected. Volume settings persist. Playback continues across the app's routes and suspends when the page is hidden. Failed loading or browser audio permissions leave the application usable and offer a retry.
+
+The bundled **Thermal / 104** is an original 104 BPM, 16-bar ambient dub techno composition, approximately 37 seconds long. Rounded percussion, minor and suspended chords, stereo echoes and synthesized water texture form a loop. It uses no commercial recordings or external samples. Its source is [scripts/render-ambience.mjs](scripts/render-ambience.mjs); the AAC asset is about 530 KB. Recreate it with Node.js and FFmpeg:
+
+```sh
+node scripts/render-ambience.mjs /tmp/handc-thermal.wav
+ffmpeg -i /tmp/handc-thermal.wav -c:a aac -b:a 112k -movflags +faststart assets/audio/thermal-104.m4a
+```
+
+Every enabled app button, navigation link and disclosure receives a quiet click while effects are enabled. Toggles use a small electronic response; confirmed purchases, admissions and saved changes receive a two-note confirmation, while errors use a low double tap. Disabled controls stay silent. These sounds are synthesized locally with Web Audio and have short envelopes and bounded voices.
+
 ## Run and verify
 
 No build or package installation is needed to serve the static application:
@@ -46,7 +63,7 @@ npm ci
 npm test
 ```
 
-Tests exercise the catalogue, Malaysian time boundaries, duration expiry, single and unlimited admission, founding stock/idempotency, role permissions, occupancy, group enquiries, public/member/staff routes, purchasing, QR entry, registration and Traditional Chinese.
+Tests exercise the catalogue, Malaysian time boundaries, duration expiry, single and unlimited admission, founding stock/idempotency, role permissions, occupancy, group enquiries, public/member/staff routes, purchasing, QR entry, registration, Traditional Chinese, default theme and saved preferences, optional audio, looping, muting, cancelled playback and reduced motion. Browser checks verify actual audio decoding and the visual sequence separately from the mocked audio regression tests.
 
 ## Demo accounts
 

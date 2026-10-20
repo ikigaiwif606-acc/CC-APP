@@ -7,3 +7,4 @@ tests
 package-lock.json
 node_modules
 docs/diagrams
+scripts
