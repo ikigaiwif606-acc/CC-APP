@@ -37,7 +37,7 @@ New visitors start in night mode. An early theme check preserves an explicit day
 
 The front page introduces **Cold → Heat → Reset** through a natural scrolling sequence of the pools, sauna and reception. It includes a dot-matrix logo reveal, large animated typography, slow image movement, water light and warm highlights. The three scene selectors also work without scrolling. Motion can be paused from the hero or sound settings; device reduced-motion preferences take priority and remove the extended scrolling sequence. Lower sections reveal once as they enter view. Offscreen scenes and hidden tabs pause their continuous animation.
 
-The header's waveform button opens independent **Music** and **Button effects** controls, separate volume sliders and **Mute all sound**. Both channels start off on each page load; audio is initialized only after opting in, and music is downloaded only when selected. Volume settings persist. Playback continues across the app's routes and suspends when the page is hidden. Failed loading or browser audio permissions leave the application usable and offer a retry.
+The header's waveform button opens independent **Music** and **Button effects** controls, separate volume sliders and **Mute all sound**. Music defaults to on and fades in where browser autoplay is permitted. If the browser requires activation, it starts with the first ordinary click, tap or keyboard activation, without opening the sound controls. A pending autoplay attempt never blocks the interface or claims that music is already playing. Music mute/off and volume choices persist; effects remain off until selected. The loop is downloaded only when playback can start. Playback continues across the app's routes and suspends when the page is hidden. Failed loading or browser audio permissions leave the application usable and offer a retry.
 
 The bundled **Thermal / 104** is an original 104 BPM, 16-bar ambient dub techno composition, approximately 37 seconds long. Rounded percussion, minor and suspended chords, stereo echoes and synthesized water texture form a loop. It uses no commercial recordings or external samples. Its source is [scripts/render-ambience.mjs](scripts/render-ambience.mjs); the AAC asset is about 530 KB. Recreate it with Node.js and FFmpeg:
 
@@ -63,7 +63,7 @@ npm ci
 npm test
 ```
 
-Tests exercise the catalogue, Malaysian time boundaries, duration expiry, single and unlimited admission, founding stock/idempotency, role permissions, occupancy, group enquiries, public/member/staff routes, purchasing, QR entry, registration, Traditional Chinese, default theme and saved preferences, optional audio, looping, muting, cancelled playback and reduced motion. Browser checks verify actual audio decoding and the visual sequence separately from the mocked audio regression tests.
+Tests exercise the catalogue, Malaysian time boundaries, duration expiry, single and unlimited admission, founding stock/idempotency, role permissions, occupancy, group enquiries, public/member/staff routes, purchasing, QR entry, registration, Traditional Chinese, default theme and saved preferences, automatic audio, blocked-autoplay fallback, remembered mute, looping, cancelled playback and reduced motion. Browser checks verify actual audio decoding and the visual sequence separately from the mocked audio regression tests.
 
 ## Demo accounts
 

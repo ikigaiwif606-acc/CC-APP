@@ -15,12 +15,12 @@ const wait=()=>new Promise(r=>setTimeout(r,15));
 async function settle(){await wait();await wait()}
 async function go(w,route){w.location.hash=route;await settle()}
 async function submit(w,selector){q(w,selector).dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await settle()}
-function boot(t,{language='en',userId,route='home',theme,motion,reducedMotion=false,audioMock}={}){
+function boot(t,{language='en',userId,route='home',theme,motion,reducedMotion=false,audioMock,musicPreference}={}){
  const w=new Window({url:'https://handc.test/#'+route,settings:{enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true,disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
  t.after(()=>w.happyDOM.abort());w.document.write(markup);w.localStorage.setItem('handc-locale',language);
  // Fix the browser clock to a Malaysian opening hour, independent of CI timezone.
  w.Date.now=()=>NOW;w.structuredClone=structuredClone;
- if(theme)w.localStorage.setItem('handc-theme',theme);if(motion)w.localStorage.setItem('handc-motion',motion);
+ if(musicPreference)w.localStorage.setItem('handc-music',musicPreference);if(theme)w.localStorage.setItem('handc-theme',theme);if(motion)w.localStorage.setItem('handc-motion',motion);
  w.matchMedia=()=>({matches:reducedMotion,addEventListener(){}});if(audioMock){w.AudioContext=audioMock.Context;w.fetch=audioMock.fetch}
  if(userId)w.sessionStorage.setItem('handc-thermal-session',JSON.stringify({userId}));
  w.eval(scripts);return w;
@@ -152,16 +152,16 @@ test('purchase confirmation rechecks inventory against a newer saved database',a
  assert.match(q(w,'.form-error').textContent,/All 200/);assert.equal(db(w).passes.filter(p=>p.productId==='founding').length,0);
 });
 
-function audioHarness({fail=false,hold=false}={}){
- const calls={contexts:0,resumes:0,suspends:0,fetches:0,sources:[],tones:[],nodes:[]};let release;
+function audioHarness({fail=false,hold=false,blocked=false}={}){
+ const calls={contexts:0,resumes:0,suspends:0,fetches:0,sources:[],tones:[],nodes:[]};let release,allowed=!blocked;
  class Param{value=0;setValueAtTime(v){this.value=v}setTargetAtTime(v){this.value=v}linearRampToValueAtTime(v){this.value=v}exponentialRampToValueAtTime(v){this.value=v}cancelScheduledValues(){}}
  class Node{gain=new Param();frequency=new Param();threshold=new Param();knee=new Param();ratio=new Param();attack=new Param();release=new Param();connections=[];connect(node){this.connections.push(node)}disconnect(){this.disconnected=true}start(at=0){this.started=at}stop(at=0){this.stopped=at;this.onended?.()}}
  class Context{
-  state='suspended';currentTime=1;destination={};constructor(){calls.contexts++}resume(){calls.resumes++;this.state='running';return Promise.resolve()}suspend(){calls.suspends++;this.state='suspended';return Promise.resolve()}addEventListener(){}
+  state='suspended';currentTime=1;destination={};constructor(){calls.contexts++}resume(){calls.resumes++;if(!allowed)return new Promise(()=>{});this.state='running';return Promise.resolve()}suspend(){calls.suspends++;this.state='suspended';return Promise.resolve()}addEventListener(){}
   createGain(){const n=new Node();calls.nodes.push(n);return n}createDynamicsCompressor(){return new Node()}createBufferSource(){const n=new Node();calls.sources.push(n);return n}createOscillator(){const n=new Node();calls.tones.push(n);return n}decodeAudioData(){return Promise.resolve({duration:36.9231})}
  }
  const fetch=async()=>{calls.fetches++;if(hold)await new Promise(r=>release=r);if(fail)throw new Error('Offline');return {ok:true,arrayBuffer:async()=>new ArrayBuffer(8)}};
- return {Context,fetch,calls,release:()=>release?.()};
+ return {Context,fetch,calls,release:()=>release?.(),allow:()=>{allowed=true}};
 }
 
 test('night is the fresh default; an explicit day preference is preserved',t=>{
@@ -175,16 +175,26 @@ test('motion pause, manual scene selection and reduced motion leave content avai
  await go(w,'passes');await go(w,'home');assert.equal(w.document.documentElement.dataset.motion,'paused');assert.match(q(w,'[data-experience=motion]').textContent,/Resume/);
  const reduced=boot(t,{reducedMotion:true});assert.equal(reduced.document.documentElement.dataset.motion,'reduced');assert.equal(q(reduced,'[data-experience=motion]').disabled,true);q(reduced,'[data-experience=stage][data-step="1"]').click();assert.equal(q(reduced,'.thermal-stage').dataset.step,'1');
 });
-test('audio stays off and unloaded until opted in; playback loops and survives navigation',async t=>{
- const audio=audioHarness(),w=boot(t,{audioMock:audio});assert.equal(audio.calls.contexts,0);assert.equal(audio.calls.fetches,0);assert.equal(w.HandCExperience.state.music,false);
- q(w,'#sound-button').click();assert.equal(q(w,'#sound-panel').open,true);assert.equal(audio.calls.contexts,0);
- q(w,'[data-experience=music]').click();await settle();assert.equal(audio.calls.contexts,1);assert.equal(audio.calls.fetches,1);assert.equal(w.HandCExperience.state.music,true);assert.equal(w.HandCExperience.state.effects,false);assert.match(q(w,'#sound-message').textContent,/Playing/);
+test('default music starts without controls when autoplay is allowed and continues across routes',async t=>{
+ const audio=audioHarness(),w=boot(t,{audioMock:audio});await settle();assert.equal(audio.calls.contexts,1);assert.equal(audio.calls.fetches,1);assert.equal(w.HandCExperience.state.music,true);assert.equal(w.HandCExperience.state.effects,false);assert.equal(w.document.querySelector('#sound-panel').open,false);
  assert.equal(audio.calls.sources[0].loop,true);assert.ok(Math.abs(audio.calls.sources[0].loopEnd-60/104*64)<.001);
- q(w,'[data-experience=sound-close]').click();await go(w,'passes');assert.equal(audio.calls.sources.length,1);assert.equal(w.HandCExperience.state.music,true);
- q(w,'#sound-button').click();q(w,'[data-experience=mute]').click();assert.equal(w.HandCExperience.state.music,false);assert.equal(w.HandCExperience.state.effects,false);assert.ok(audio.calls.sources[0].disconnected);
+ await go(w,'passes');assert.equal(audio.calls.sources.length,1);assert.equal(w.HandCExperience.state.music,true);
+ q(w,'#sound-button').click();assert.match(q(w,'#sound-message').textContent,/Playing/);q(w,'[data-experience=mute]').click();assert.equal(w.HandCExperience.state.music,false);assert.equal(w.localStorage.getItem('handc-music'),'off');assert.ok(audio.calls.sources[0].disconnected);
+});
+test('blocked autoplay waits without loading music, then starts on the first ordinary click',async t=>{
+ const audio=audioHarness({blocked:true}),w=boot(t,{audioMock:audio});await settle();assert.equal(w.HandCExperience.state.waitingForGesture,true);assert.equal(w.HandCExperience.state.music,false);assert.equal(audio.calls.fetches,0);assert.match(q(w,'#sound-button').getAttribute('aria-label'),/ready/);
+ audio.allow();q(w,'[data-action=theme]').click();await settle();assert.equal(w.HandCExperience.state.music,true);assert.equal(w.HandCExperience.state.waitingForGesture,false);assert.equal(audio.calls.fetches,1);assert.equal(audio.calls.sources.length,1);assert.equal(q(w,'#sound-panel').open,false);
+});
+test('keyboard activation also starts default music; mute cancels pending autoplay',async t=>{
+ const audio=audioHarness({blocked:true}),w=boot(t,{audioMock:audio});audio.allow();q(w,'[data-action=theme]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));await settle();assert.equal(w.HandCExperience.state.music,true);
+ const blocked=audioHarness({blocked:true}),m=boot(t,{audioMock:blocked});q(m,'#sound-panel').showModal();q(m,'[data-experience=mute]').click();assert.equal(m.HandCExperience.state.waitingForGesture,false);assert.equal(m.localStorage.getItem('handc-music'),'off');blocked.allow();q(m,'[data-action=theme]').click();await settle();assert.equal(blocked.calls.fetches,0);assert.equal(m.HandCExperience.state.music,false);
+});
+test('a remembered mute prevents automatic audio setup and can be overridden explicitly',async t=>{
+ const audio=audioHarness(),w=boot(t,{audioMock:audio,musicPreference:'off'});await settle();assert.equal(audio.calls.contexts,0);q(w,'[data-action=theme]').click();await settle();assert.equal(audio.calls.contexts,0);
+ q(w,'#sound-button').click();q(w,'[data-experience=music]').click();await settle();assert.equal(w.HandCExperience.state.music,true);assert.equal(w.localStorage.getItem('handc-music'),'on');
 });
 test('button and keyboard activation sound once; disabled controls and muting stay silent',async t=>{
- const audio=audioHarness(),w=boot(t,{audioMock:audio});q(w,'#sound-button').click();q(w,'[data-experience=effects]').click();await settle();assert.equal(w.HandCExperience.state.effects,true);assert.equal(audio.calls.fetches,0);
+ const audio=audioHarness(),w=boot(t,{audioMock:audio,musicPreference:'off'});q(w,'#sound-button').click();q(w,'[data-experience=effects]').click();await settle();assert.equal(w.HandCExperience.state.effects,true);assert.equal(audio.calls.fetches,0);
  q(w,'[data-experience=sound-close]').click();await settle();audio.calls.tones.length=0;
  // click() represents the browser click generated by mouse, touch or keyboard activation.
  q(w,'[data-action=theme]').click();await settle();assert.equal(audio.calls.tones.length,2);assert.ok(audio.calls.tones.every(n=>n.disconnected));
@@ -192,10 +202,10 @@ test('button and keyboard activation sound once; disabled controls and muting st
  q(w,'#sound-button').click();q(w,'[data-experience=mute]').click();await settle();audio.calls.tones.length=0;q(w,'[data-experience=sound-close]').click();q(w,'[data-action=theme]').click();await settle();assert.equal(audio.calls.tones.length,0);
 });
 test('audio failure and cancellation never report playback or affect app actions',async t=>{
- const failed=audioHarness({fail:true}),w=boot(t,{audioMock:failed});q(w,'#sound-button').click();q(w,'[data-experience=music]').click();await settle();assert.equal(w.HandCExperience.state.music,false);assert.match(q(w,'#sound-message').textContent,/could not start/);assert.equal(failed.calls.sources.length,0);q(w,'[data-experience=sound-close]').click();await go(w,'passes');assert.equal(w.document.querySelectorAll('.pass-card').length,6);
- const slow=audioHarness({hold:true}),s=boot(t,{audioMock:slow});q(s,'#sound-button').click();q(s,'[data-experience=music]').click();await settle();assert.equal(s.HandCExperience.state.loading,true);q(s,'[data-experience=mute]').click();slow.release();await settle();assert.equal(s.HandCExperience.state.music,false);assert.equal(slow.calls.sources.length,0);
+ const failed=audioHarness({fail:true}),w=boot(t,{audioMock:failed,musicPreference:'off'});q(w,'#sound-button').click();q(w,'[data-experience=music]').click();await settle();assert.equal(w.HandCExperience.state.music,false);assert.match(q(w,'#sound-message').textContent,/could not start/);assert.equal(failed.calls.sources.length,0);q(w,'[data-experience=sound-close]').click();await go(w,'passes');assert.equal(w.document.querySelectorAll('.pass-card').length,6);
+ const slow=audioHarness({hold:true}),s=boot(t,{audioMock:slow,musicPreference:'off'});q(s,'#sound-button').click();q(s,'[data-experience=music]').click();await settle();assert.equal(s.HandCExperience.state.loading,true);q(s,'[data-experience=mute]').click();slow.release();await settle();assert.equal(s.HandCExperience.state.music,false);assert.equal(slow.calls.sources.length,0);
 });
-test('audio volume is remembered while playback stays opt-in, and Chinese labels are covered',async t=>{
- const audio=audioHarness(),w=boot(t,{audioMock:audio,language:'zh-TW'});q(w,'#sound-button').click();assert.match(q(w,'#sound-title').textContent,/氛圍/);assert.match(q(w,'[data-experience=motion]').textContent,/暫停/);
+test('audio volume and mute are remembered, and Chinese labels are covered',async t=>{
+ const audio=audioHarness(),w=boot(t,{audioMock:audio,language:'zh-TW',musicPreference:'off'});q(w,'#sound-button').click();assert.match(q(w,'#sound-title').textContent,/氛圍/);assert.match(q(w,'[data-experience=motion]').textContent,/暫停/);
  const range=q(w,'[data-volume=music]');range.value=12;range.dispatchEvent(new w.Event('input',{bubbles:true}));assert.equal(JSON.parse(w.localStorage.getItem('handc-volume')).music,12);assert.equal(w.HandCExperience.state.music,false);assert.equal(audio.calls.contexts,0);assert.equal(q(w,'#music-level').textContent,'12%');
 });

@@ -1,10 +1,11 @@
-/* HandC sound and motion. Optional audio never gates navigation or transactions. */
+/* HandC sound and motion. Audio never gates navigation or transactions. */
 window.HandCExperience=(() => {
   'use strict';
   const root=document.documentElement;
   const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
   let t=value=>value,context=null,effectsBus=null,musicBus=null,buffer=null,source=null;
   let loading=false,music=false,effects=false,request=0,abort=null,audioError='',lastClick=-1;
+  let musicPreference='on',waitingForGesture=false,autoplayAttempted=false;
   let observer=null,raf=0,stage=null,manualStep=null,lastStep=-1,motionPreference='full';
   let musicVolume=25,effectsVolume=35;
   const voices=new Set();
@@ -12,12 +13,14 @@ window.HandCExperience=(() => {
   const audioSupported=!!(window.AudioContext||window.webkitAudioContext);
   try{
     motionPreference=localStorage.getItem('handc-motion')==='paused'?'paused':'full';
+    musicPreference=localStorage.getItem('handc-music')==='off'?'off':'on';
     const saved=JSON.parse(localStorage.getItem('handc-volume'));
     if(saved){musicVolume=clamp(saved.music,25);effectsVolume=clamp(saved.effects,35)}
   }catch{}
   function clamp(value,fallback){return Number.isFinite(value)?Math.max(0,Math.min(100,value)):fallback}
   const motion=()=>reduced?.matches?'reduced':motionPreference;
   function saveVolume(){try{localStorage.setItem('handc-volume',JSON.stringify({music:musicVolume,effects:effectsVolume}))}catch{}}
+  function saveMusic(value){musicPreference=value;try{localStorage.setItem('handc-music',value)}catch{}}
   const waveform='<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M3 10v4m4-7v10m5-14v18m5-14v10m4-7v4"/></svg>';
   function soundControls(){
     const panel=$('#sound-panel');if(!panel)return;
@@ -27,24 +30,24 @@ window.HandCExperience=(() => {
       <label class="sound-volume">${t('Music volume')}<output id="music-level">${musicVolume}%</output><input type="range" data-volume="music" min="0" max="100" step="1" value="${musicVolume}" aria-label="${t('Music volume')}" ${audioSupported?'':'disabled'}></label>
       <div class="sound-setting"><div><strong>${t('Button effects')}</strong><span>${t('Tactile clicks and gentle confirmations.')}</span></div><button class="sound-switch" role="switch" aria-checked="false" data-experience="effects" aria-label="${t('Button sound effects')}" ${audioSupported?'':'disabled'}><i></i><span>${t('Off')}</span></button></div>
       <label class="sound-volume">${t('Effects volume')}<output id="effects-level">${effectsVolume}%</output><input type="range" data-volume="effects" min="0" max="100" step="1" value="${effectsVolume}" aria-label="${t('Effects volume')}" ${audioSupported?'':'disabled'}></label>
-      <p id="sound-message" class="small muted" role="status" aria-live="polite"></p><button class="button secondary mute-button" data-experience="mute">${t('Mute all sound')} ${waveform}</button><p class="sound-footnote">${t('Sound starts off. Your volume settings are remembered.')}</p><div class="experience-preference"><span>${t('Visual motion')}</span><button class="motion-button" data-experience="motion" aria-pressed="false">${t('Pause motion')}</button></div>`;
+      <p id="sound-message" class="small muted" role="status" aria-live="polite"></p><button class="button secondary mute-button" data-experience="mute">${t('Mute all sound')} ${waveform}</button><p class="sound-footnote">${t('Music starts automatically. Your mute and volume choices are remembered.')}</p><div class="experience-preference"><span>${t('Visual motion')}</span><button class="motion-button" data-experience="motion" aria-pressed="false">${t('Pause motion')}</button></div>`;
     syncSound();applyMotion();
   }
   function syncSound(){
     const button=$('#sound-button');
-    if(button){button.innerHTML=waveform+`<span>${t('Sound')}</span><i class="sound-indicator" aria-hidden="true"></i>`;button.dataset.on=String(music||effects);button.setAttribute('aria-label',t(music||effects?'Sound settings. Sound on.':'Sound settings. Sound off.'));button.setAttribute('aria-expanded',String(!!$('#sound-panel')?.open))}
+    if(button){button.innerHTML=waveform+`<span>${t('Sound')}</span><i class="sound-indicator" aria-hidden="true"></i>`;button.dataset.on=String(music||effects);button.setAttribute('aria-label',t(waitingForGesture?'Sound settings. Music ready.':music||effects?'Sound settings. Sound on.':'Sound settings. Sound off.'));button.setAttribute('aria-expanded',String(!!$('#sound-panel')?.open))}
     for(const [key,on] of [['music',music],['effects',effects]]){
       const control=$(`[data-experience="${key}"]`);if(!control)continue;
-      control.setAttribute('aria-checked',String(on));control.querySelector('span').textContent=t(key==='music'&&loading?'Loading…':on?'On':'Off');
+      control.setAttribute('aria-checked',String(on));control.querySelector('span').textContent=t(key==='music'&&loading?'Loading…':key==='music'&&waitingForGesture?'Ready':on?'On':'Off');
     }
     const message=$('#sound-message');
-    if(message)message.textContent=t(!audioSupported?'Sound is unavailable in this browser.':loading?'Loading the original HandC loop…':music?'Playing / Thermal 104':effects?'Button effects enabled.':'Choose music, effects, or both.');
+    if(message)message.textContent=t(!audioSupported?'Sound is unavailable in this browser.':waitingForGesture?'Music will start with your first tap.':loading?'Loading the original HandC loop…':music?'Playing / Thermal 104':effects?'Button effects enabled.':'Choose music, effects, or both.');
     // Keep a playback failure visible instead of masking it with the loading message.
     if(message&&audioError)message.textContent=t(audioError);
-    const mute=$('[data-experience="mute"]');if(mute)mute.disabled=!music&&!effects&&!loading;
-    root.dataset.music=music&&!loading?'on':'off';
+    const mute=$('[data-experience="mute"]');if(mute)mute.disabled=!music&&!effects&&!loading&&!waitingForGesture;
+    root.dataset.music=waitingForGesture?'waiting':music&&!loading?'on':'off';
   }
-  async function audio(){
+  function audioContext(){
     if(!audioSupported)throw new Error('unsupported');
     if(!context){
       const Audio=window.AudioContext||window.webkitAudioContext;context=new Audio();
@@ -52,7 +55,10 @@ window.HandCExperience=(() => {
       musicBus=context.createGain();effectsBus=context.createGain();musicBus.connect(limiter);effectsBus.connect(limiter);setVolumes();
       context.addEventListener?.('statechange',()=>{if(context.state==='closed'){music=false;effects=false;syncSound()}});
     }
-    if(context.state!=='running')await context.resume();
+    return context;
+  }
+  async function audio(){
+    audioContext();if(context.state!=='running')await context.resume();
     if(context.state!=='running')throw new Error('suspended');
     return context;
   }
@@ -63,7 +69,7 @@ window.HandCExperience=(() => {
     }
   }
   function stopMusic(){
-    request++;abort?.abort();abort=null;loading=false;music=false;
+    request++;abort?.abort();abort=null;loading=false;music=false;waitingForGesture=false;
     if(source){
       const old=source;source=null;
       old.gain.gain.cancelScheduledValues(context.currentTime);old.gain.gain.setTargetAtTime(0,context.currentTime,.045);
@@ -71,9 +77,9 @@ window.HandCExperience=(() => {
     }
     syncSound();
   }
-  async function toggleMusic(){
-    if(music||loading){stopMusic();return}
-    const token=++request;music=true;loading=true;audioError='';syncSound();
+  async function startMusic(){
+    if(music||loading)return;
+    const token=++request;waitingForGesture=false;music=true;loading=true;audioError='';syncSound();
     try{
       const ctx=await audio();if(token!==request)return;
       if(!buffer){
@@ -90,6 +96,28 @@ window.HandCExperience=(() => {
     }catch(error){
       if(token!==request)return;stopMusic();audioError=error.name==='AbortError'?'':'Music could not start. Tap Music to try again.';syncSound();
     }
+  }
+  function toggleMusic(){
+    if(music||loading){saveMusic('off');stopMusic();return}
+    saveMusic('on');return startMusic();
+  }
+  function attemptDefaultMusic(){
+    if(autoplayAttempted||document.hidden||musicPreference==='off'||!audioSupported)return;
+    autoplayAttempted=true;
+    try{
+      const ctx=audioContext();
+      if(ctx.state==='running'){void startMusic();return}
+      waitingForGesture=true;syncSound();
+      // Some browsers leave resume() pending until activation. Never await it here.
+      ctx.resume().then(()=>{if(waitingForGesture&&musicPreference==='on'&&!document.hidden&&ctx.state==='running')void startMusic()}).catch(()=>{});
+    }catch{waitingForGesture=true;syncSound()}
+  }
+  function activateMusic(event){
+    if(!waitingForGesture||musicPreference==='off'||document.hidden)return;
+    const target=event.target.closest?.('[data-experience]');
+    if(target&&['mute','music'].includes(target.dataset.experience))return;
+    if(event.target.closest?.(':disabled,[aria-disabled="true"]'))return;
+    void startMusic();
   }
   // Short envelopes avoid speaker clicks. Nodes disconnect when each voice ends.
   function tone(frequency,start,duration,gain=.13,type='sine',endFrequency=frequency){
@@ -112,7 +140,9 @@ window.HandCExperience=(() => {
       else if(kind==='error'){tone(220,now,.075,.11);tone(185,now+.095,.1,.09)}
     }catch{/* Audio permissions or hardware must never block an app action. */}
   }
-  function muted(){effects=false;audioError='';for(const voice of voices){try{voice.stop()}catch{}}stopMusic();syncSound()}
+  function muted(){saveMusic('off');effects=false;audioError='';for(const voice of voices){try{voice.stop()}catch{}}stopMusic();syncSound()}
+  document.addEventListener('click',activateMusic,true);
+  document.addEventListener('keydown',event=>{if(!event.repeat&&['Enter',' '].includes(event.key))activateMusic(event)},true);
   document.addEventListener('click',event=>{
     const target=event.target.closest?.('button,a[href],summary,input[type=checkbox],input[type=radio],select,[role=button]');
     if(!target||target.disabled||target.getAttribute('aria-disabled')==='true'||event.defaultPrevented)return;
@@ -179,7 +209,7 @@ window.HandCExperience=(() => {
       observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-revealed');observer.unobserve(entry.target)}}),{threshold:.08,rootMargin:'0px 0px -15px 0px'});
       $$('#app [data-reveal]').forEach(el=>observer.observe(el));root.classList.add('motion-ready');
     }
-    if(!$('#sound-panel')?.open)soundControls();syncSound();applyMotion();
+    if(!$('#sound-panel')?.open)soundControls();syncSound();applyMotion();attemptDefaultMusic();
   }
   window.addEventListener('scroll',schedulePosition,{passive:true});
   window.addEventListener('resize',()=>{root.style.setProperty('--header-height',($('.header')?.getBoundingClientRect().height||100)+'px');schedulePosition()},{passive:true});
@@ -187,13 +217,15 @@ window.HandCExperience=(() => {
   reduced?.addEventListener?.('change',applyMotion);
   function visibility(){
     root.dataset.pageHidden=String(document.hidden);
+    if(!document.hidden&&!autoplayAttempted)attemptDefaultMusic();
     if(!context)return;
     if(document.hidden){context.suspend().catch(()=>{})}
-    else if(music||effects)context.resume().catch(()=>{stopMusic();audioError='Tap Music to resume the soundtrack.';syncSound()});
+    else if(music||effects)context.resume().catch(()=>{stopMusic();if(musicPreference==='on'){waitingForGesture=true;audioError=''}else audioError='Sound could not start. Please try again.';syncSound()});
+    else if(waitingForGesture&&musicPreference==='on')context.resume().then(()=>{if(waitingForGesture&&context.state==='running'&&!document.hidden)void startMusic()}).catch(()=>{});
   }
   document.addEventListener('visibilitychange',visibility);
   window.addEventListener('pagehide',()=>{if(raf)cancelAnimationFrame(raf);raf=0;context?.suspend().catch(()=>{})});
   window.addEventListener('pageshow',visibility);
   applyMotion();
-  return {mount,feedback,get state(){return {music,effects,loading,musicVolume,effectsVolume,motion:motion(),contextState:context?.state||'not-created'}}};
+  return {mount,feedback,get state(){return {music,effects,loading,waitingForGesture,musicPreference,musicVolume,effectsVolume,motion:motion(),contextState:context?.state||'not-created'}}};
 })();
