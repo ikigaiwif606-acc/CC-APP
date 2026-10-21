@@ -88,7 +88,7 @@ Registered demo passwords are salted and hashed with PBKDF2. This browser-only a
 
 ## Deployment and scope
 
-[Live app](https://handc-app.vercel.app) · [GitHub](https://github.com/ikigaiwif606-acc/CC-APP)
+[Live app](https://cc-app-my.vercel.app) · [GitHub](https://github.com/ikigaiwif606-acc/CC-APP)
 
 Vercel serves the project root without an install/build step, as defined in `vercel.json`. Development tests and historical notes are excluded from deployment.
 
