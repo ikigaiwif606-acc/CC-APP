@@ -1,81 +1,43 @@
-# Mekansm APP
+# CC-APP
 
-Mekansm is the studio name. The identity uses an original dot-matrix wordmark and an M symbol, shared with the studio concept and private business plan. Logo SVGs live in `assets/logos/mekansm-wordmark.svg` and `assets/logos/mekansm-symbol.svg`. Existing deployment URLs, browser storage keys and demo credentials stay compatible with earlier previews.
+**Cold. Heat. A moment to reset.**
 
-Cold. Heat. A moment to reset.
+A web app prototype for **Mekansm**, a thermal wellness studio concept in Raja Uda, Butterworth, Penang. Explore sauna and cold-plunge passes, manage memberships, and try the daily workflows of a studio reception team.
 
-A thermal wellness pass and studio operations prototype for Raja Uda, Butterworth, Penang. The app was developed from [SYNC-APP](https://github.com/ikigaiwif606-acc/SYNC-APP); the current interface and access model are specific to Mekansm.
+[Open the live app](https://cc-app-my.vercel.app) · [Studio concept](https://handc-business-summary.vercel.app/)
 
-## Passes and access
+## The experience
 
-Every pass includes the communal sauna and both cold-plunge pools.
+| Workspace | What you can do |
+| --- | --- |
+| Visitors | Explore the studio, compare passes, choose a visit date, and continue to sign-in or registration. |
+| Members | Purchase demo passes, view validity and entry codes, review visits and purchases, and update a profile. |
+| Reception | Find members, sell passes, review access, confirm entry and departure, and manage group enquiries. |
+| Studio attendants | Confirm entry and departure, monitor current visits, and update facility availability. |
+| Admin | Access reception and studio tools, pause admissions, and configure an operating occupancy limit. |
 
-| Pass | Price | Access | Allowance / validity |
+The interface includes English and Traditional Chinese, day and night themes, responsive layouts, keyboard-accessible dialogs, and reduced-motion support. A dot-matrix identity, animated thermal halo, studio imagery, and an original ambient soundtrack carry the experience from the homepage into the app. Music and button sounds have separate controls.
+
+## Passes
+
+Every pass includes the communal sauna and both cold-plunge pools. Prices below are the current demo catalogue, in Malaysian ringgit.
+
+| Pass | Price | Access hours | Validity |
 | --- | --- | --- | --- |
-| Full Day | RM70 | 9am–9pm | One entry on the chosen date |
-| Sunrise | RM30 | 9am–12pm | One entry; leave by noon |
-| Sunset | RM30 | 6pm–9pm | One entry; leave by 9pm |
-| Weekly | RM200 | 9am–9pm | Unlimited entries for 7 days from purchase |
-| Monthly | RM500 | 9am–9pm | Unlimited entries for 30 days from purchase |
-| Founding Member | RM3,000 | 9am–9pm | Unlimited entries for one year from purchase; 200 passes total |
+| Full Day | RM70 | 9am–9pm | One entry on the selected date |
+| Sunrise | RM30 | 9am–12pm | One entry on the selected date; departure by noon |
+| Sunset | RM30 | 6pm–9pm | One entry on the selected date |
+| Weekly | RM200 | 9am–9pm | Unlimited entries for 7 days |
+| Monthly | RM500 | 9am–9pm | Unlimited entries for 30 days |
+| Founding Member | RM3,000 | 9am–9pm | Unlimited entries for one year; allocation of 200 passes |
 
-All times use `Asia/Kuala_Lumpur`. Duration validity begins at the exact purchase timestamp and runs continuously, including outside access hours. Annual expiry is the calendar anniversary, with 29 February clamped to 28 February in a non-leap year. Single-entry tickets offer a visit date within 90 days; an ended window cannot be bought for that date.
+All access rules use Malaysia time (`Asia/Kuala_Lumpur`). Weekly, monthly, and annual validity starts when the purchase is confirmed and runs continuously. Single-entry passes use the chosen visit date.
 
-Reception confirms entry and departure. Showing a QR code never consumes a pass. A single-entry pass is used only after staff confirm admission. Duration passes support repeat admission after recorded departure. An eligible duration pass is used before a finite day ticket. A visit's departure deadline is the earlier of pass expiry and its access window's end. Overdue visits remain visible until staff record departure.
+Members show an entry QR code at reception. Staff scan the code or look up the member number, review the available pass, and confirm admission. A single-entry pass is consumed only when entry is confirmed. Departure is recorded separately, and repeat visits on an unlimited pass require the previous visit to be closed.
 
-The founding counter is calculated from saved demo purchases, capped at 200, and guarded against duplicate confirmation. This is a local allocation, not shared inventory.
+## Try the demo
 
-## Design and workflows
-
-The day and night palettes follow the [Mekansm business concept](https://handc-business-summary.vercel.app/): pale concrete, brushed steel, dark industrial surfaces, warm timber, dot-matrix identity, thin grids and small red indicators. Optimized concept images from that brief are bundled under `assets/studio/`. Temperatures of 4°C and 8°C are labelled as targets, not live readings.
-
-Visitors can browse the studio and six passes before signing in. Members can purchase demo passes, see exact validity, display their entry QR, inspect visits and purchase history, and update their profile. Reception and admin can sell passes, review member records and process group enquiries. All staff can confirm entry/departure, pause admissions and change manual facility status. Only admin can configure an approved operating occupancy limit; no limit is inferred from pool or sauna design capacities.
-
-The homepage moves from the thermal halo into the studio experience. Its pass links lead to the dedicated collection, where visitors can review all six passes and choose a visit date before authentication. Continuing saves the selection in session storage; sign-in and registration show the selected pass, price, access hours and date, with an edit action. The date survives authentication and registration, and a separate confirmation is still required to issue a demo pass. A date that expires while the visitor signs in is shown for correction rather than silently replaced. The original pending-product key is accepted during the transition.
-
-Time-sensitive views refresh at access-window and expiry boundaries without replacing the page, resetting forms, closing dialogs or restarting the halo. The dashboard distinguishes closed hours, paused admissions, full capacity and open admissions using the same rule as entry validation. Closing time takes precedence over paused/full status; existing visits remain available for departure. An open entry confirmation is withdrawn when entry becomes invalid, while purchase dates receive an inline warning. Visible pages check boundaries once per second and refresh on return from a hidden tab. Mobile departure tables use cards, and staff navigation exposes all destinations without horizontal scrolling.
-
-The app includes responsive layouts, accessible dialogs and forms, reduced-motion support, and English / Traditional Chinese. There are no classes or instructor workflows. The previous runtime has been retired; original source remains in Git history.
-
-## Sound, motion and night mode
-
-New visitors start in night mode. An early theme check preserves an explicit day preference before the first paint. Later theme choices are remembered.
-
-The front page opens with the **thermal halo**: a breathing, slowly rotating dot-matrix ring in silver and amber, with a red orbiting point. It breathes over four bars of the 104 BPM track; a Web Audio analyser adds a restrained response to the actual music's bass. Muted or blocked audio leaves the gentle breathing motion without simulated beat pulses. The canvas caps drawing at 30fps, reduces the dot count on mobile, and stops its animation loop while offscreen or hidden. Route changes dispose the old canvas and its observers. Day mode uses darker dots for contrast.
-
-Below the halo, **Cold → Heat → Reset** unfolds through a natural scrolling sequence of the pools, sauna and reception. It includes a dot-matrix logo reveal, large animated typography, slow image movement, water light and warm highlights. The three scene selectors also work without scrolling. The hero has no play/pause button. Visual motion can still be paused in sound settings; device reduced-motion preferences take priority, display a static halo and remove the extended scrolling sequence. Lower sections reveal once as they enter view. Offscreen scenes and hidden tabs pause their continuous animation.
-
-The header's waveform button opens independent **Music** and **Button effects** controls, separate volume sliders and **Mute all sound**. Music defaults to on and fades in where browser autoplay is permitted. If the browser requires activation, it starts with the first ordinary click, tap or keyboard activation, without opening the sound controls. A pending autoplay attempt never blocks the interface or claims that music is already playing. Music mute/off and volume choices persist; effects remain off until selected. The loop is downloaded only when playback can start. Playback continues across the app's routes and suspends when the page is hidden. Failed loading or browser audio permissions leave the application usable and offer a retry.
-
-The bundled **Thermal / 104** is an original 104 BPM, 16-bar ambient dub techno composition, approximately 37 seconds long. Rounded percussion, minor and suspended chords, stereo echoes and synthesized water texture form a loop. It uses no commercial recordings or external samples. Its source is [scripts/render-ambience.mjs](scripts/render-ambience.mjs); the AAC asset is about 530 KB. Recreate it with Node.js and FFmpeg:
-
-```sh
-node scripts/render-ambience.mjs /tmp/handc-thermal.wav
-ffmpeg -i /tmp/handc-thermal.wav -c:a aac -b:a 112k -movflags +faststart assets/audio/thermal-104.m4a
-```
-
-Every enabled app button, navigation link and disclosure receives a quiet click while effects are enabled. Toggles use a small electronic response; confirmed purchases, admissions and saved changes receive a two-note confirmation, while errors use a low double tap. Disabled controls stay silent. These sounds are synthesized locally with Web Audio and have short envelopes and bounded voices.
-
-## Run and verify
-
-No build or package installation is needed to serve the static application:
-
-```sh
-python3 -m http.server 4184 --bind 127.0.0.1
-```
-
-Open <http://127.0.0.1:4184/>. For the development tests, use Node.js 20 or later:
-
-```sh
-npm ci
-npm test
-```
-
-Tests exercise the catalogue, Malaysian time boundaries, duration expiry, single and unlimited admission, founding stock/idempotency, role permissions, occupancy, group enquiries, public/member/staff routes, purchasing, QR entry, registration, Traditional Chinese, default theme and saved preferences, automatic audio, blocked-autoplay fallback, remembered mute, looping, cancelled playback and reduced motion. Clock-controlled checks cover noon expiry, opening/closing, overdue departures, open dialogs and unfinished forms. Guest checkout checks cover review before authentication, retained dates, editing with typed credentials and registration. Browser checks verify actual audio decoding and responsive layouts separately from the mocked regression tests.
-
-## Demo accounts
-
-Choose **Try a demo account** on the sign-in page. The shared sample password is `HandCDemo2026!`.
+Open the [live app](https://cc-app-my.vercel.app), go to sign-in, and select **Try a demo account**.
 
 | Role | Email |
 | --- | --- |
@@ -84,16 +46,48 @@ Choose **Try a demo account** on the sign-in page. The shared sample password is
 | Reception | `reception@handc.demo` |
 | Studio attendant | `attendant@handc.demo` |
 
-Registered demo passwords are salted and hashed with PBKDF2. This browser-only account system is not production authentication. Use sample details and a throwaway password.
+Shared demo password: `HandCDemo2026!`
+
+Purchases, member records, visit history, and enquiries are saved in the current browser. Data is not shared across devices, payments are simulated, and group enquiries do not send messages or reserve places. Use sample details when exploring registration.
+
+## Run locally
+
+The app uses plain HTML, CSS, and JavaScript. Python 3 is enough to serve it; no build step or package installation is required.
+
+```sh
+git clone https://github.com/ikigaiwif606-acc/CC-APP.git
+cd CC-APP
+python3 -m http.server 4184 --bind 127.0.0.1
+```
+
+Open [localhost:4184](http://127.0.0.1:4184/).
+
+To run the automated checks, use Node.js 20 or later:
+
+```sh
+npm ci
+npm test
+```
+
+The tests cover pass validity, Malaysian time boundaries, purchases, admissions, role permissions, occupancy, member journeys, translations, audio preferences, and reduced motion.
+
+## Project structure
+
+| Path | Purpose |
+| --- | --- |
+| `index.html` | App shell and asset loading |
+| `src/core/business.js` | Pass catalogue, access rules, purchases, visits, and studio state |
+| `src/thermal/` | Interface, translations, styles, animation, and audio behaviour |
+| `assets/` | Logos, studio concept images, and the ambient soundtrack |
+| `vendor/` | QR generation and scanning libraries |
+| `tests/app.test.mjs` | Automated business-rule and interface checks |
+| `scripts/render-ambience.mjs` | Source for the original ambient audio |
+| `vercel.json` | Static deployment configuration |
 
 ## Deployment and scope
 
-[Live app](https://cc-app-my.vercel.app) · [GitHub](https://github.com/ikigaiwif606-acc/CC-APP)
+Vercel serves the project root with no install or build step. The GitHub repository is connected to the `cc-app` project, with production available at **[cc-app-my.vercel.app](https://cc-app-my.vercel.app)**.
 
-Vercel serves the project root without an install/build step, as defined in `vercel.json`. Development tests and historical notes are excluded from deployment.
-
-Data uses the fresh `handc-thermal-v2` namespace. Earlier demonstration records are not migrated into thermal passes. Purchases, stock, admissions, sales and enquiries are simulated in the current browser and are not shared across devices. No real payments or messages are sent. Live operation requires shared persistence, server-side authentication and authorization, payment confirmation and verified entry credentials.
-
-The final address, contact channels, drink menu/prices, refund terms and approved operating capacity have not been supplied. Group enquiries do not reserve places or confirm private access. Historical documents under `docs/planning`, `docs/reviews` and `docs/diagrams` describe the previous source prototype.
+This is a browser-based prototype. Live operation would require a shared backend, server-side authentication and authorization, payment processing, and verified entry credentials. Studio images are concept visuals; displayed pool temperatures are targets. The final address, contact details, refund terms, and operating capacity remain to be confirmed.
 
 Bundled QR libraries retain their licenses: [jsQR](vendor/jsQR-LICENSE.txt) and [QRCode.js](vendor/qrcode-LICENSE.txt).
